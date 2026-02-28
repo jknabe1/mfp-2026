@@ -1,40 +1,60 @@
-import { NextResponse } from "next/server";
-import axios from "axios";
+import { NextResponse } from 'next/server';
 
-export async function POST(req: Request) {
+export async function POST(request: Request) {
   try {
-    const { email } = await req.json();
+    const { email } = await request.json();
+
     if (!email) {
-      return NextResponse.json({ error: "E-post krävs" }, { status: 400 });
+      return NextResponse.json(
+        { error: 'E-postadress krävs' },
+        { status: 400 }
+      );
     }
 
-    const API_KEY = process.env.NEXT_PUBLIC_BREVO_API_KEY;
-    const LIST_ID = process.env.NEXT_PUBLIC_BREVO_LIST_ID;
-
-    if (!API_KEY || !LIST_ID) {
-      return NextResponse.json({ error: "Miljövariabler saknas" }, { status: 500 });
-    }
-
-    await axios.post(
-      "https://api.brevo.com/v3/contacts",
-      {
-        email,
-        listIds: [parseInt(LIST_ID, 10)],
-        updateEnabled: true, // Uppdatera befintlig kontakt om den redan finns
+    // Anropa Get a Newsletter API
+    const response = await fetch('https://api.getanewsletter.com/v3/subscribers', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${process.env.NEWSLETTER_API_KEY}`,
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
       },
-      {
-        headers: {
-          "Content-Type": "application/json",
-          "api-key": API_KEY,
-        },
-      }
+      body: JSON.stringify({
+        email: email,
+        list_ids: [process.env.NEWSLETTER_LIST_ID], 
+        status: 'active'
+      }),
+    });
+
+    // Hantera rate limiting (429 Too Many Requests)
+    if (response.status === 429) {
+      const waitSeconds = response.headers.get('X-Throttle-wait-Seconds') || '60';
+      return NextResponse.json(
+        { error: `För många förfrågningar. Försök igen om ${waitSeconds} sekunder.` },
+        { status: 429 }
+      );
+    }
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      // Fånga upp specifika API-fel
+      return NextResponse.json(
+        { error: data.detail || data.message || 'Kunde inte prenumerera' },
+        { status: response.status }
+      );
+    }
+
+    return NextResponse.json(
+      { message: 'Välkommen ombord!', data },
+      { status: 200 }
     );
 
-    return NextResponse.json({ message: "Prenumeration lyckades!" }, { status: 200 });
   } catch (error) {
-    // Type the error as an AxiosError or unknown
-    const axiosError = error as import("axios").AxiosError;
-    console.error("Fel vid prenumeration:", axiosError.response?.data || axiosError.message);
-    return NextResponse.json({ error: "Misslyckades med att prenumerera" }, { status: 500 });
+    console.error('Newsletter API error:', error);
+    return NextResponse.json(
+      { error: 'Internt serverfel. Vi har blivit notifierade.' },
+      { status: 500 }
+    );
   }
 }

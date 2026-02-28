@@ -22,7 +22,7 @@ export default function NewsletterSection() {
       const data = await response.json();
 
       if (response.ok) {
-        setMessage("Välkommen ombord.");
+        setMessage("✅ Välkommen ombord!");
       } else {
         setMessage("❌ " + data.error);
       }
@@ -56,6 +56,7 @@ export default function NewsletterSection() {
                   className="block w-full input-newsletter border p-2"
                   required
                   aria-label="Nyhetsbrev e-post"
+                  placeholder="din@epost.se"
                 />
                 <button
                   aria-label="Submit"
@@ -70,7 +71,11 @@ export default function NewsletterSection() {
                 E-post
               </label>
             </form>
-            {message && <p className="mt-2 text-sm">{message}</p>}
+            {message && (
+              <p className={`mt-2 text-sm ${message.includes('❌') ? 'text-red-600' : 'text-green-600'}`}>
+                {message}
+              </p>
+            )}
           </div>
         </div>
       </div>

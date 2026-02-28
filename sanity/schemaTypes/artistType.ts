@@ -2,35 +2,30 @@ import {defineField, defineType} from 'sanity'
 
 export const artistType = defineType({
   name: 'artist',
-  title: 'Artist',
+  title: 'Föreningar',
   type: 'document',
   fields: [
     defineField(
       {
-      name: 'name',
+      name: 'Namn',
       type: 'string',
     }),
     defineField({
-      name: 'image',
+      name: 'Bild',
       type: 'image',
       options: {
         hotspot: true
       },
     }),
     defineField({
-      name: 'Biography',
+      name: 'Beskrivning',
       type: 'array',
       of: [{type: 'block'}],
     }),
     defineField({
-      name: 'Events',
-      type: 'reference',
-      to: [{type: 'event'}],
-    }),
-    defineField({
-      name: 'slug',
+      name: 'URL',
       type: 'slug',
-      options: {source: 'name'},
+      options: {source: 'Namn'},
       validation: (rule) => rule
       .required()
       .error(`Required to generate a page on the website`),
