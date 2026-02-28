@@ -16,7 +16,7 @@ const AboutSection = () => {
                         <div className="absolute inset-0 overflow-hidden">
                             <div className="absolute inset-0 transition-transform duration-300 ease-bouncy">
                                 <Image 
-                                src="https://cdn.sanity.io/images/44gy0hz3/production/25000ee9e3eb6f333f8507ae5b66aea1779c29e3-3005x2000.png"
+                                src="https://cdn.sanity.io/images/g3r6iupk/production/4f3bf0ef1a7eec71593899df619e39084dea5dc5-2048x1331.png"
                                 alt='' 
                                 className="w-full h-full object-cover noise border border-solid border-black transition-transform duration-500 group-hover:scale-105"
                                 width="1024"

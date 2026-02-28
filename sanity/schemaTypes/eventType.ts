@@ -56,11 +56,6 @@ export const eventType = defineType({
     }),
     }),
     defineField({
-      name: 'headline',
-      type: 'reference',
-      to: [{type: 'artist'}],
-    }),
-    defineField({
       name: 'image',
       type: 'image',
       options: {

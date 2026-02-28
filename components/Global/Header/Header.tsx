@@ -35,14 +35,10 @@ const Header = () => {
     }
   }
 
-  // We're removing the click outside handler for the nav menu as requested
-
   useEffect(() => {
     document.addEventListener("mousedown", handleSearchClickOutside)
-    // Removed the click outside handler for the nav menu
     return () => {
       document.removeEventListener("mousedown", handleSearchClickOutside)
-      // Removed the cleanup for the nav click outside handler
     }
   }, [])
 
@@ -53,7 +49,7 @@ const Header = () => {
   const handleSearchSubmit = () => {
     if (searchQuery.trim().length > 0) {
       router.push(`/search?q=${encodeURIComponent(searchQuery)}`)
-      toggleSearch() // Optionally close the overlay
+      toggleSearch()
     }
   }
 
@@ -118,7 +114,7 @@ const Header = () => {
               <Link aria-label="K&K Records" className="block xl:ml-3" href="/">
                 <picture>
                   <img
-                    src="https://kkrecords.se/media/kkrecords.svg"
+                    src="/media/mfp.svg"
                     alt="K&K Records Logo"
                     className="block w-full h-full"
                   />

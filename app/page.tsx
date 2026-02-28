@@ -60,7 +60,7 @@ export default function Home() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
       <AboutSection />
-        <ConcertSection />
+      <ConcertSection />
       <ArtistSection />
       <NewsSection />
       <TuneIn />

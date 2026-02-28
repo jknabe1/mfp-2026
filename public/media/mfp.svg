@@ -1,0 +1,20 @@
+<svg 
+  width="387" 
+  height="86" 
+  viewBox="0 0 1144.13 116.44" 
+  fill="none" 
+  xmlns="http://www.w3.org/2000/svg"
+>
+  <ellipse cx="466.22" cy="46.5" rx="38.03" ry="44.18" fill="#E6007E" stroke="white" strokeWidth="4.64" strokeMiterlimit="10"/>
+  <ellipse cx="479.42" cy="48.93" rx="41.75" ry="24.83" transform="translate(320.96 504.05) rotate(-76.63)" fill="#3C3C3B" stroke="white" strokeWidth="3.65" strokeMiterlimit="10"/>
+  <ellipse cx="487.46" cy="53.63" rx="39.46" ry="12.43" transform="translate(163.81 422.06) rotate(-54.98)" fill="#F39200" stroke="white" strokeWidth="2.51" strokeMiterlimit="10"/>
+  <ellipse cx="497.86" cy="63.68" rx="38.83" ry="10.2" transform="translate(62.75 313.89) rotate(-37.19)" fill="#B2B2B2" stroke="white" strokeWidth="2.25" strokeMiterlimit="10"/>
+  <g transform="translate(0, 85.82) scale(0.73, 1)">
+    <path d="M0,0 L70,0 L70,70 L0,70 L0,0 Z" fill="transparent"/>
+    <text fill="#1D1D1B" fontFamily="Arial, Helvetica, sans-serif" fontSize="99.52" fontWeight="normal">
+      <tspan x="0" y="0" letterSpacing="-0.02em">MUSIC FOR</tspan>
+      <tspan x="310.39" y="0" letterSpacing="-0.03em"> </tspan>
+      <tspan x="330.19" y="0" letterSpacing="-0.02em">PENNIES</tspan>
+    </text>
+  </g>
+</svg>

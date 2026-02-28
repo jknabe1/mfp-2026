@@ -11,10 +11,10 @@ import {schemaTypes} from './sanity/schemaTypes'
 
 export default defineConfig({
   basePath: '/studio',
-  projectId: '44gy0hz3',
+  projectId: 'g3r6iupk',
   dataset: 'production',
   useCdn: true, // set to `false` to bypass the edge cache
-  apiVersion: '2023-05-03',
+  apiVersion: '2026-02-28',
   // Add and edit the content schema in the './sanity/schemaTypes' folder
   schemaTypes,
 })

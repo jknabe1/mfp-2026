@@ -8,5 +8,4 @@ import { sponsorType } from './sponsorType'
 import { playlist } from './playListType'
 import { video } from './videoType'
 import { aboutType } from './aboutType'
-import { newRelease } from './newReleaseType'
-export const schemaTypes = [artistType, eventType, venueType, dataType, newsType, teamType, sponsorType, playlist, video, aboutType, newRelease]
+export const schemaTypes = [artistType, eventType, venueType, dataType, newsType, teamType, sponsorType, playlist, video, aboutType]
