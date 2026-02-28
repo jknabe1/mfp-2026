@@ -6,8 +6,8 @@ import TuneIn from "@/components/Landing/TuneIn/playlist-section";
 import ArtistSection from "@/components/Landing/Artists/ArtistSection";
 
 export const metadata: Metadata = {
-  title: "K&K RECORDS",
-  description: "Discover the best artists, latest concerts, and exclusive music updates from K&K Records.",
+  title: "Music For Pennies",
+  description: "Bästa gänget, svänget & hänget.",
   openGraph: {
     title: "",
     description: "Explore top artists, upcoming concerts, and new releases from K&K Records.",
