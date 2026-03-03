@@ -27,7 +27,7 @@ const AboutSection = () => {
                         <div className="max-w-full md:max-w-[520px]">
                             <h2 className="text-sans-35 lg:text-sans-60 pt-8">Bästa gänget, svänget & hänget</h2>
                             <p className="text-[1rem] lg:text-[1.1875rem] tracking-[-0.02em] 2xl:text-lg transition duration-500 delay-200 pt-8">
-                                Sedan 2019 har K&K Records arbetat med att stärka kulturlivet i Örebro län genom att stödja unga kulturutövare med finansiering och vägledning, med målet att främja en positiv kulturutveckling och stärka regionens musikexport.
+                                Sedan 2019 har Music For Pennies arbetat med att stärka kulturlivet i Örebro län genom att stödja unga kulturutövare med finansiering och vägledning, med målet att främja en positiv kulturutveckling och stärka regionens musikexport.
                             </p>
                             <div className="flex gap-2 mt-7">
                                 <Link className="mt-6 inline-block border border-solid border-black px-6 py-3 hover:bg-black hover:text-white transition-colors" href="/om-oss">Läs mer →</Link>

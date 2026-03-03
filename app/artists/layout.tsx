@@ -1,41 +1,41 @@
 export const metadata = {
     title: "Artister",
     description:
-      "Utforska alla artister som är signade till K&K Records. Se bilder, namn och datum för varje artist.",
+      "Utforska alla artister som är signade till Music For Pennies. Se bilder, namn och datum för varje artist.",
     openGraph: {
-      title: "Artister | K&K RECORDS",
-      description: "Se hela listan av artister som är del av K&K Records och upptäck nya namn.",
-      url: "https://kkrecords.se/artists",
-      siteName: "K&K Records",
+      title: "Artister | Music For Pennies",
+      description: "Se hela listan av artister som är del av Music For Pennies och upptäck nya namn.",
+      url: "https://musicforpennies.se/artists",
+      siteName: "Music For Pennies",
       images: [
         {
-          url: "https://kkrecords.se/api",
+          url: "https://musicforpennies.se/api",
           width: 1200,
           height: 630,
-          alt: "Artister | K&K RECORDS",
+          alt: "Artister | Music For Pennies",
         },
       ],
       type: "website",
     },
     twitter: {
       card: "summary_large_image",
-      title: "Artister | K&K RECORDS",
-      description: "Upptäck artister som tillhör K&K Records – allt från nya stjärnskott till etablerade namn.",
-      images: ["https://kkrecords.se/api"],
+      title: "Artister | Music For Pennies",
+      description: "Upptäck artister som tillhör Music For Pennies – allt från nya stjärnskott till etablerade namn.",
+      images: ["https://musicforpennies.se/api"],
     },
   };
 
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "CollectionPage",
-    "name": "Artister | K&K RECORDS",
+    "name": "Artister | Music For Pennies",
     "description":
-      "K&K Records representerar ett brett spektrum av artister och musiker i Sverige.",
-    "url": "https://kkrecords.se/artists",
+      "Music For Pennies representerar ett brett spektrum av artister och musiker i Sverige.",
+    "url": "https://musicforpennies.se/artists",
     "publisher": {
       "@type": "Organization",
-      "name": "K&K Records",
-      "url": "https://kkrecords.se",
+      "name": "Music For Pennies",
+      "url": "https://musicforpennies.se",
     },
   };
   

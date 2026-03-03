@@ -10,24 +10,24 @@ export const metadata: Metadata = {
   description: "Bästa gänget, svänget & hänget.",
   openGraph: {
     title: "",
-    description: "Explore top artists, upcoming concerts, and new releases from K&K Records.",
-    url: "https://kkrecords.se/",
-    siteName: "K&K RECORDS",
+    description: "Explore top artists, upcoming concerts, and new releases from Music For Pennies.",
+    url: "https://musicforpennies.se/",
+    siteName: "Music For Pennies",
     images: [
       {
-        url: "https://kkrecords.se/api",
+        url: "https://musicforpennies.se/api",
         width: 1200,
         height: 630,
-        alt: "K&K RECORDS",
+        alt: "ç",
       },
     ],
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "K&K RECORDS",
-    description: "Stay updated with the latest music, concerts, and artists at K&K Records.",
-    images: ["https://kkrecords.se/api"],
+    title: "Music For Pennies",
+    description: "Stay updated with the latest music, concerts, and artists at Music For Pennies.",
+    images: ["https://musicforpennies.se/api"],
   },
 };
 
@@ -35,20 +35,20 @@ export default function Home() {
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "WebSite",
-    "name": "K&K Records",
-    "url": "https://kkrecords.se",
-    "description": "Discover top artists, upcoming concerts, and new releases from K&K Records.",
+    "name": "Music For Pennies",
+    "url": "https://musicforpennies.se",
+    "description": "Discover top artists, upcoming concerts, and new releases from Music For Pennies.",
     "publisher": {
       "@type": "Organization",
-      "name": "K&K Records",
+      "name": "Music For Pennies",
       "logo": {
         "@type": "ImageObject",
-        "url": "https://kkrecords.se/api"
+        "url": "https://musicforpennies.se/api"
       }
     },
     "potentialAction": {
       "@type": "SearchAction",
-      "target": "https://kkrecords.se/search?q={search_term_string}",
+      "target": "https://musicforpennies.se/search?q={search_term_string}",
       "query-input": "required name=search_term_string"
     }
   };

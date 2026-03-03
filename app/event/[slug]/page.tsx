@@ -66,7 +66,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 
   if (!event) {
     return {
-      title: "Event Not Found - K&K Records",
+      title: "Event Not Found - Music For Pennies",
       description: "The requested event does not exist.",
     }
   }
@@ -75,18 +75,18 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 
   return {
     title: `${event.name}`,
-    description: plainTextDescription || `Event by K&K Records: ${event.name}`,
+    description: plainTextDescription || `Event by Music For Pennies: ${event.name}`,
     openGraph: {
-      title: `${event.name} - K&K Records`,
-      description: plainTextDescription || `Event by K&K Records: ${event.name}`,
-      url: `https://kkrecords.se/event/${event.slug.current}`,
-      siteName: "K&K Records",
+      title: `${event.name} - Music For Pennies`,
+      description: plainTextDescription || `Event by Music For Pennies: ${event.name}`,
+      url: `https://musicforpennies.se/event/${event.slug.current}`,
+      siteName: "Music For Pennies",
       images: event.image ? [{ url: urlFor(event.image).url() }] : [],
     },
     twitter: {
       card: "summary_large_image",
-      title: `${event.name} - K&K Records`,
-      description: plainTextDescription || `Event by K&K Records: ${event.name}`,
+      title: `${event.name} - Music For Pennies`,
+      description: plainTextDescription || `Event by Music For Pennies: ${event.name}`,
       images: event.image ? [{ url: urlFor(event.image).url() }] : [],
     },
   }
@@ -107,18 +107,18 @@ export default async function EventPage({ params }: { params: Promise<{ slug: st
   const venueObject = venue
     ? {
         "@type": "Place" as const,
-        name: venue.name || "K&K Records Venue",
-        address: venue.address || "K&K Records, Sweden",
+        name: venue.name || "Music For Pennies Venue",
+        address: venue.address || "Music For Pennies, Sweden",
       }
     : {
         "@type": "Place" as const,
-        name: "K&K Records Venue",
-        address: "K&K Records, Sweden",
+        name: "Music For Pennies Venue",
+        address: "Music For Pennies, Sweden",
       }
 
   const performerObject = {
     "@type": "MusicGroup" as const,
-    name: event.headline?.name || event.name || "K&K Records Artist",
+    name: event.headline?.name || event.name || "Music For Pennies Artist",
   }
 
   const jsonLd = {
@@ -128,15 +128,15 @@ export default async function EventPage({ params }: { params: Promise<{ slug: st
     startDate: event.date,
     eventStatus: "https://schema.org/EventScheduled",
     location: venueObject,
-    image: event.image ? urlFor(event.image).url() : "https://kkrecords.se/default-event-image.jpg",
-    url: `https://kkrecords.se/event/${event.slug.current}`,
-    description: plainTextDescription || `Music event: ${event.name} at K&K Records`,
+    image: event.image ? urlFor(event.image).url() : "https://musicforpennies.se/default-event-image.jpg",
+    url: `https://musicforpennies.se/event/${event.slug.current}`,
+    description: plainTextDescription || `Music event: ${event.name} at Music For Pennies`,
     performer: performerObject,
     organizer: {
       "@type": "Organization",
-      name: "K&K Records",
-      url: "https://kkrecords.se",
-      logo: "https://kkrecords.se/logo.png",
+      name: "Music For Pennies",
+      url: "https://musicforpennies.se",
+      logo: "https://musicforpennies.se/logo.png",
     },
     offers: tickets
       ? {

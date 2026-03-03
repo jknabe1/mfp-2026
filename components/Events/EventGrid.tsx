@@ -63,15 +63,15 @@ const EventGrid = () => {
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'EventSeries',
-    'name': 'K&K Records Events',
-    'description': 'A list of concerts and events at K&K Records.',
+    'name': 'Music For Pennies Events',
+    'description': 'A list of concerts and events at Music For Pennies.',
     'event': allEvents.map((event) => ({
       '@type': 'MusicEvent',
       'name': event.name,
       'startDate': event.date,
       'eventStatus': 'https://schema.org/EventScheduled',
       'image': event.image ? urlFor(event.image).url() : undefined,
-      'url': `https://kkrecords.se/event/${event.slug.current}`,
+      'url': `https://musicforpennies.se/event/${event.slug.current}`,
     })),
   };
 

@@ -54,13 +54,13 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 
   if (!artist) {
     return {
-      title: 'Artist Not Found | K&K RECORDS',
+      title: 'Artist Not Found | Music For Pennies',
       description: 'The requested artist could not be found.',
     };
   }
 
   return {
-    title: `${artist.name} | K&K RECORDS`,
+    title: `${artist.name} | Music For Pennies`,
     description: artist.Biography?.map(block => block.children?.map(child => child.text).join(' ')).join(' ') || 'Explore the artist’s biography and works.',
     openGraph: {
       title: artist.name,

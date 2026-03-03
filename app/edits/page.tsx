@@ -24,27 +24,27 @@ export const revalidate = 30;
 
 export const metadata: Metadata = {
   title: 'Edits',
-  description: 'Senaste nyheterna från K&K Records. Håll dig uppdaterad med pressmeddelanden, evenemang och nyheter.',
+  description: 'Senaste nyheterna från Music For Pennies. Håll dig uppdaterad med pressmeddelanden, evenemang och nyheter.',
   openGraph: {
-    title: 'Edits - K&K Records',
-    description: 'Senaste nyheterna från K&K Records.',
-    url: 'https://kkrecords.se/edits',
-    siteName: 'K&K Records',
+    title: 'Edits - Music For Pennies',
+    description: 'Senaste nyheterna från Music For Pennies.',
+    url: 'https://musicforpennies.se/edits',
+    siteName: 'Music For Pennies',
     images: [
       {
-        url: 'https://kkrecords.se/api', // Replace with a valid image
+        url: 'https://musicforpennies.se/api', // Replace with a valid image
         width: 1200,
         height: 630,
-        alt: 'Nyheter - K&K Records',
+        alt: 'Nyheter - Music For Pennies',
       },
     ],
     type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Edits - K&K Records',
-    description: 'Håll dig uppdaterad med de senaste nyheterna från K&K Records.',
-    images: ['https://kkrecords.se/api'],
+    title: 'Edits - Music For Pennies',
+    description: 'Håll dig uppdaterad med de senaste nyheterna från Music For Pennies.',
+    images: ['https://musicforpennies.se/api'],
   },
 };
 

@@ -11,7 +11,7 @@ const staticPages = [
   "events",
   "edits",
 ].map((path) => ({
-  url: `https://kkrecords.se/${path}`,
+  url: `https://musicforpennies.se/${path}`,
   lastModified: new Date().toISOString(),
 }));
 
@@ -29,17 +29,17 @@ async function fetchDynamicRoutes() {
 
   // Convert Sanity data to sitemap format
   const artistRoutes = artists.map(({ slug }) => ({
-    url: `https://kkrecords.se/artists/${slug.current}`,
+    url: `https://musicforpennies.se/artists/${slug.current}`,
     lastModified: new Date().toISOString(),
   }));
 
   const newsRoutes = news.map(({ slug }) => ({
-    url: `https://kkrecords.se/edits/${slug.current}`,
+    url: `https://musicforpennies.se/edits/${slug.current}`,
     lastModified: new Date().toISOString(),
   }));
 
   const eventRoutes = events.map(({ slug }) => ({
-    url: `https://kkrecords.se/event/${slug.current}`,
+    url: `https://musicforpennies.se/event/${slug.current}`,
     lastModified: new Date().toISOString(),
   }));
 

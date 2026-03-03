@@ -72,7 +72,7 @@ export default async function BlogArticle({ params }: { params: Promise<{ slug: 
     name: artist.name,
     description: artist.Biography,
     image: artist.image ? urlFor(artist.image).url() : undefined,
-    url: `https://kkrecords.se/artists/${artist.currentSlug}`,
+    url: `https://musicforpennies.se/artists/${artist.currentSlug}`,
     sameAs: [artist.Instagram || '', artist.Facebook || '', artist.spotify || ''].filter(Boolean),
   };
 

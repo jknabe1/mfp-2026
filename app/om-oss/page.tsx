@@ -7,30 +7,30 @@ import Image from "next/image";
 export const metadata: Metadata = {
   title: "Om Oss",
   description:
-    "K&K Records är en ledande aktör inom live- och underhållningsindustrin i Sverige och Europa. Vi representerar artister, producerar konserter, festivaler och musikaler.",
+    "Music For Pennies är en ledande aktör inom live- och underhållningsindustrin i Sverige och Europa. Vi representerar artister, producerar konserter, festivaler och musikaler.",
   openGraph: {
-    title: "Om K&K Records - Mer än ett skivbolag",
+    title: "Om Music For Pennies - Mer än ett skivbolag",
     description:
-      "K&K Records är en ledande aktör inom live- och underhållningsindustrin i Sverige och Europa. Vi representerar artister, producerar konserter, festivaler och musikaler.",
-    url: "https://kkrecords.se/om-oss",
-    siteName: "K&K Records",
+      "Music For Pennies är en ledande aktör inom live- och underhållningsindustrin i Sverige och Europa. Vi representerar artister, producerar konserter, festivaler och musikaler.",
+    url: "https://musicforpennies.se/om-oss",
+    siteName: "Music For Pennies",
     images: [
       {
-        url: "https://kkrecords.se/api",
+        url: "https://musicforpennies.se/api",
         width: 1200,
         height: 800,
-        alt: "K&K Records - Om oss",
+        alt: "Music For Pennies - Om oss",
       },
     ],
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Om K&K Records - Mer än ett skivbolag",
+    title: "Om Music For Pennies - Mer än ett skivbolag",
     description:
-      "K&K Records är en ledande aktör inom live- och underhållningsindustrin i Sverige och Europa. Vi representerar artister, producerar konserter, festivaler och musikaler.",
+      "Music For Pennies är en ledande aktör inom live- och underhållningsindustrin i Sverige och Europa. Vi representerar artister, producerar konserter, festivaler och musikaler.",
     images: [
-      "https://kkrecords.se/api",
+      "https://musicforpennies.se/api",
     ],
   },
 };
@@ -40,11 +40,11 @@ export default function Page() {
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "Organization",
-    "name": "K&K Records",
+    "name": "Music For Pennies",
     "description":
-      "K&K Records är en ledande aktör inom live- och underhållningsindustrin i Sverige och Europa. Vi representerar artister, producerar konserter, festivaler och musikaler.",
+      "Music For Pennies är en ledande aktör inom live- och underhållningsindustrin i Sverige och Europa. Vi representerar artister, producerar konserter, festivaler och musikaler.",
     "image": "https://cdn.sanity.io/images/1k2t1bm0/production/b34d044f641e16d3f97b0237d7fbda9b0a22b306-1439x1913.jpg",
-    "url": "https://kkrecords.se/about",
+    "url": "https://musicforpennies.se/about",
     "sameAs": [
       "https://www.facebook.com/kkmusicrecords",
       "https://www.instagram.com/kkrecords.se",
@@ -81,12 +81,12 @@ export default function Page() {
                             <li className="grid-col-border px-2 py-3 lg:px-5">
                               {/* Heading */}
                               <h1 className="text-sans-35 lg:text-sans-60 font-600">
-                                Om K&K Records
+                                Om Music For Pennies
                               </h1>
 
                               {/* Introduction */}
                               <p className="mt-4 text-lg leading-relaxed">
-                              På K&K Records har vi sedan starten 2019 haft en tydlig ambition: att skapa bättre förutsättningar för unga kulturutövare i Örebro län. Vi tror på kraften i kreativitet och vill ge unga artister och kreatörer det stöd de behöver för att kunna växa – både konstnärligt och professionellt.
+                              På Music For Pennies har vi sedan starten 2019 haft en tydlig ambition: att skapa bättre förutsättningar för unga kulturutövare i Örebro län. Vi tror på kraften i kreativitet och vill ge unga artister och kreatörer det stöd de behöver för att kunna växa – både konstnärligt och professionellt.
                               Vi erbjuder finansiering till kulturella produktioner såsom studioinspelningar, musikvideos och turnéer. Utöver det fungerar vi som ett bollplank i frågor som rör utveckling, strategiskt tänkande och långsiktigt skapande. Målet är att varje person vi samarbetar med ska känna sig sedd, stärkt och fri att uttrycka sin vision.
                               Vi vill vara en del av ett kulturliv som är levande, inkluderande och framåtblickande. Genom våra initiativ vill vi inte bara stödja individer, utan också bidra till en starkare musikexport från regionen.
                               </p>

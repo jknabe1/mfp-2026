@@ -7,27 +7,27 @@ import Image from 'next/image';
 // ✅ Static Metadata
 export const metadata: Metadata = {
   title: "Kontakta oss",
-  description: "Kontakta oss på K&K Records. Här hittar du kontaktuppgifter till föreningen, press, ekonomi, och våra medarbetare.",
+  description: "Kontakta oss på Music For Pennies. Här hittar du kontaktuppgifter till föreningen, press, ekonomi, och våra medarbetare.",
   openGraph: {
-    title: "Kontakta oss - K&K Records",
-    description: "Behöver du nå oss? Här hittar du kontaktuppgifter till K&K Records.",
-    url: "https://kkrecords.se/om-oss/kontakta-oss",
-    siteName: "K&K Records",
+    title: "Kontakta oss - Music For Pennies",
+    description: "Behöver du nå oss? Här hittar du kontaktuppgifter till Music For Pennies.",
+    url: "https://musicforpennies.se/om-oss/kontakta-oss",
+    siteName: "Music For Pennies",
     images: [
       {
-        url: "https://kkrecords.se/api",
+        url: "https://musicforpennies.se/api",
         width: 1200,
         height: 800,
-        alt: "K&K Records Kontakt",
+        alt: "Music For Pennies Kontakt",
       },
     ],
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Kontakta oss - K&K Records",
-    description: "Behöver du nå oss? Här hittar du kontaktuppgifter till K&K Records.",
-    images: ["https://kkrecords.se/api"],
+    title: "Kontakta oss - Music For Pennies",
+    description: "Behöver du nå oss? Här hittar du kontaktuppgifter till Music For Pennies.",
+    images: ["https://musicforpennies.se/api"],
   },
 };
 
@@ -36,14 +36,14 @@ export default function page() {
     const jsonLd = {
         "@context": "https://schema.org",
         "@type": "ContactPage",
-        "name": "Kontakta oss  - K&K Records",
-        "description": "Kontaktuppgifter till K&K Records.",
-        "url": "https://kkrecords.se/om-oss/kontakta-oss",
-        "image": "https://kkrecords.se/api",
+        "name": "Kontakta oss  - Music For Pennies",
+        "description": "Kontaktuppgifter till Music For Pennies.",
+        "url": "https://musicforpennies.se/om-oss/kontakta-oss",
+        "image": "https://musicforpennies.se/api",
         "publisher": {
           "@type": "Organization",
-          "name": "K&K Records",
-          "url": "https://kkrecords.se"
+          "name": "Music For Pennies",
+          "url": "https://musicforpennies.se"
         },
         "contactPoint": [
           {

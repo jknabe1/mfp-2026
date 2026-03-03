@@ -31,7 +31,7 @@ export async function generateMetadata({ params }) {
 
   if (!about) {
     return {
-      title: 'About Not Found - K&K Records',
+      title: 'About Not Found - Music For Pennies',
       description: 'The requested about page could not be found.',
     };
   }
@@ -40,13 +40,13 @@ export async function generateMetadata({ params }) {
     title: `${about.name}`,
     description: about.excerpt || 'Read the latest about and updates.',
     openGraph: {
-      title: `${about.name} - K&K Records`,
+      title: `${about.name} - Music For Pennies`,
       description: about.excerpt || 'Read the latest about and updates.',
       images: about.image ? [{ url: urlFor(about.image).url() }] : [],
     },
     twitter: {
       card: 'summary_large_image',
-      title: `${about.name} - K&K Records`,
+      title: `${about.name} - Music For Pennies`,
       description: about.excerpt || 'Read the latest about and updates.',
       images: about.image ? [{ url: urlFor(about.image).url() }] : [],
     },
@@ -67,19 +67,19 @@ export default async function BlogArticle({ params }) {
     datePublished: about.publishedAt,
     mainEntityOfPage: {
       '@type': 'WebPage',
-      '@id': `https://kkrecords.se/om-oss/${about.currentSlug}`,
+      '@id': `https://musicforpennies.se/om-oss/${about.currentSlug}`,
     },
     image: about.image ? urlFor(about.image).url() : undefined,
     author: {
       '@type': 'Organization',
-      name: 'K&K Records',
+      name: 'Music For Pennies',
     },
     publisher: {
       '@type': 'Organization',
-      name: 'K&K Records',
+      name: 'Music For Pennies',
       logo: {
         '@type': 'ImageObject',
-        url: 'https://kkrecords.se/api',
+        url: 'https://musicforpennies.se/api',
       },
     },
   };

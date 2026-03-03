@@ -41,22 +41,22 @@ export async function generateMetadata(): Promise<Metadata> {
     title: 'Events',
     description: 'Se våra kommande och tidigare konserter och evenemang.',
     openGraph: {
-      title: 'Events - K&K Records',
-      description: 'Check out the latest concerts and events at K&K Records.',
-      url: 'https://kkrecords.se/events',
-      siteName: 'K&K Records',
+      title: 'Events - Music For Pennies',
+      description: 'Check out the latest concerts and events at Music For Pennies.',
+      url: 'https://musicforpennies.se/events',
+      siteName: 'Music For Pennies',
       images: events.length > 0
         ? events.map((event) => ({ url: urlFor(event.image).url() }))
-        : [{ url: 'https://kkrecords.se/assets/default-event.jpg' }],
+        : [{ url: 'https://musicforpennies.se/assets/default-event.jpg' }],
       type: 'website',
     },
     twitter: {
       card: 'summary_large_image',
-      title: 'Events - K&K Records',
-      description: 'Stay updated with the latest concerts and events at K&K Records.',
+      title: 'Events - Music For Pennies',
+      description: 'Stay updated with the latest concerts and events at Music For Pennies.',
       images: events.length > 0
         ? events.map((event) => urlFor(event.image).url())
-        : ['https://kkrecords.se/assets/default-event.jpg'],
+        : ['https://musicforpennies.se/assets/default-event.jpg'],
     },
   };
 }

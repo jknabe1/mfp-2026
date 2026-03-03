@@ -10,20 +10,20 @@ export const dynamic = 'force-dynamic'; // Force revalidation on every request
 
 export const metadata: Metadata = {
   title: {
-    template: '%s | K&K RECORDS',
-    default: 'K&K RECORDS', 
+    template: '%s | Music For Pennies',
+    default: 'Music For Pennies', 
   },  
   description: "Inte den vanliga sortens skivbolag...",
 
-  metadataBase: new URL('https://kkrecords.se'),
+  metadataBase: new URL('https://musicforpennies.se'),
   openGraph: {
-    title: 'K&K RECORDS',
+    title: 'Music For Pennies',
     description: "Inte den vanliga sortens skivbolag...",
-    url: 'https://kkrecords.se',
-    siteName: 'K&K RECORDS',
+    url: 'https://musicforpennies.se',
+    siteName: 'Music For Pennies',
     images: [
       {
-        url: 'https://kkrecords.se/api', // Must be an absolute URL
+        url: 'https://musicforpennies.se/api', // Must be an absolute URL
         width: 800,
         height: 600,
       },
@@ -36,7 +36,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'wwww.kkrecords.se',
     description: "Inte den vanliga sortens skivbolag...",
-    images: ['https://kkrecords.se/api',], // Must be an absolute URL
+    images: ['https://musicforpennies.se/api',], // Must be an absolute URL
   },
 
 };

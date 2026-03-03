@@ -111,11 +111,11 @@ const Header = () => {
               </ul>
             </div>
             <div className="col-span-4 lg:col-span-4 lg:flex justify-center">
-              <Link aria-label="K&K Records" className="block xl:ml-3" href="/">
+              <Link aria-label="Music For Pennies" className="block xl:ml-3" href="/">
                 <picture>
                   <img
                     src="/media/mfp.svg"
-                    alt="K&K Records Logo"
+                    alt="Music For Pennies Logo"
                     className="block w-full h-full"
                   />
                 </picture>
