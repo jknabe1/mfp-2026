@@ -49,7 +49,7 @@ export default function page() {
           {
             "@type": "ContactPoint",
             "contactType": "Föreningen",
-            "email": "halloj@kkrecords.se"
+            "email": "tjooo@musicforpennies.se"
           },
           {
             "@type": "ContactPoint",
@@ -59,7 +59,7 @@ export default function page() {
           {
             "@type": "ContactPoint",
             "contactType": "Press",
-            "email": "jens.knabe@kkrecords.se"
+            "email": "jens.knabe@musicforpennies.se"
           },
           {
             "@type": "ContactPoint",
@@ -88,7 +88,7 @@ export default function page() {
                             <li className="grid-col-border  px-2 py-3 lg:px-5">
                                 <h2 className="text-sans-35 lg:text-sans-60 font-600">Föreningen</h2>
                                 <div className="rich-text text-sans-22 lg:text-sans-30 rich-text-light line-break">
-                                    <p>halloj@kkrecords.se</p>
+                                    <p>tjooo@musicforpennies.se</p>
                                 </div>
                             </li>
                             <li className="grid-col-border px-2 py-3 lg:px-5">
@@ -100,7 +100,7 @@ export default function page() {
                             <li className="grid-col-border px-2 py-3 lg:px-5">
                                 <h2 className="text-sans-35 lg:text-sans-60 font-600">Press</h2>
                                 <div className="rich-text text-sans-22 lg:text-sans-30 rich-text-light line-break">
-                                    <p>jens.knabe@kkrecords.se</p>
+                                    <p>jens.knabe@musicforpennies.se</p>
                                 </div>
                             </li>
                             <li className="grid-col-border px-2 py-3 lg:px-5">

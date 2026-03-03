@@ -74,7 +74,7 @@ export default function Footer() {
                                 <div>
                                     <ul className="flex flex-col gap-px border-t border-solid">
                                         <li className="grid-col-border">
-                                            <Link className="block w-full text-sans-14 uppercase tracking-wider p-2 text-left" title="Instagram" aria-label="Instagram" href="https://www.instagram.com/kkrecords.se">Instagram</Link>
+                                            <Link className="block w-full text-sans-14 uppercase tracking-wider p-2 text-left" title="Instagram" aria-label="Instagram" href="https://www.instagram.com/musicforpennies.se">Instagram</Link>
                                         </li>
                                         <li className="grid-col-border">
                                             <Link className="block w-full text-sans-14 uppercase tracking-wider p-2 text-left" title="Facebook" aria-label="Facebook" href="https://www.facebook.com/kkmusicrecords">Facebook</Link>
@@ -138,7 +138,7 @@ export default function Footer() {
                             <h2 className="text-sans-60 font-600 mb-2 tracking-tighter ml-[-0.08em]">Socials</h2>
                             <ul>
                                 <li>
-                                    <Link className="inline-block text-sans-16 uppercase tracking-wider font-800 link-primary pb-1" title="Instagram" aria-label="Instagram" href="https://www.instagram.com/kkrecords.se">Instagram</Link>
+                                    <Link className="inline-block text-sans-16 uppercase tracking-wider font-800 link-primary pb-1" title="Instagram" aria-label="Instagram" href="https://www.instagram.com/musicforpennies.se">Instagram</Link>
                                 </li>
                                 <li>
                                     <Link className="inline-block text-sans-16 uppercase tracking-wider font-800 link-primary pb-1" title="Facebook" aria-label="Facebook" href="https://www.facebook.com/kkmusicrecords">Facebook</Link>

@@ -34,7 +34,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'wwww.kkrecords.se',
+    title: 'wwww.musicforpennies.se',
     description: "Inte den vanliga sortens skivbolag...",
     images: ['https://musicforpennies.se/api',], // Must be an absolute URL
   },

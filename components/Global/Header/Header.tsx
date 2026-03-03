@@ -317,7 +317,7 @@ const Header = () => {
               {/* First row - 3 links */}
               <div className="flex justify-center items-center space-x-4">
                 <Link
-                  href="https://www.instagram.com/kkrecords.se"
+                  href="https://www.instagram.com/musicforpennies.se"
                   className="text-sm font-medium hover:italic px-2 py-1 whitespace-nowrap"
                   onClick={handleLinkClick}
                 >
@@ -411,7 +411,7 @@ const Header = () => {
                     className="block w-full text-sans-14 uppercase tracking-wider p-2 text-center"
                     title="Instagram"
                     aria-label="Instagram"
-                    href="https://www.instagram.com/kkrecords.se"
+                    href="https://www.instagram.com/musicforpennies.se"
                   >
                     Instagram
                   </Link>

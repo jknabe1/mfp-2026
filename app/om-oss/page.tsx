@@ -26,7 +26,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Om Music For Pennies - Mer än ett skivbolag",
+    title: "Om Music For Pennies",
     description:
       "Music For Pennies är en ledande aktör inom live- och underhållningsindustrin i Sverige och Europa. Vi representerar artister, producerar konserter, festivaler och musikaler.",
     images: [
@@ -44,12 +44,12 @@ export default function Page() {
     "description":
       "Music For Pennies är en ledande aktör inom live- och underhållningsindustrin i Sverige och Europa. Vi representerar artister, producerar konserter, festivaler och musikaler.",
     "image": "https://cdn.sanity.io/images/1k2t1bm0/production/b34d044f641e16d3f97b0237d7fbda9b0a22b306-1439x1913.jpg",
-    "url": "https://musicforpennies.se/about",
+    "url": "https://musicforpennies.se/om-oss",
     "sameAs": [
-      "https://www.facebook.com/kkmusicrecords",
-      "https://www.instagram.com/kkrecords.se",
+      "https://www.facebook.com/musicforpennies",
+      "https://www.instagram.com/music_for_pennies",
     ],
-    "foundingDate": "2019",
+    "foundingDate": "2022",
     "founder": [
       {
         "@type": "Person",
@@ -57,7 +57,7 @@ export default function Page() {
       },
       {
         "@type": "Person",
-        "name": "Edwin Krutholm",
+        "name": "Mikael Lehikoinen",
       },
     ],
     "memberOf": {

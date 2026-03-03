@@ -17,7 +17,7 @@ module.exports = {
           hostname: 'cdn.sanity.io'
         },
         {
-          hostname: 'kkrecords.se',
+          hostname: 'musicforpennies.se',
         },
         {
           hostname: 'images.ctfassets.net',
