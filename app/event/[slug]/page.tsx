@@ -193,7 +193,7 @@ export default async function EventPage({ params }: { params: Promise<{ slug: st
                     alt={event.name}
                     className="w-full h-full object-cover noise"
                     width={1000}
-                    height={1000}
+                    height={1350}
                     loading="lazy"
                   />
                 ) : (

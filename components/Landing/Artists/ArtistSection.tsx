@@ -105,7 +105,7 @@ export default function ArtistSection() {
   const SeeMoreSlide = () => (
     <div className="keen-slider__slide">
       <Link
-        href="/artists"
+        href="/arrangemang"
         className="group block relative aspect-[4/5] lg:aspect-[6/5] overflow-hidden bg-black flex items-center justify-center"
       >
         <div className="text-white text-center p-5">
@@ -132,7 +132,7 @@ export default function ArtistSection() {
             {[...randomArtists, ...filteredArtists.slice(0, 3)].map((artist) => (
               <div key={artist._id} className="keen-slider__slide">
                 <Link
-                  href={`/artists/${artist.slug.current}`}
+                  href={`/arrangemang/${artist.slug.current}`}
                   className="group block relative aspect-[4/5] overflow-hidden"
                 >
                   <Image
@@ -164,7 +164,7 @@ export default function ArtistSection() {
                 {randomArtists.map((artist) => (
                   <Link
                     key={artist._id}
-                    href={`/artists/${artist.slug.current}`}
+                    href={`/arrangemang/${artist.slug.current}`}
                     className="group block relative aspect-[4/5] lg:aspect-[6/5] overflow-hidden"
                   >
                     <Image
@@ -192,7 +192,7 @@ export default function ArtistSection() {
                 {filteredArtists.slice(0, 2).map((artist) => (
                   <Link
                     key={artist._id}
-                    href={`/artists/${artist.slug.current}`}
+                    href={`/arrangemang/${artist.slug.current}`}
                     className="group block relative aspect-[4/5] lg:aspect-[6/5] overflow-hidden"
                   >
                     <Image
@@ -214,7 +214,7 @@ export default function ArtistSection() {
 
                 {/* Static "See More" panel */}
                 <Link
-                  href="/artists"
+                  href="/arrangemang"
                   className="group block relative aspect-[4/5] lg:aspect-[6/5] overflow-hidden bg-black flex items-center justify-center"
                 >
                   <div className="text-white text-center p-5">
