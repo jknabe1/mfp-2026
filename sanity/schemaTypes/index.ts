@@ -1,11 +1,23 @@
-import {eventType} from './eventType'
-import {artistType} from './artistType'
-import {venueType} from './venueType'
-import {dataType} from './dataType'
-import { newsType } from './newsType'
-import { teamType } from './teamType'
-import { sponsorType } from './sponsorType'
-import { playlist } from './playListType'
-import { video } from './videoType'
-import { aboutType } from './aboutType'
-export const schemaTypes = [artistType, eventType, venueType, dataType, newsType, teamType, sponsorType, playlist, video, aboutType]
+// Import everything from the documents folder
+import {artistType} from './documents/artistType'
+import {eventType} from './documents/eventType'
+import {venueType} from './documents/venueType'
+import {dataType} from './documents/dataType'
+import {newsType} from './documents/newsType'
+import {teamType} from './documents/teamType'
+import {sponsorType} from './documents/sponsorType'
+import {aboutType} from './documents/aboutType'
+import {arrangemangType} from './documents/arrangemangType'
+
+// Export them all (you can keep the same order)
+export const schemaTypes = [
+  artistType, 
+  eventType, 
+  venueType, 
+  dataType, 
+  newsType, 
+  teamType, 
+  sponsorType, 
+  aboutType, 
+  arrangemangType
+]

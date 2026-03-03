@@ -2,8 +2,8 @@ import type { Metadata } from 'next';
 import AboutSection from "@/components/Landing/About/AboutSection";
 import ConcertSection from "@/components/Landing/ConcertSection";
 import NewsSection from "@/components/Landing/NewsSection";
-import TuneIn from "@/components/Landing/TuneIn/playlist-section";
-import ArtistSection from "@/components/Landing/Artists/ArtistSection";
+import VaraArrangemang from "@/components/Landing/Arrangemang/VaraArrangemang";
+import ForeningarSection from '@/components/Landing/Foreningar/ForeningarSection';
 
 export const metadata: Metadata = {
   title: "Music For Pennies",
@@ -61,9 +61,9 @@ export default function Home() {
       />
       <AboutSection />
       <ConcertSection />
-      <ArtistSection />
       <NewsSection />
-      <TuneIn />
+      <VaraArrangemang />
+      <ForeningarSection />
     </main>
   );
 }

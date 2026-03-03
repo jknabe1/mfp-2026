@@ -1,6 +1,6 @@
 import {defineField, defineType} from 'sanity'
 import {CalendarIcon} from '@sanity/icons'
-import {DoorsOpenInput} from './components/DoorsOpenInput'
+import {DoorsOpenInput} from '../components/DoorsOpenInput'
 
 
 
