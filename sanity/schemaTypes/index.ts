@@ -1,5 +1,5 @@
 // Import everything from the documents folder
-import {foreningType} from './documents/artistType'
+import {foreningType} from './documents/foreningType'
 import {eventType} from './documents/eventType'
 import {venueType} from './documents/venueType'
 import {dataType} from './documents/dataType'

@@ -22,10 +22,10 @@ export async function generateMetadata(): Promise<Metadata> {
   const arrangemangArtists = await fetchArrangemangArtists();
   
   return {
-    title: 'Artister',
+    title: 'Arrangemang - Music For Pennies',
     description: 'Utforska alla artister som är signade till Music For Pennies.',
     openGraph: {
-      title: 'Artister - Music For Pennies',
+      title: 'Arrangemang - Music For Pennies',
       description: 'Se hela listan av artister som är del av Music For Pennies och upptäck nya namn.',
       url: 'https://musicforpennies.se/arrangemang',
       siteName: 'Music For Pennies',
