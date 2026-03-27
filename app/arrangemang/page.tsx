@@ -3,42 +3,42 @@ import ArrangemangList from '@/components/Arrangemang/ArrangemangList';
 import { SanityImageSource } from '@/lib/utils';
 import type { Metadata } from 'next';
 
-interface ArtistData {
+interface ArrangemangData {
   _id: string;
-  name: string;
-  slug: { current: string };
-  date: string;
-  image: SanityImageSource;
+  Namn: string;
+  URL: { current: string };
+  Bild: SanityImageSource;
+  Beskrivning?: any;
 }
 
 export const revalidate = 30;
 
-async function fetchArrangemangArtists(): Promise<ArtistData[]> {
-  const arrangemangQuery = `*[_type == "artist" && defined(slug.current) && defined(date)]{_id, name, slug, date, image} | order(date desc)`;
-  return await client.fetch<ArtistData[]>(arrangemangQuery);
+async function fetchArrangemang(): Promise<ArrangemangData[]> {
+  const arrangemangQuery = `*[_type == "arrangemang" && defined(URL.current)]{_id, Namn, URL, Bild, Beskrivning} | order(Namn asc)`;
+  return await client.fetch<ArrangemangData[]>(arrangemangQuery);
 }
 
 export async function generateMetadata(): Promise<Metadata> {
-  const arrangemangArtists = await fetchArrangemangArtists();
+  const arrangemangItems = await fetchArrangemang();
   
   return {
     title: 'Arrangemang - Music For Pennies',
-    description: 'Utforska alla artister som är signade till Music For Pennies.',
+    description: 'Utforska alla arrangemang och evenemang från Music For Pennies.',
     openGraph: {
       title: 'Arrangemang - Music For Pennies',
-      description: 'Se hela listan av artister som är del av Music For Pennies och upptäck nya namn.',
+      description: 'Se hela listan av arrangemang och evenemang från Music For Pennies.',
       url: 'https://musicforpennies.se/arrangemang',
       siteName: 'Music For Pennies',
-      images: arrangemangArtists.length > 0 ? arrangemangArtists.slice(0, 1).map(artist => ({
-        url: artist.image ? `https://musicforpennies.se/api` : 'https://musicforpennies.se/assets/default-artist.jpg'
-      })) : [{ url: 'https://musicforpennies.se/assets/default-artist.jpg' }],
+      images: arrangemangItems.length > 0 ? arrangemangItems.slice(0, 1).map(item => ({
+        url: item.Bild ? `https://musicforpennies.se/api` : 'https://musicforpennies.se/assets/default-arrangemang.jpg'
+      })) : [{ url: 'https://musicforpennies.se/assets/default-arrangemang.jpg' }],
       type: 'website',
     },
   };
 }
 
 export default async function ArrangemangPage() {
-  const arrangemangArtists = await fetchArrangemangArtists();
+  const arrangemangItems = await fetchArrangemang();
 
-  return <ArrangemangList initialArtists={arrangemangArtists} />;
+  return <ArrangemangList initialArrangemang={arrangemangItems} />;
 }
