@@ -5,7 +5,6 @@ import imageUrlBuilder from '@sanity/image-url';
 import { client } from '@/sanity/client';
 import Link from 'next/link';
 import Image from 'next/image';
-import CursorGradientHero from './CursorGradientHero';
 
 // Define the Sanity image source type
 interface SanityImageSource {
@@ -55,49 +54,48 @@ function EventHeroBanner({ event }: { event: Event }) {
       className="group block relative w-full overflow-hidden border-b border-black border-solid"
       aria-label={`Gå till event: ${event.name}`}
     >
-      <CursorGradientHero className="h-[60vw] min-h-[320px] max-h-[85vh]">
-        {/* Full-width image */}
-        <div className="relative w-full h-full">
-          {event.image ? (
-            <Image
-              src={urlFor(event.image).width(2400).quality(85).url()}
-              alt={event.name}
-              fill
-              priority
-              className="object-cover noise transition-transform duration-700 ease-in-out group-hover:scale-[1.02]"
-              sizes="100vw"
-            />
-          ) : (
-            <div className="absolute inset-0 bg-black" />
-          )}
-
-          {/* "FEATURED" label top-left */}
-          <div className="absolute top-4 left-4 lg:top-6 lg:left-6 z-10">
-            <span className="inline-flex items-center gap-1.5 bg-[var(--vividGreen)] text-black text-sans-12 font-600 px-2 py-1 uppercase tracking-widest">
-              <span aria-hidden="true">■</span> Nästa event
-            </span>
-          </div>
-
-          {/* Bottom overlay: event info */}
-          <div className="absolute bottom-0 left-0 right-0 z-10 px-4 pb-6 lg:px-8 lg:pb-10 flex flex-col md:flex-row md:items-end md:justify-between gap-4">
-            {/* Event name */}
-            <h1 className="text-white uppercase font-600 text-sans-35 lg:text-sans-60 xl:text-sans-120 leading-none text-balance max-w-[80%]">
-              {event.name}
-            </h1>
-
-            {/* Date block */}
-            <div className="flex items-end gap-0 shrink-0">
-              <div className="flex flex-col items-center justify-center border border-white/60 px-4 py-3 min-w-[72px]">
-                <span className="text-white text-sans-35 lg:text-sans-60 font-600 leading-none">{day}</span>
-                <span className="text-white text-sans-12 font-600 tracking-widest mt-1">{month}</span>
+      <div className="relative w-full overflow-hidden border-b border-black border-solid">
+              {/* Hero image */}
+              <div className="relative w-full h-[56vw] min-h-[300px] max-h-[90vh]">
+                {event.image ? (
+                  <Image
+                    src={urlFor(event.image).width(2400).quality(90).url()}
+                    alt={event.name}
+                    fill
+                    priority
+                    className="object-cover noise"
+                    sizes="100vw"
+                  />
+                ) : (
+                  <div className="absolute inset-0 bg-black" />
+                )}
+      
+                {/* Gradient scrim — stronger at bottom for text legibility */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
+      
+                {/* Bottom overlay: arrangemang name */}
+                <div className="absolute bottom-0 left-0 right-0 z-10 px-4 pb-5 lg:px-8 lg:pb-8 flex flex-col items-start">
+                  <h1 className="text-white uppercase font-600 text-sans-35 lg:text-sans-60 xl:text-sans-120 leading-none text-balance max-w-[85%]">
+                    {event.name}
+                  </h1>
+                </div>
               </div>
-              <div className="flex flex-col items-center justify-center border border-white/60 border-l-0 px-4 py-3">
-                <span className="text-white text-sans-18 font-600 tracking-widest">{year}</span>
+      
+              {/* Banner info bar */}
+              <div className="flex items-center justify-between px-4 py-3 lg:px-8 lg:py-4 bg-black text-white uppercase">
+                <span className="text-sans-12 lg:text-sans-14 font-600 tracking-wide">
+                  Arrangemang
+                </span>
+                <Link
+                  href="/arrangemang"
+                  className="text-sans-12 font-600 tracking-widest text-[var(--vividGreen)] hover:italic transition-all"
+                >
+                  ← Alla arrangemang
+                </Link>
               </div>
             </div>
-          </div>
-        </div>
-      </CursorGradientHero>
+
+
 
       {/* Info bar below image */}
       <div className="flex items-center justify-between px-4 py-3 lg:px-8 lg:py-4 bg-black text-white uppercase">
