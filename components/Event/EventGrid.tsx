@@ -6,6 +6,7 @@ import { client } from '@/sanity/client';
 import Link from 'next/link';
 import Image from 'next/image';
 import CursorGradientHero from './CursorGradientHero';
+import CursorFollowImage from './CursorFollowImage';
 
 interface SanityImageSource {
   asset: { _ref: string };
@@ -119,62 +120,65 @@ function EventHeroBanner({ event }: { event: Event }) {
   );
 }
 
-// ─── Event Row (Debaser-style list row) ───────────────────────────────────────
+// ─── Event Row (Debaser-style list row with cursor-following image) ───────────
 function EventRow({ event, isPast }: { event: Event; isPast: boolean }) {
   const { day, weekday, month, year } = getDateParts(event.date);
   const type = (event.eventType === 'virtual' ? 'ONLINE' : 'KONSERT').toUpperCase();
+  const imageUrl = event.image ? urlFor(event.image).width(480).quality(80).url() : '';
 
   return (
-    <Link
-      href={`/event/${event.slug.current}`}
-      className="group grid grid-cols-[auto_1fr] md:grid-cols-[120px_auto_1fr_auto] items-center gap-px border-b border-black border-solid hover:bg-black hover:text-white transition-colors duration-150"
-      aria-label={event.name}
-    >
-      {/* Date block */}
-      <div className="flex flex-col items-center justify-center bg-black text-white px-4 py-5 md:px-6 md:py-6 min-w-[80px] md:min-w-[120px] self-stretch">
-        <span className="text-sans-10 font-600 tracking-widest opacity-70 uppercase">{weekday}</span>
-        <span className="text-sans-48 font-700 leading-none mt-0.5">{day}</span>
-        <span className="text-sans-10 font-600 tracking-widest mt-0.5 uppercase">{month}</span>
-        <span className="text-sans-10 font-600 tracking-widest opacity-50 mt-0.5">{year}</span>
-      </div>
+    <CursorFollowImage imageUrl={imageUrl} alt={event.name}>
+      <Link
+        href={`/event/${event.slug.current}`}
+        className="group grid grid-cols-[auto_1fr] md:grid-cols-[120px_auto_1fr_auto] items-center gap-px border-b border-black border-solid hover:bg-black hover:text-white transition-colors duration-150"
+        aria-label={event.name}
+      >
+        {/* Date block */}
+        <div className="flex flex-col items-center justify-center bg-black text-white px-4 py-5 md:px-6 md:py-6 min-w-[80px] md:min-w-[120px] self-stretch">
+          <span className="text-sans-10 font-600 tracking-widest opacity-70 uppercase">{weekday}</span>
+          <span className="text-sans-48 font-700 leading-none mt-0.5">{day}</span>
+          <span className="text-sans-10 font-600 tracking-widest mt-0.5 uppercase">{month}</span>
+          <span className="text-sans-10 font-600 tracking-widest opacity-50 mt-0.5">{year}</span>
+        </div>
 
-      {/* Type badge — hidden on mobile, shown as pill on md+ */}
-      <div className="hidden md:flex items-center justify-center self-stretch px-3 border-r border-l border-black bg-[var(--background)]">
-        <span className="text-sans-10 font-700 tracking-widest uppercase rotate-[-90deg] whitespace-nowrap opacity-60">
-          {type}
-        </span>
-      </div>
-
-      {/* Main content */}
-      <div className="flex flex-col justify-center px-4 py-5 md:px-6 md:py-6 min-w-0">
-        {/* Mobile: show type inline */}
-        <span className="md:hidden text-sans-9 font-700 tracking-widest uppercase opacity-50 mb-1">{type}</span>
-
-        <h3 className="text-sans-16 md:text-sans-22 font-700 uppercase leading-tight line-clamp-2 group-hover:italic transition-all">
-          {event.name}
-        </h3>
-
-        {event.venue?.name && (
-          <p className="text-sans-12 font-600 tracking-wide uppercase opacity-60 mt-1.5">
-            {[event.venue.name, event.venue.City].filter(Boolean).join(' — ')}
-          </p>
-        )}
-      </div>
-
-      {/* Right: status / CTA */}
-      <div className="hidden md:flex flex-col items-center justify-center self-stretch px-6 border-l border-black gap-2 min-w-[120px]">
-        {isPast ? (
-          <span className="text-sans-10 font-700 tracking-widest uppercase opacity-40 text-center">Avslutat</span>
-        ) : event.tickets ? (
-          <span className="inline-block bg-[var(--vividGreen)] text-black text-sans-10 font-700 tracking-widest uppercase px-3 py-1.5 text-center group-hover:bg-white transition-colors">
-            Biljetter
+        {/* Type badge — hidden on mobile, shown as pill on md+ */}
+        <div className="hidden md:flex items-center justify-center self-stretch px-3 border-r border-l border-black bg-[var(--background)] group-hover:bg-black">
+          <span className="text-sans-10 font-700 tracking-widest uppercase rotate-[-90deg] whitespace-nowrap opacity-60">
+            {type}
           </span>
-        ) : (
-          <span className="text-sans-10 font-700 tracking-widest uppercase opacity-40 text-center">Info</span>
-        )}
-        <span className="text-sans-18 font-700 group-hover:translate-x-1 transition-transform" aria-hidden="true">→</span>
-      </div>
-    </Link>
+        </div>
+
+        {/* Main content */}
+        <div className="flex flex-col justify-center px-4 py-5 md:px-6 md:py-6 min-w-0">
+          {/* Mobile: show type inline */}
+          <span className="md:hidden text-sans-9 font-700 tracking-widest uppercase opacity-50 mb-1">{type}</span>
+
+          <h3 className="text-sans-16 md:text-sans-22 font-700 uppercase leading-tight line-clamp-2 group-hover:italic transition-all">
+            {event.name}
+          </h3>
+
+          {event.venue?.name && (
+            <p className="text-sans-12 font-600 tracking-wide uppercase opacity-60 mt-1.5">
+              {[event.venue.name, event.venue.City].filter(Boolean).join(' — ')}
+            </p>
+          )}
+        </div>
+
+        {/* Right: status / CTA */}
+        <div className="hidden md:flex flex-col items-center justify-center self-stretch px-6 border-l border-black gap-2 min-w-[120px]">
+          {isPast ? (
+            <span className="text-sans-10 font-700 tracking-widest uppercase opacity-40 text-center">Avslutat</span>
+          ) : event.tickets ? (
+            <span className="inline-block bg-[var(--vividGreen)] text-black text-sans-10 font-700 tracking-widest uppercase px-3 py-1.5 text-center group-hover:bg-white transition-colors">
+              Biljetter
+            </span>
+          ) : (
+            <span className="text-sans-10 font-700 tracking-widest uppercase opacity-40 text-center">Info</span>
+          )}
+          <span className="text-sans-18 font-700 group-hover:translate-x-1 transition-transform" aria-hidden="true">→</span>
+        </div>
+      </Link>
+    </CursorFollowImage>
   );
 }
 
