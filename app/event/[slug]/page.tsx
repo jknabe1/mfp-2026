@@ -55,6 +55,11 @@ async function getEvent(slug: string): Promise<Event | null> {
   return await client.fetch(EVENT_QUERY, { slug })
 }
 
+async function getRelatedEvents(currentSlug: string): Promise<Event[]> {
+  const EVENTS_QUERY = `*[_type == "event" && slug.current != $slug && date < now()] | order(date desc)[0..6]`
+  return await client.fetch(EVENTS_QUERY, { slug: currentSlug })
+}
+
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params
   const event = await getEvent(slug)
@@ -128,10 +133,54 @@ function MetaRow({ label, value }: { label: string; value: React.ReactNode }) {
   )
 }
 
+// ─── Previous Event Card ────────────────────────────────────────────────────
+function PreviousEventCard({ event }: { event: Event }) {
+  return (
+    <Link
+      href={`/event/${event.slug.current}`}
+      className="group block p-4 lg:p-5 border border-black border-solid hover:bg-gray-50 transition-colors"
+    >
+      <div className="flex items-start justify-between gap-4">
+        {event.image && (
+          <div className="relative w-16 h-16 lg:w-20 lg:h-20 flex-shrink-0 overflow-hidden border border-black">
+            <Image
+              src={urlFor(event.image).width(200).quality(75).url()}
+              alt={event.name}
+              fill
+              className="object-cover"
+            />
+          </div>
+        )}
+        <div className="flex-grow min-w-0">
+          <h3 className="text-sans-14 lg:text-sans-16 font-600 uppercase group-hover:italic transition-all truncate">
+            {event.name}
+          </h3>
+          {event.date && (
+            <p className="text-sans-12 opacity-60 uppercase mt-1">
+              {new Date(event.date).toLocaleDateString('sv-SE', {
+                day: 'numeric',
+                month: 'short',
+                year: '2-digit',
+              })}
+            </p>
+          )}
+          {event.venue?.name && (
+            <p className="text-sans-12 opacity-50 uppercase mt-0.5">
+              {event.venue.name}
+            </p>
+          )}
+        </div>
+        <span className="text-[var(--vividGreen)] text-sans-14 font-600 shrink-0">→</span>
+      </div>
+    </Link>
+  )
+}
+
 // ─── Page ────────────────────────────────────────────────────────────────────
 export default async function EventPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params
   const event = await getEvent(slug)
+  const previousEvents = await getRelatedEvents(slug)
 
   if (!event) {
     return (
@@ -236,26 +285,60 @@ export default async function EventPage({ params }: { params: Promise<{ slug: st
           </div>
         </div>
 
-        {/* Banner info bar */}
-        <div className="flex flex-wrap items-center justify-between gap-3 px-4 py-3 lg:px-8 lg:py-4 bg-black text-white uppercase">
-          <div className="flex flex-wrap items-center gap-4 lg:gap-8">
-            {event.date && (
-              <span className="text-sans-12 lg:text-sans-14 font-600 tracking-wide capitalize">
-                {formatLongDate(event.date)} — {formatTime(event.date)}
-              </span>
-            )}
-            {venue?.name && (
-              <span className="text-sans-12 lg:text-sans-14 font-600 tracking-wide opacity-60">
-                {[venue.name, venue.City].filter(Boolean).join(', ')}
-              </span>
-            )}
+        {/* ── Enhanced Banner Info Bar (now larger and more prominent) ──── */}
+        <div className="bg-black text-white border-b border-black border-solid">
+          <div className="px-4 py-8 lg:px-8 lg:py-10">
+            <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
+              {/* Left: Date and Venue */}
+              <div className="flex flex-col gap-4">
+                {event.date && (
+                  <div>
+                    <p className="text-sans-12 font-600 uppercase tracking-widest opacity-60 mb-2">Datum & Tid</p>
+                    <p className="text-sans-18 lg:text-sans-24 font-600 uppercase capitalize">
+                      {formatLongDate(event.date)}
+                    </p>
+                    <p className="text-sans-16 lg:text-sans-20 font-600 uppercase mt-1">
+                      {formatTime(event.date)}
+                    </p>
+                  </div>
+                )}
+                {venue?.name && (
+                  <div className="mt-2">
+                    <p className="text-sans-12 font-600 uppercase tracking-widest opacity-60 mb-2">Plats</p>
+                    <p className="text-sans-18 lg:text-sans-24 font-600 uppercase">
+                      {venue.name}
+                    </p>
+                    {(venue.City || venue.Country) && (
+                      <p className="text-sans-16 lg:text-sans-18 font-600 uppercase opacity-75 mt-1">
+                        {[venue.City, venue.Country].filter(Boolean).join(', ')}
+                      </p>
+                    )}
+                  </div>
+                )}
+              </div>
+
+              {/* Right: Actions */}
+              <div className="flex flex-col gap-3">
+                {tickets && !isPast && (
+                  <Link
+                    href={tickets}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center justify-center gap-2 bg-[var(--vividGreen)] text-black px-8 py-4 text-sans-14 lg:text-sans-16 font-600 uppercase tracking-widest hover:bg-white transition-colors"
+                  >
+                    <span aria-hidden="true">■</span>
+                    Köp biljetter
+                  </Link>
+                )}
+                <Link
+                  href="/event"
+                  className="inline-flex items-center justify-center gap-2 text-sans-12 font-600 tracking-widest text-[var(--vividGreen)] hover:italic transition-all border border-[var(--vividGreen)] px-4 py-3"
+                >
+                  ← Alla event
+                </Link>
+              </div>
+            </div>
           </div>
-          <Link
-            href="/event"
-            className="text-sans-12 font-600 tracking-widest text-[var(--vividGreen)] hover:italic transition-all"
-          >
-            ← Alla event
-          </Link>
         </div>
       </div>
 
@@ -355,6 +438,28 @@ export default async function EventPage({ params }: { params: Promise<{ slug: st
           </div>
         </div>
       </div>
+
+      {/* ── Previous Events Section ────────────────────────────────────────── */}
+      {previousEvents && previousEvents.length > 0 && (
+        <section className="px-4 lg:px-8 py-12 lg:py-16 border-t border-black border-solid bg-gray-50">
+          <h2 className="text-sans-35 lg:text-sans-60 font-600 uppercase mb-8 pb-4 border-b border-black">
+            Tidigare event
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-px border border-black border-solid">
+            {previousEvents.map((prevEvent) => (
+              <PreviousEventCard key={prevEvent._id} event={prevEvent} />
+            ))}
+          </div>
+          <div className="mt-8 flex justify-center">
+            <Link
+              href="/event"
+              className="inline-flex items-center gap-2 px-8 py-4 border border-black font-600 uppercase tracking-widest text-sans-14 hover:bg-black hover:text-white transition-colors"
+            >
+              Se alla event
+            </Link>
+          </div>
+        </section>
+      )}
     </main>
   )
 }
