@@ -86,9 +86,10 @@ export default function ImageCarousel({ images, title = 'Galleribilder' }: Image
           src={urlFor(images[currentIndex]).width(1200).quality(85).url()}
           alt={`Galleri bild ${currentIndex + 1} av ${images.length}`}
           fill
+          priority
+          loading="eager"
           className="object-cover noise transition-opacity duration-500"
           sizes="100vw"
-          loading="lazy"
         />
 
         {/* Navigation buttons */}

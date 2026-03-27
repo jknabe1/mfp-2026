@@ -131,7 +131,7 @@ export default function ArrangemangSection() {
         <section className="relative mt-10 mb-10">
           <div ref={sliderRef} className="keen-slider">
             {/* Regular arrangemang slides */}
-            {[...randomArrangemang, ...filteredArrangemang.slice(0, 3)].map((item) => (
+            {[...randomArrangemang, ...filteredArrangemang.slice(0, 3)].map((item, index) => (
               <div key={item._id} className="keen-slider__slide">
                 <Link
                   href={`/arrangemang/${item.URL.current}`}  // Changed from slug to URL
@@ -141,6 +141,8 @@ export default function ArrangemangSection() {
                     src={urlFor(item.Bild)}  // Changed from image to Bild
                     alt={item.Namn}  // Changed from name to Namn
                     fill
+                    priority={index === 0}
+                    loading={index === 0 ? "eager" : "lazy"}
                     className="h-full w-full object-cover border border-solid border-black transition-transform duration-500 group-hover:scale-105"
                   />
                   <div className="absolute inset-0 z-10 flex flex-col justify-end bg-gradient-to-t from-transparent to-gray-950/50 p-5">
@@ -163,7 +165,7 @@ export default function ArrangemangSection() {
           {randomArrangemang.length > 0 && (
             <div className="mb-10">
               <div className="grid grid-cols-2 gap-5">
-                {randomArrangemang.map((item) => (
+                {randomArrangemang.map((item, index) => (
                   <Link
                     key={item._id}
                     href={`/arrangemang/${item.URL.current}`}  // Changed from slug to URL
@@ -173,6 +175,8 @@ export default function ArrangemangSection() {
                       src={urlFor(item.Bild)}  // Changed from image to Bild
                       alt={item.Namn}  // Changed from name to Namn
                       fill
+                      priority={index === 0}
+                      loading={index === 0 ? "eager" : "lazy"}
                       className="h-full w-full object-cover border border-solid border-black transition-transform duration-500 group-hover:scale-105"
                     />
                     <div className="absolute inset-0 z-10 flex flex-col justify-end bg-gradient-to-b from-transparent to-gray-950/50 p-5">
@@ -191,7 +195,7 @@ export default function ArrangemangSection() {
             <div className="mt-12">
               <div className="grid grid-cols-3 gap-5">
                 {/* Show only 2 arrangemang from the filtered list */}
-                {filteredArrangemang.slice(0, 2).map((item) => (
+                {filteredArrangemang.slice(0, 2).map((item, index) => (
                   <Link
                     key={item._id}
                     href={`/arrangemang/${item.URL.current}`}  // Changed from slug to URL
@@ -201,6 +205,8 @@ export default function ArrangemangSection() {
                       src={urlFor(item.Bild)}  // Changed from image to Bild
                       alt={item.Namn}  // Changed from name to Namn
                       fill
+                      priority={index === 0}
+                      loading={index === 0 ? "eager" : "lazy"}
                       className="h-full w-full object-cover border border-solid border-black transition-transform duration-500 group-hover:scale-105"
                     />
                     <div className="absolute inset-0 z-10 flex flex-col justify-end bg-gradient-to-t from-transparent to-gray-950/50 p-5">

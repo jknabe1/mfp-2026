@@ -128,7 +128,7 @@ export default function ForeningarSection() {
         <section className="relative mt-10 mb-10">
           <div ref={sliderRef} className="keen-slider">
             {/* Regular artist slides */}
-            {[...randomArtists, ...filteredArtists.slice(0, 3)].map((artist) => (
+            {[...randomArtists, ...filteredArtists.slice(0, 3)].map((artist, index) => (
               <div key={artist._id} className="keen-slider__slide">
                 <Link
                   href={`/artists/${artist.URL.current}`}  // Changed from slug to URL
@@ -138,6 +138,8 @@ export default function ForeningarSection() {
                     src={urlFor(artist.Bild)}  // Changed from image to Bild
                     alt={artist.Namn}  // Changed from name to Namn
                     fill
+                    priority={index === 0}
+                    loading={index === 0 ? "eager" : "lazy"}
                     className="h-full w-full object-cover border border-solid border-black transition-transform duration-500 group-hover:scale-105"
                   />
                   <div className="absolute inset-0 z-10 flex flex-col justify-end bg-gradient-to-t from-transparent to-gray-950/50 p-5">
@@ -160,7 +162,7 @@ export default function ForeningarSection() {
           {randomArtists.length > 0 && (
             <div className="mb-10">
               <div className="grid grid-cols-2 gap-5">
-                {randomArtists.map((artist) => (
+                {randomArtists.map((artist, index) => (
                   <Link
                     key={artist._id}
                     href={`/artists/${artist.URL.current}`}  // Changed from slug to URL
@@ -170,6 +172,8 @@ export default function ForeningarSection() {
                       src={urlFor(artist.Bild)}  // Changed from image to Bild
                       alt={artist.Namn}  // Changed from name to Namn
                       fill
+                      priority={index === 0}
+                      loading={index === 0 ? "eager" : "lazy"}
                       className="h-full w-full object-cover border border-solid border-black transition-transform duration-500 group-hover:scale-105"
                     />
                     <div className="absolute inset-0 z-10 flex flex-col justify-end bg-gradient-to-b from-transparent to-gray-950/50 p-5">
@@ -188,7 +192,7 @@ export default function ForeningarSection() {
             <div className="mt-12">
               <div className="grid grid-cols-3 gap-5">
                 {/* Show only 2 artists from the filtered list */}
-                {filteredArtists.slice(0, 2).map((artist) => (
+                {filteredArtists.slice(0, 2).map((artist, index) => (
                   <Link
                     key={artist._id}
                     href={`/artists/${artist.URL.current}`}  // Changed from slug to URL
@@ -198,6 +202,8 @@ export default function ForeningarSection() {
                       src={urlFor(artist.Bild)}  // Changed from image to Bild
                       alt={artist.Namn}  // Changed from name to Namn
                       fill
+                      priority={index === 0}
+                      loading={index === 0 ? "eager" : "lazy"}
                       className="h-full w-full object-cover border border-solid border-black transition-transform duration-500 group-hover:scale-105"
                     />
                     <div className="absolute inset-0 z-10 flex flex-col justify-end bg-gradient-to-t from-transparent to-gray-950/50 p-5">

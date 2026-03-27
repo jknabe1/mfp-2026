@@ -56,13 +56,14 @@ export default function ContentSlider({ items, itemType }: SliderProps) {
   })
 
   const renderItems = () => {
-    const renderedItems = items.map((item) => (
+    const renderedItems = items.map((item, index) => (
       <div key={item._id} className={isMobile ? "keen-slider__slide" : ""}>
         <Link href={`/${itemType}/${item.slug.current}`} className="group block h-full" rel="noopener">
           <div className="noise relative aspect-[4/5] lg:aspect-[6/5]">
             <Image
               alt={item.name}
-              loading="lazy"
+              loading={index === 0 ? "eager" : "lazy"}
+              priority={index === 0}
               width="1536"
               height="1920"
               className="h-full w-full object-cover border border-solid border-black transition-transform duration-500 group-hover:scale-105"
