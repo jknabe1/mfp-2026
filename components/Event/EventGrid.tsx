@@ -82,17 +82,6 @@ function EventHeroBanner({ event }: { event: Event }) {
               </div>
       
               {/* Banner info bar */}
-              <div className="flex items-center justify-between px-4 py-3 lg:px-8 lg:py-4 bg-black text-white uppercase">
-                <span className="text-sans-12 lg:text-sans-14 font-600 tracking-wide">
-                  Arrangemang
-                </span>
-                <Link
-                  href="/arrangemang"
-                  className="text-sans-12 font-600 tracking-widest text-[var(--vividGreen)] hover:italic transition-all"
-                >
-                  ← Alla arrangemang
-                </Link>
-              </div>
             </div>
 
 
