@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { urlFor, SanityImageSource } from '@/lib/utils';
 import Image from 'next/image';
 
-interface Artist {
+interface ArtistData {
   _id: string;
   name: string;
   slug: { current: string };
@@ -14,10 +14,10 @@ interface Artist {
 }
 
 interface ArrangemangListProps {
-  initialArtists: Artist[];
+  initialArtists: ArtistData[];
 }
 
-function formatDate(dateStr: string) {
+function formatFullDate(dateStr: string) {
   return new Date(dateStr).toLocaleDateString('sv-SE', {
     day: 'numeric',
     month: 'long',
@@ -25,7 +25,7 @@ function formatDate(dateStr: string) {
   });
 }
 
-function formatDateShort(dateStr: string) {
+function formatDateComponents(dateStr: string) {
   const d = new Date(dateStr);
   return {
     day: d.toLocaleDateString('sv-SE', { day: '2-digit' }),
@@ -34,9 +34,9 @@ function formatDateShort(dateStr: string) {
   };
 }
 
-// ─── Hero Banner ────────────────────────────────────────────────────────────
-function ArtistHeroBanner({ artist }: { artist: Artist }) {
-  const { day, month, year } = formatDateShort(artist.date);
+// ─── Hero Banner Section ───────────────────────────────────────────────────
+function ArtistHeroBanner({ artist }: { artist: ArtistData }) {
+  const { day, month, year } = formatDateComponents(artist.date);
 
   return (
     <Link
@@ -44,7 +44,6 @@ function ArtistHeroBanner({ artist }: { artist: Artist }) {
       className="group block relative w-full overflow-hidden border-b border-black border-solid"
       aria-label={`Gå till artist: ${artist.name}`}
     >
-      {/* Full-width image */}
       <div className="relative w-full h-[60vw] min-h-[320px] max-h-[85vh]">
         {artist.image ? (
           <Image
@@ -58,24 +57,23 @@ function ArtistHeroBanner({ artist }: { artist: Artist }) {
         ) : (
           <div className="absolute inset-0 bg-black" />
         )}
-        {/* Dark scrim for legibility */}
+        {/* Dark overlay for text legibility */}
         <div className="absolute inset-0 bg-black/40" />
 
-        {/* "FEATURED" label top-left */}
+        {/* Featured label */}
         <div className="absolute top-4 left-4 lg:top-6 lg:left-6 z-10">
           <span className="inline-flex items-center gap-1.5 bg-[var(--vividGreen)] text-black text-sans-12 font-600 px-2 py-1 uppercase tracking-widest">
             <span aria-hidden="true">■</span> Aktuell artist
           </span>
         </div>
 
-        {/* Bottom overlay: artist info */}
+        {/* Bottom content overlay */}
         <div className="absolute bottom-0 left-0 right-0 z-10 px-4 pb-6 lg:px-8 lg:pb-10 flex flex-col md:flex-row md:items-end md:justify-between gap-4">
-          {/* Artist name */}
           <h1 className="text-white uppercase font-600 text-sans-35 lg:text-sans-60 xl:text-sans-120 leading-none text-balance max-w-[80%]">
             {artist.name}
           </h1>
 
-          {/* Date block */}
+          {/* Date display boxes */}
           <div className="flex items-end gap-0 shrink-0">
             <div className="flex flex-col items-center justify-center border border-white/60 px-4 py-3 min-w-[72px]">
               <span className="text-white text-sans-35 lg:text-sans-60 font-600 leading-none">{day}</span>
@@ -89,8 +87,8 @@ function ArtistHeroBanner({ artist }: { artist: Artist }) {
       </div>
 
       {/* Info bar below image */}
-      <div className="flex items-center justify-between px-4 py-3 lg:px-8 lg:py-4 bg-black text-white uppercase">
-        <span className="text-sans-14 lg:text-sans-16 font-600 tracking-wide">{formatDate(artist.date)}</span>
+      <div className="flex items-center justify-between px-4 py-3 lg:px-8 lg:py-4 bg-black text-white uppercase border-b border-black border-solid">
+        <span className="text-sans-14 lg:text-sans-16 font-600 tracking-wide">{formatFullDate(artist.date)}</span>
         <span className="text-sans-12 lg:text-sans-14 font-600 tracking-widest text-[var(--vividGreen)] group-hover:italic transition-all">
           Se artist →
         </span>
@@ -99,18 +97,18 @@ function ArtistHeroBanner({ artist }: { artist: Artist }) {
   );
 }
 
-// ─── Artist Card ────────────────────────────────────────────────────────────
-function ArtistCard({ artist }: { artist: Artist }) {
-  const { day, month } = formatDateShort(artist.date);
+// ─── Artist Card Component ─────────────────────────────────────────────────
+function ArtistCard({ artist }: { artist: ArtistData }) {
+  const { day, month } = formatDateComponents(artist.date);
 
   return (
     <Link
       href={`/arrangemang/${artist.slug.current}`}
-      className="relative group flex flex-col overflow-hidden border border-black border-solid"
+      className="relative group flex flex-col overflow-hidden border border-black border-solid transition-colors hover:bg-gray-50"
       aria-label={artist.name}
     >
-      {/* Image */}
-      <div className="relative aspect-[4/5] overflow-hidden">
+      {/* Image container */}
+      <div className="relative aspect-[4/5] overflow-hidden bg-gray-100">
         {artist.image ? (
           <Image
             src={urlFor(artist.image).width(800).quality(80).url()}
@@ -121,12 +119,12 @@ function ArtistCard({ artist }: { artist: Artist }) {
             sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
           />
         ) : (
-          <div className="absolute inset-0 flex items-center justify-center bg-gray-200 text-black text-sans-12 uppercase">
+          <div className="absolute inset-0 flex items-center justify-center bg-gray-200 text-black text-sans-12 uppercase font-600">
             Bild saknas
           </div>
         )}
-        {/* Date chip */}
-        <div className="absolute top-3 left-3 z-10 flex items-stretch border border-black/80">
+        {/* Date chip overlay */}
+        <div className="absolute top-3 left-3 z-10 flex items-stretch border border-black/80 shadow-sm">
           <div className="flex flex-col items-center justify-center bg-white text-black px-2 py-1 min-w-[36px]">
             <span className="text-sans-22 font-600 leading-none">{day}</span>
             <span className="text-sans-10 font-600 tracking-widest">{month}</span>
@@ -134,9 +132,9 @@ function ArtistCard({ artist }: { artist: Artist }) {
         </div>
       </div>
 
-      {/* Card footer */}
+      {/* Card footer with artist info */}
       <div className="flex items-center justify-between px-3 py-3 border-t border-black border-solid bg-[var(--background)]">
-        <h2 className="text-sans-14 lg:text-sans-16 font-600 uppercase truncate mr-2 group-hover:italic transition-all">
+        <h2 className="text-sans-14 lg:text-sans-16 font-600 uppercase truncate mr-2 group-hover:italic transition-all flex-1">
           {artist.name}
         </h2>
         <span className="text-[var(--vividGreen)] shrink-0 text-sans-12 font-600" aria-hidden="true">■</span>
@@ -145,27 +143,70 @@ function ArtistCard({ artist }: { artist: Artist }) {
   );
 }
 
-// ─── Main Component ───────────────────────────────────────────────────────────
+// ─── Section Header Component ──────────────────────────────────────────────
+function SectionHeader({ title }: { title: string }) {
+  return (
+    <div className="mb-8 border-b border-black border-solid pb-4">
+      <h2 className="text-sans-35 lg:text-sans-60 font-600 uppercase tracking-tight">
+        {title}
+      </h2>
+    </div>
+  );
+}
+
+// ─── Artists Grid Component ────────────────────────────────────────────────
+function ArtistsGrid({ artists }: { artists: ArtistData[] }) {
+  if (artists.length === 0) {
+    return (
+      <p className="text-sans-16 text-gray-600 font-500">
+        Inga artister tillgängliga för tillfället.
+      </p>
+    );
+  }
+
+  return (
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-px border border-black border-solid">
+      {artists.map((artist) => (
+        <ArtistCard key={artist._id} artist={artist} />
+      ))}
+    </div>
+  );
+}
+
+// ─── Main Arrangemang List Component ────────────────────────────────────────
 export default function ArrangemangList({ initialArtists }: ArrangemangListProps) {
-  const [upcomingArtists, setUpcomingArtists] = useState<Artist[]>([]);
-  const [pastArtists, setPastArtists] = useState<Artist[]>([]);
+  const [upcomingArtists, setUpcomingArtists] = useState<ArtistData[]>([]);
+  const [pastArtists, setPastArtists] = useState<ArtistData[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     if (!initialArtists || initialArtists.length === 0) {
+      setIsLoading(false);
       return;
     }
 
     const now = new Date();
-    const upcoming = initialArtists
-      .filter((a) => new Date(a.date) >= now)
+    
+    const upcomingFiltered = initialArtists
+      .filter((artist) => new Date(artist.date) >= now)
       .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
-    const past = initialArtists
-      .filter((a) => new Date(a.date) < now)
+    
+    const pastFiltered = initialArtists
+      .filter((artist) => new Date(artist.date) < now)
       .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 
-    setUpcomingArtists(upcoming);
-    setPastArtists(past);
+    setUpcomingArtists(upcomingFiltered);
+    setPastArtists(pastFiltered);
+    setIsLoading(false);
   }, [initialArtists]);
+
+  if (isLoading) {
+    return (
+      <main className="px-2 py-3 lg:px-5">
+        <p className="text-sans-16 text-gray-500">Laddar artister...</p>
+      </main>
+    );
+  }
 
   if (!initialArtists || initialArtists.length === 0) {
     return (
@@ -176,11 +217,16 @@ export default function ArrangemangList({ initialArtists }: ArrangemangListProps
   }
 
   const allArtists = [...upcomingArtists, ...pastArtists];
+  const featuredArtist = upcomingArtists[0] ?? pastArtists[0] ?? null;
+  const remainingUpcomingArtists = upcomingArtists.slice(1);
+
+  // Structured data for search engines
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'CollectionPage',
     name: 'Music For Pennies - Artister',
     description: 'En lista över alla artister och musiker representerade av Music For Pennies.',
+    url: 'https://musicforpennies.se/arrangemang',
     mainEntity: {
       '@type': 'ItemList',
       itemListElement: allArtists.map((artist, index) => ({
@@ -192,11 +238,6 @@ export default function ArrangemangList({ initialArtists }: ArrangemangListProps
     },
   };
 
-  // The feature banner uses the soonest upcoming artist; if none, the most recent past artist
-  const featuredArtist = upcomingArtists[0] ?? pastArtists[0] ?? null;
-  // Remaining upcoming artists (skip the featured one)
-  const remainingUpcoming = upcomingArtists.slice(1);
-
   return (
     <main>
       <script
@@ -204,25 +245,19 @@ export default function ArrangemangList({ initialArtists }: ArrangemangListProps
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
 
-      {/* ── Hero banner ─────────────────────────────────────────── */}
+      {/* Featured artist hero banner */}
       {featuredArtist && <ArtistHeroBanner artist={featuredArtist} />}
 
-      {/* ── Upcoming artists (minus featured) ───────────────────── */}
+      {/* Upcoming artists section */}
       <section
         aria-label="Kommande artister"
-        className="px-2 py-3 lg:px-5 mt-10 lg:mt-16 mb-10 lg:mb-16 uppercase"
+        className="px-2 py-3 lg:px-5 mt-12 lg:mt-20 mb-16 lg:mb-20 uppercase"
       >
-        <h2 className="text-sans-35 lg:text-sans-60 font-600 mb-8 border-b border-black border-solid pb-4">
-          Kommande artister
-        </h2>
-        {remainingUpcoming.length > 0 ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-px border border-black border-solid">
-            {remainingUpcoming.map((artist) => (
-              <ArtistCard key={artist._id} artist={artist} />
-            ))}
-          </div>
+        <SectionHeader title="Kommande artister" />
+        {remainingUpcomingArtists.length > 0 ? (
+          <ArtistsGrid artists={remainingUpcomingArtists} />
         ) : (
-          <p className="text-sans-16 text-gray-500">
+          <p className="text-sans-16 text-gray-600">
             {upcomingArtists.length === 0
               ? 'Inga kommande artister för tillfället.'
               : 'Inga fler kommande artister.'}
@@ -230,20 +265,14 @@ export default function ArrangemangList({ initialArtists }: ArrangemangListProps
         )}
       </section>
 
-      {/* ── Past artists ────────────────────────────────────────── */}
+      {/* Past artists section */}
       {pastArtists.length > 0 && (
         <section
           aria-label="Tidigare artister"
-          className="px-2 py-3 lg:px-5 mt-0 mb-10 lg:mb-16 uppercase"
+          className="px-2 py-3 lg:px-5 mb-16 lg:mb-20 uppercase"
         >
-          <h2 className="text-sans-35 lg:text-sans-60 font-600 mb-8 border-b border-black border-solid pb-4">
-            Tidigare artister
-          </h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-px border border-black border-solid">
-            {pastArtists.map((artist) => (
-              <ArtistCard key={artist._id} artist={artist} />
-            ))}
-          </div>
+          <SectionHeader title="Tidigare artister" />
+          <ArtistsGrid artists={pastArtists} />
         </section>
       )}
     </main>
