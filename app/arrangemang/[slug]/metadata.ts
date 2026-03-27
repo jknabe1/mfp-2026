@@ -66,20 +66,6 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   };
 }
 
-
-// Define the artist data structure
-interface Artist {
-  currentSlug: string;
-  name: string;
-  Biography: PortableTextBlock[];
-  image: SanityImageSource;
-  Instagram?: string;
-  Facebook?: string;
-  spotify?: string;
-  excerpt?: string;
-  date?: string;
-}
-
 const builder = imageUrlBuilder(client);
 
 function urlFor(source: SanityImageSource) {
