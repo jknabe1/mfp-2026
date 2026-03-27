@@ -37,7 +37,7 @@ async function getData(slug: string): Promise<Arrangemang | null> {
   return arrangemang;
 }
 
-// Explicitly use Metadata as the return type
+// Generate metadata for arrangemang pages
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const resolvedParams = await params;
   const arrangemang = await getData(resolvedParams.slug);
@@ -56,37 +56,6 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
       title: arrangemang.Namn,
       description: arrangemang.Beskrivning?.map(block => block.children?.map(child => child.text).join(' ')).join(' ') || 'Explore this arrangemang.',
       images: arrangemang.Bild ? [{ url: urlFor(arrangemang.Bild).url() }] : [],
-    },
-  };
-}
-
-
-
-// Explicitly use Metadata as the return type
-export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
-  const resolvedParams = await params;
-  const artist = await getData(resolvedParams.slug);
-
-  if (!artist) {
-    return {
-      title: 'Artist Not Found | Music For Pennies',
-      description: 'The requested artist could not be found.',
-    };
-  }
-
-  return {
-    title: `${artist.name} | Music For Pennies`,
-    description: artist.Biography?.map(block => block.children?.map(child => child.text).join(' ')).join(' ') || 'Explore the artist’s biography and works.',
-    openGraph: {
-      title: artist.name,
-      description: artist.Biography?.map(block => block.children?.map(child => child.text).join(' ')).join(' ') || 'Explore the artist’s biography and works.',
-      images: artist.image ? [{ url: urlFor(artist.image).url() }] : [],
-    },
-    twitter: {
-      card: 'summary_large_image',
-      title: artist.name,
-      description: artist.Biography?.map(block => block.children?.map(child => child.text).join(' ')).join(' ') || 'Explore the artist’s biography and works.',
-      images: artist.image ? [{ url: urlFor(artist.image).url() }] : [],
     },
   };
 }
