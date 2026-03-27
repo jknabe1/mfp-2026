@@ -43,6 +43,14 @@ async function getData(slug: string): Promise<Arrangemang | null> {
       }[0]`;
 
   const arrangemang = await client.fetch<Arrangemang>(query);
+  console.log('[v0] getData query result:', {
+    slug,
+    hasData: !!arrangemang,
+    navn: arrangemang?.Namn,
+    hasBild: !!arrangemang?.Bild,
+    hasiBilder: !!arrangemang?.Bilder,
+    bilderCount: arrangemang?.Bilder?.length || 0,
+  });
   return arrangemang;
 }
 

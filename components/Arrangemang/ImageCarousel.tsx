@@ -4,7 +4,12 @@ import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import imageUrlBuilder from '@sanity/image-url';
 import { client } from '@/sanity/client';
-import type { SanityImageSource } from '@sanity/image-url/lib/types/types';
+
+interface SanityImageSource {
+  asset: {
+    _ref: string;
+  };
+}
 
 const builder = imageUrlBuilder(client);
 
@@ -20,6 +25,12 @@ interface ImageCarouselProps {
 export default function ImageCarousel({ images, title = 'Galleribilder' }: ImageCarouselProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isAutoplay, setIsAutoplay] = useState(true);
+  const [isLoaded, setIsLoaded] = useState(false);
+
+  useEffect(() => {
+    console.log('[v0] ImageCarousel mounted with images:', images);
+    setIsLoaded(true);
+  }, [images]);
 
   // Auto-advance carousel
   useEffect(() => {
@@ -32,9 +43,17 @@ export default function ImageCarousel({ images, title = 'Galleribilder' }: Image
     return () => clearInterval(timer);
   }, [isAutoplay, images.length]);
 
-  if (!images || images.length === 0) {
+  if (!isLoaded) {
+    console.log('[v0] ImageCarousel not yet loaded');
     return null;
   }
+
+  if (!images || images.length === 0) {
+    console.log('[v0] ImageCarousel: No images provided, returning null');
+    return null;
+  }
+
+  console.log('[v0] ImageCarousel rendering with', images.length, 'images');
 
   const goToPrevious = () => {
     setIsAutoplay(false);
