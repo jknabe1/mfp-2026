@@ -11,9 +11,22 @@ export async function POST(request: Request) {
       );
     }
 
+    // Kontrollera om API-nycklarna är konfigurerade
+    console.log('[v0] Checking environment variables...');
+    console.log('[v0] NEWSLETTER_API_KEY exists:', !!process.env.NEWSLETTER_API_KEY);
+    console.log('[v0] NEWSLETTER_LIST_ID:', process.env.NEWSLETTER_LIST_ID);
+    
+    if (!process.env.NEWSLETTER_API_KEY || !process.env.NEWSLETTER_LIST_ID) {
+      console.error('[v0] Newsletter API keys not configured');
+      console.error('[v0] Missing keys - API_KEY:', !process.env.NEWSLETTER_API_KEY, 'LIST_ID:', !process.env.NEWSLETTER_LIST_ID);
+      return NextResponse.json(
+        { error: 'Nyhetsbrev-tjänsten är inte konfigurerad. Kontakta administratörer.' },
+        { status: 503 }
+      );
+    }
+
     console.log('[v0] Newsletter subscription attempt for:', email);
-    console.log('[v0] Using API key:', process.env.NEWSLETTER_API_KEY ? 'SET' : 'NOT SET');
-    console.log('[v0] Using list ID:', process.env.NEWSLETTER_LIST_ID);
+    console.log('[v0] API key first 20 chars:', process.env.NEWSLETTER_API_KEY.substring(0, 20));
 
     // Anropa Get a Newsletter API
     const response = await fetch('https://api.getanewsletter.com/v3/subscribers', {
@@ -41,7 +54,21 @@ export async function POST(request: Request) {
       );
     }
 
-    const data = await response.json();
+    // Försök att parsa svaret som JSON
+    let data;
+    const contentType = response.headers.get('content-type');
+    
+    if (contentType && contentType.includes('application/json')) {
+      data = await response.json();
+    } else {
+      // Om svaret inte är JSON, det är troligen ett fel
+      const text = await response.text();
+      console.error('[v0] Non-JSON response from GetANewsletter:', response.status, text.substring(0, 200));
+      return NextResponse.json(
+        { error: 'Oväntad svar från nyhetsbrev-tjänsten. Försök igen senare.' },
+        { status: 502 }
+      );
+    }
 
     if (!response.ok) {
       // Fånga upp specifika API-fel
