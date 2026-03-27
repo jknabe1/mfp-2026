@@ -97,18 +97,18 @@ function EventHeroBanner({ event }: { event: Event }) {
   );
 }
 
-// ─── Event Card ──────────────────────────────────────────────────────────────
+// ─── Event Card (Debaser-inspired) ───────────────────────────────────────────
 function EventCard({ event }: { event: Event }) {
   const { day, month } = formatDateShort(event.date);
 
   return (
     <Link
       href={`/event/${event.slug.current}`}
-      className="relative group flex flex-col overflow-hidden border border-black border-solid"
+      className="relative group flex flex-col overflow-hidden border border-black border-solid transition-all duration-300 hover:bg-black/5"
       aria-label={event.name}
     >
-      {/* Image */}
-      <div className="relative aspect-[4/5] overflow-hidden">
+      {/* Image container */}
+      <div className="relative aspect-[4/5] overflow-hidden bg-gray-100">
         {event.image ? (
           <Image
             src={urlFor(event.image).width(800).quality(80).url()}
@@ -123,21 +123,28 @@ function EventCard({ event }: { event: Event }) {
             Bild saknas
           </div>
         )}
-        {/* Date chip */}
-        <div className="absolute top-3 left-3 z-10 flex items-stretch border border-black/80">
-          <div className="flex flex-col items-center justify-center bg-white text-black px-2 py-1 min-w-[36px]">
-            <span className="text-sans-22 font-600 leading-none">{day}</span>
-            <span className="text-sans-10 font-600 tracking-widest">{month}</span>
+        
+        {/* Date chip - top left corner */}
+        <div className="absolute top-3 left-3 z-10 flex items-stretch border border-black bg-white shadow-sm">
+          <div className="flex flex-col items-center justify-center px-2 py-1.5 min-w-[48px]">
+            <span className="text-sans-22 font-700 leading-none">{day}</span>
+            <span className="text-sans-9 font-600 tracking-wider mt-0.5">{month}</span>
           </div>
         </div>
       </div>
 
-      {/* Card footer */}
-      <div className="flex items-center justify-between px-3 py-3 border-t border-black border-solid bg-[var(--background)]">
-        <h2 className="text-sans-14 lg:text-sans-16 font-600 uppercase truncate mr-2 group-hover:italic transition-all">
+      {/* Card content */}
+      <div className="flex flex-col flex-grow px-4 py-4 border-t border-black border-solid bg-white">
+        {/* Event name */}
+        <h3 className="text-sans-14 lg:text-sans-16 font-700 uppercase leading-tight mb-2 line-clamp-2 group-hover:italic transition-all">
           {event.name}
-        </h2>
-        <span className="text-[var(--vividGreen)] shrink-0 text-sans-12 font-600" aria-hidden="true">■</span>
+        </h3>
+
+        {/* Bottom row: CTA indicator */}
+        <div className="flex items-center justify-between mt-auto pt-3 border-t border-black/10">
+          <span className="text-sans-11 font-600 tracking-wider uppercase opacity-60">Läs mer</span>
+          <span className="text-[var(--vividGreen)] text-sans-14 font-700" aria-hidden="true">→</span>
+        </div>
       </div>
     </Link>
   );
@@ -201,58 +208,64 @@ const EventGrid = () => {
       {/* ── Hero banner ─────────────────────────────────────────── */}
       {featuredEvent && <EventHeroBanner event={featuredEvent} />}
 
-      {/* ── Upcoming events (minus featured) ────────────────────── */}
+      {/* ── Upcoming events section ────────────────────────────────── */}
       <section
         aria-label="Kommande event"
         className="uppercase"
       >
-        <div className="border-t border-black border-solid">
-          {/* Section header */}
-          <div className="px-4 lg:px-8 py-10 lg:py-16 border-b border-black border-solid">
-            <h2 className="text-sans-35 lg:text-sans-60 font-600">
-              Kommande event
+        {/* Section header */}
+        <div className="border-t border-black border-solid bg-white">
+          <div className="px-4 lg:px-8 py-12 lg:py-16">
+            <h2 className="text-sans-48 lg:text-sans-72 font-700 tracking-tight">
+              Kommande
             </h2>
+            <p className="text-sans-14 lg:text-sans-16 font-600 tracking-wider text-gray-600 mt-2">
+              {remainingUpcoming.length} event
+            </p>
           </div>
-          
-          {/* Events grid */}
-          {remainingUpcoming.length > 0 ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-px border border-black border-solid">
-              {remainingUpcoming.map((event) => (
-                <EventCard key={event._id} event={event} />
-              ))}
-            </div>
-          ) : (
-            <div className="px-4 lg:px-8 py-8 border border-black border-solid border-t-0">
-              <p className="text-sans-16 text-gray-500">
-                {upcomingEvents.length === 0
-                  ? 'Inga kommande event för tillfället.'
-                  : 'Inga fler kommande event.'}
-              </p>
-            </div>
-          )}
         </div>
+        
+        {/* Events grid */}
+        {remainingUpcoming.length > 0 ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-px border border-black border-solid border-t-0">
+            {remainingUpcoming.map((event) => (
+              <EventCard key={event._id} event={event} />
+            ))}
+          </div>
+        ) : (
+          <div className="px-4 lg:px-8 py-12 border border-black border-solid border-t-0 bg-gray-50">
+            <p className="text-sans-16 font-600 text-gray-500">
+              {upcomingEvents.length === 0
+                ? 'Inga kommande event för tillfället.'
+                : 'Inga fler kommande event.'}
+            </p>
+          </div>
+        )}
       </section>
 
-      {/* ── Past events ─────────────────────────────────────────── */}
+      {/* ── Past events section ────────────────────────────────────── */}
       {pastEvents.length > 0 && (
         <section
           aria-label="Tidigare event"
           className="uppercase"
         >
-          <div className="border-t border-black border-solid">
-            {/* Section header */}
-            <div className="px-4 lg:px-8 py-10 lg:py-16 border-b border-black border-solid">
-              <h2 className="text-sans-35 lg:text-sans-60 font-600">
-                Tidigare event
+          {/* Section header */}
+          <div className="border-t border-black border-solid bg-white">
+            <div className="px-4 lg:px-8 py-12 lg:py-16">
+              <h2 className="text-sans-48 lg:text-sans-72 font-700 tracking-tight">
+                Tidigare
               </h2>
+              <p className="text-sans-14 lg:text-sans-16 font-600 tracking-wider text-gray-600 mt-2">
+                {pastEvents.length} event
+              </p>
             </div>
-            
-            {/* Events grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-px border border-black border-solid">
-              {pastEvents.map((event) => (
-                <EventCard key={event._id} event={event} />
-              ))}
-            </div>
+          </div>
+          
+          {/* Events grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-px border border-black border-solid border-t-0">
+            {pastEvents.map((event) => (
+              <EventCard key={event._id} event={event} />
+            ))}
           </div>
         </section>
       )}
