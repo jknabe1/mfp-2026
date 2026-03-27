@@ -66,11 +66,6 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   };
 }
 
-const builder = imageUrlBuilder(client);
-
-function urlFor(source: SanityImageSource) {
-  return builder.image(source);
-}
 
 async function getData(slug: string): Promise<Artist | null> {
   const query = `
