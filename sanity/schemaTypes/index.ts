@@ -1,5 +1,5 @@
 // Import everything from the documents folder
-import {artistType} from './documents/artistType'
+import {foreningType} from './documents/artistType'
 import {eventType} from './documents/eventType'
 import {venueType} from './documents/venueType'
 import {dataType} from './documents/dataType'
@@ -11,7 +11,7 @@ import {arrangemangType} from './documents/arrangemangType'
 
 // Export them all (you can keep the same order)
 export const schemaTypes = [
-  artistType, 
+  foreningType, 
   eventType, 
   venueType, 
   dataType, 

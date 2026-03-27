@@ -1,6 +1,6 @@
 import {defineField, defineType} from 'sanity'
 
-export const artistType = defineType({
+export const foreningType = defineType({
   name: 'artist',
   title: 'Föreningar',
   type: 'document',
