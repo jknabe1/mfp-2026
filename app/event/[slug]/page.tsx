@@ -285,60 +285,26 @@ export default async function EventPage({ params }: { params: Promise<{ slug: st
           </div>
         </div>
 
-        {/* ── Enhanced Banner Info Bar (now larger and more prominent) ──── */}
-        <div className="bg-black text-white border-b border-black border-solid">
-          <div className="px-4 py-8 lg:px-8 lg:py-10">
-            <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
-              {/* Left: Date and Venue */}
-              <div className="flex flex-col gap-4">
-                {event.date && (
-                  <div>
-                    <p className="text-sans-12 font-600 uppercase tracking-widest opacity-60 mb-2">Datum & Tid</p>
-                    <p className="text-sans-18 lg:text-sans-24 font-600 uppercase capitalize">
-                      {formatLongDate(event.date)}
-                    </p>
-                    <p className="text-sans-16 lg:text-sans-20 font-600 uppercase mt-1">
-                      {formatTime(event.date)}
-                    </p>
-                  </div>
-                )}
-                {venue?.name && (
-                  <div className="mt-2">
-                    <p className="text-sans-12 font-600 uppercase tracking-widest opacity-60 mb-2">Plats</p>
-                    <p className="text-sans-18 lg:text-sans-24 font-600 uppercase">
-                      {venue.name}
-                    </p>
-                    {(venue.City || venue.Country) && (
-                      <p className="text-sans-16 lg:text-sans-18 font-600 uppercase opacity-75 mt-1">
-                        {[venue.City, venue.Country].filter(Boolean).join(', ')}
-                      </p>
-                    )}
-                  </div>
-                )}
-              </div>
-
-              {/* Right: Actions */}
-              <div className="flex flex-col gap-3">
-                {tickets && !isPast && (
-                  <Link
-                    href={tickets}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center justify-center gap-2 bg-[var(--vividGreen)] text-black px-8 py-4 text-sans-14 lg:text-sans-16 font-600 uppercase tracking-widest hover:bg-white transition-colors"
-                  >
-                    <span aria-hidden="true">■</span>
-                    Köp biljetter
-                  </Link>
-                )}
-                <Link
-                  href="/event"
-                  className="inline-flex items-center justify-center gap-2 text-sans-12 font-600 tracking-widest text-[var(--vividGreen)] hover:italic transition-all border border-[var(--vividGreen)] px-4 py-3"
-                >
-                  ← Alla event
-                </Link>
-              </div>
-            </div>
+        {/* ── Banner info bar (compact) ──────────────────────────────────── */}
+        <div className="flex flex-wrap items-center justify-between gap-3 px-4 py-3 lg:px-8 lg:py-4 bg-black text-white uppercase">
+          <div className="flex flex-wrap items-center gap-4 lg:gap-8">
+            {event.date && (
+              <span className="text-sans-12 lg:text-sans-14 font-600 tracking-wide capitalize">
+                {formatLongDate(event.date)} — {formatTime(event.date)}
+              </span>
+            )}
+            {venue?.name && (
+              <span className="text-sans-12 lg:text-sans-14 font-600 tracking-wide opacity-60">
+                {[venue.name, venue.City].filter(Boolean).join(', ')}
+              </span>
+            )}
           </div>
+          <Link
+            href="/event"
+            className="text-sans-12 font-600 tracking-widest text-[var(--vividGreen)] hover:italic transition-all"
+          >
+            ← Alla event
+          </Link>
         </div>
       </div>
 
