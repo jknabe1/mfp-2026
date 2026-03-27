@@ -290,11 +290,11 @@ const Header = () => {
             OM OSS
           </Link>
           <Link
-            href="/artists"
+            href="/arrangemang"
             className="flex items-center justify-center text-sans-35 font-600 border-b border-black border-solid hover:italic py-5"
             onClick={handleLinkClick}
           >
-            ARTISTER
+            ARRANGEMANG
           </Link>
           <Link
             href="/edits"
@@ -380,11 +380,11 @@ const Header = () => {
 
           {/* Middle row */}
           <Link
-            href="/artists"
+            href="/arrangemang"
             className="flex items-center justify-center text-sans-60 font-600 border-r border-b border-black border-solid hover:italic"
             onClick={handleLinkClick}
           >
-            ARTISTER
+            ARRANGEMANG
           </Link>
           <Link
             href="/edits"
