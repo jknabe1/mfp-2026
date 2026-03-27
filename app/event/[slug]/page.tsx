@@ -208,7 +208,7 @@ export default async function EventPage({ params }: { params: Promise<{ slug: st
                 href={tickets}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 bg-[var(--vividGreen)] text-black text-sans-12 font-600 px-4 py-2 uppercase tracking-widest hover:bg-black hover:text-[var(--vividGreen)] transition-colors border border-[var(--vividGreen)]"
+                className="inline-flex items-center gap-2 bg-black text-white text-sans-12 font-600 px-4 py-2 uppercase tracking-widest hover:bg-white hover:text-black transition-colors border border-[var(--vividGreen)]"
               >
                 Köp biljetter
               </Link>
