@@ -1,6 +1,6 @@
 import '@/app/globals.css';
 import { client } from '@/sanity/client';
-import ArtistsList from '@/components/Artists/ArtistsSection';
+import ArrangemangList from '@/components/Arrangemang/ArrangemangList';
 import { SanityImageSource } from '@/lib/utils'; // Import type from utils
 
 // Define the Artist interface with proper image typing
@@ -34,5 +34,5 @@ export default async function Page() {
     image: artist.image,
   }));
 
-  return <ArtistsList initialArtists={artists} />;
+  return <ArrangemangList initialArtists={artists} />;
 }
