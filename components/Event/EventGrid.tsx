@@ -5,6 +5,7 @@ import imageUrlBuilder from '@sanity/image-url';
 import { client } from '@/sanity/client';
 import Link from 'next/link';
 import Image from 'next/image';
+import CursorGradientHero from './CursorGradientHero';
 
 // Define the Sanity image source type
 interface SanityImageSource {
@@ -54,49 +55,49 @@ function EventHeroBanner({ event }: { event: Event }) {
       className="group block relative w-full overflow-hidden border-b border-black border-solid"
       aria-label={`Gå till event: ${event.name}`}
     >
-      {/* Full-width image */}
-      <div className="relative w-full h-[60vw] min-h-[320px] max-h-[85vh]">
-        {event.image ? (
-          <Image
-            src={urlFor(event.image).width(2400).quality(85).url()}
-            alt={event.name}
-            fill
-            priority
-            className="object-cover noise transition-transform duration-700 ease-in-out group-hover:scale-[1.02]"
-            sizes="100vw"
-          />
-        ) : (
-          <div className="absolute inset-0 bg-black" />
-        )}
-        {/* Dark scrim for legibility */}
-        <div className="absolute inset-0 bg-black/40" />
+      <CursorGradientHero className="h-[60vw] min-h-[320px] max-h-[85vh]">
+        {/* Full-width image */}
+        <div className="relative w-full h-full">
+          {event.image ? (
+            <Image
+              src={urlFor(event.image).width(2400).quality(85).url()}
+              alt={event.name}
+              fill
+              priority
+              className="object-cover noise transition-transform duration-700 ease-in-out group-hover:scale-[1.02]"
+              sizes="100vw"
+            />
+          ) : (
+            <div className="absolute inset-0 bg-black" />
+          )}
 
-        {/* "FEATURED" label top-left */}
-        <div className="absolute top-4 left-4 lg:top-6 lg:left-6 z-10">
-          <span className="inline-flex items-center gap-1.5 bg-[var(--vividGreen)] text-black text-sans-12 font-600 px-2 py-1 uppercase tracking-widest">
-            <span aria-hidden="true">■</span> Nästa event
-          </span>
-        </div>
+          {/* "FEATURED" label top-left */}
+          <div className="absolute top-4 left-4 lg:top-6 lg:left-6 z-10">
+            <span className="inline-flex items-center gap-1.5 bg-[var(--vividGreen)] text-black text-sans-12 font-600 px-2 py-1 uppercase tracking-widest">
+              <span aria-hidden="true">■</span> Nästa event
+            </span>
+          </div>
 
-        {/* Bottom overlay: event info */}
-        <div className="absolute bottom-0 left-0 right-0 z-10 px-4 pb-6 lg:px-8 lg:pb-10 flex flex-col md:flex-row md:items-end md:justify-between gap-4">
-          {/* Event name */}
-          <h1 className="text-white uppercase font-600 text-sans-35 lg:text-sans-60 xl:text-sans-120 leading-none text-balance max-w-[80%]">
-            {event.name}
-          </h1>
+          {/* Bottom overlay: event info */}
+          <div className="absolute bottom-0 left-0 right-0 z-10 px-4 pb-6 lg:px-8 lg:pb-10 flex flex-col md:flex-row md:items-end md:justify-between gap-4">
+            {/* Event name */}
+            <h1 className="text-white uppercase font-600 text-sans-35 lg:text-sans-60 xl:text-sans-120 leading-none text-balance max-w-[80%]">
+              {event.name}
+            </h1>
 
-          {/* Date block */}
-          <div className="flex items-end gap-0 shrink-0">
-            <div className="flex flex-col items-center justify-center border border-white/60 px-4 py-3 min-w-[72px]">
-              <span className="text-white text-sans-35 lg:text-sans-60 font-600 leading-none">{day}</span>
-              <span className="text-white text-sans-12 font-600 tracking-widest mt-1">{month}</span>
-            </div>
-            <div className="flex flex-col items-center justify-center border border-white/60 border-l-0 px-4 py-3">
-              <span className="text-white text-sans-18 font-600 tracking-widest">{year}</span>
+            {/* Date block */}
+            <div className="flex items-end gap-0 shrink-0">
+              <div className="flex flex-col items-center justify-center border border-white/60 px-4 py-3 min-w-[72px]">
+                <span className="text-white text-sans-35 lg:text-sans-60 font-600 leading-none">{day}</span>
+                <span className="text-white text-sans-12 font-600 tracking-widest mt-1">{month}</span>
+              </div>
+              <div className="flex flex-col items-center justify-center border border-white/60 border-l-0 px-4 py-3">
+                <span className="text-white text-sans-18 font-600 tracking-widest">{year}</span>
+              </div>
             </div>
           </div>
         </div>
-      </div>
+      </CursorGradientHero>
 
       {/* Info bar below image */}
       <div className="flex items-center justify-between px-4 py-3 lg:px-8 lg:py-4 bg-black text-white uppercase">
@@ -216,23 +217,27 @@ const EventGrid = () => {
       {/* ── Upcoming events (minus featured) ────────────────────── */}
       <section
         aria-label="Kommande event"
-        className="px-2 py-3 lg:px-5 mt-10 lg:mt-16 mb-10 lg:mb-16 uppercase"
+        className="uppercase"
       >
-        <h2 className="text-sans-35 lg:text-sans-60 font-600 mb-8 border-b border-black border-solid pb-4">
-          Kommande event
-        </h2>
+        <div className="px-4 lg:px-8 py-10 lg:py-16 border-t border-black border-solid">
+          <h2 className="text-sans-35 lg:text-sans-60 font-600 mb-8 border-b border-black border-solid pb-4">
+            Kommande event
+          </h2>
+        </div>
         {remainingUpcoming.length > 0 ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-px border border-black border-solid">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-px border border-black border-solid">
             {remainingUpcoming.map((event) => (
               <EventCard key={event._id} event={event} />
             ))}
           </div>
         ) : (
-          <p className="text-sans-16 text-gray-500">
-            {upcomingEvents.length === 0
-              ? 'Inga kommande event för tillfället.'
-              : 'Inga fler kommande event.'}
-          </p>
+          <div className="px-4 lg:px-8 py-8">
+            <p className="text-sans-16 text-gray-500">
+              {upcomingEvents.length === 0
+                ? 'Inga kommande event för tillfället.'
+                : 'Inga fler kommande event.'}
+            </p>
+          </div>
         )}
       </section>
 
@@ -240,12 +245,14 @@ const EventGrid = () => {
       {pastEvents.length > 0 && (
         <section
           aria-label="Tidigare event"
-          className="px-2 py-3 lg:px-5 mt-0 mb-10 lg:mb-16 uppercase"
+          className="uppercase"
         >
-          <h2 className="text-sans-35 lg:text-sans-60 font-600 mb-8 border-b border-black border-solid pb-4">
-            Tidigare event
-          </h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-px border border-black border-solid">
+          <div className="px-4 lg:px-8 py-10 lg:py-16 border-t border-black border-solid">
+            <h2 className="text-sans-35 lg:text-sans-60 font-600 mb-8 border-b border-black border-solid pb-4">
+              Tidigare event
+            </h2>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-px border border-black border-solid">
             {pastEvents.map((event) => (
               <EventCard key={event._id} event={event} />
             ))}
