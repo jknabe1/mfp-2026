@@ -75,7 +75,8 @@ export default function NewsSection() {
                   <Image
                     src={urlFor(article.image)}
                     alt={article.name}
-                    loading="lazy"
+                    loading="eager"
+                    priority
                     width={1536}
                     height={1920}
                     className="h-full w-full object-cover border border-solid border-black transition-transform duration-500 group-hover:scale-105"
