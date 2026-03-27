@@ -13,9 +13,23 @@ export const arrangemangType = defineType({
     defineField({
       name: 'Bild',
       type: 'image',
+      title: 'Huvudbild',
+      description: 'Huvudbilden som visas överst på sidan',
       options: {
         hotspot: true
       },
+    }),
+    defineField({
+      name: 'Bilder',
+      type: 'array',
+      title: 'Galleribilder',
+      description: 'Ytterligare bilder för bildgalleri nedan huvudbilden',
+      of: [{
+        type: 'image',
+        options: {
+          hotspot: true
+        }
+      }],
     }),
     defineField({
       name: 'Beskrivning',

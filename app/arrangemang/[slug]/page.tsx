@@ -6,6 +6,7 @@ import { client } from '@/sanity/client';
 import imageUrlBuilder from '@sanity/image-url';
 import { generateMetadata } from './metadata';
 import { PortableText, PortableTextBlock } from 'next-sanity';
+import ImageCarousel from '@/components/Arrangemang/ImageCarousel';
 
 export const revalidate = 30;
 
@@ -22,6 +23,7 @@ interface Arrangemang {
   Namn: string;
   Beskrivning: PortableTextBlock[];
   Bild: SanityImageSource;
+  Bilder?: SanityImageSource[];
 }
 
 const builder = imageUrlBuilder(client);
@@ -37,9 +39,18 @@ async function getData(slug: string): Promise<Arrangemang | null> {
         Namn,
         Beskrivning,
         Bild,
+        Bilder,
       }[0]`;
 
   const arrangemang = await client.fetch<Arrangemang>(query);
+  console.log('[v0] getData query result:', {
+    slug,
+    hasData: !!arrangemang,
+    navn: arrangemang?.Namn,
+    hasBild: !!arrangemang?.Bild,
+    hasiBilder: !!arrangemang?.Bilder,
+    bilderCount: arrangemang?.Bilder?.length || 0,
+  });
   return arrangemang;
 }
 
@@ -75,9 +86,9 @@ export default async function ArrangemangDetail({ params }: { params: Promise<{ 
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
 
-      {/* ── Full-width banner ──────────────────────────────────────────────── */}
+      {/* ── Full-width hero banner with main image ──────────────────────────── */}
       <div className="relative w-full overflow-hidden border-b border-black border-solid">
-        {/* Banner image */}
+        {/* Hero image */}
         <div className="relative w-full h-[56vw] min-h-[300px] max-h-[90vh]">
           {arrangemang.Bild ? (
             <Image
@@ -117,10 +128,10 @@ export default async function ArrangemangDetail({ params }: { params: Promise<{ 
         </div>
       </div>
 
-      {/* ── Content below banner ───────────────────────────────────────────── */}
+      {/* ── Content section below banner ────────────────────────────────────── */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-px">
 
-        {/* Left column: description */}
+        {/* Left column: description content */}
         <div className="lg:col-span-8 grid-col-border">
 
           {/* Description */}
@@ -132,6 +143,13 @@ export default async function ArrangemangDetail({ params }: { params: Promise<{ 
               <div className="prose prose-sm lg:prose-base max-w-none text-sans-16 leading-relaxed rich-text">
                 <PortableText value={arrangemang.Beskrivning} />
               </div>
+            </div>
+          )}
+
+          {/* Image carousel — positioned below description on desktop, for optimal page flow */}
+          {arrangemang.Bilder && arrangemang.Bilder.length > 0 && (
+            <div className="px-4 py-6 lg:px-8 lg:py-10">
+              <ImageCarousel images={arrangemang.Bilder} title="Galleribilder" />
             </div>
           )}
         </div>
