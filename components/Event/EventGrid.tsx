@@ -206,26 +206,31 @@ const EventGrid = () => {
         aria-label="Kommande event"
         className="uppercase"
       >
-        <div className="px-4 lg:px-8 py-10 lg:py-16 border-t border-black border-solid">
-          <h2 className="text-sans-35 lg:text-sans-60 font-600 mb-8 border-b border-black border-solid pb-4">
-            Kommande event
-          </h2>
+        <div className="border-t border-black border-solid">
+          {/* Section header */}
+          <div className="px-4 lg:px-8 py-10 lg:py-16 border-b border-black border-solid">
+            <h2 className="text-sans-35 lg:text-sans-60 font-600">
+              Kommande event
+            </h2>
+          </div>
+          
+          {/* Events grid */}
+          {remainingUpcoming.length > 0 ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-px border border-black border-solid">
+              {remainingUpcoming.map((event) => (
+                <EventCard key={event._id} event={event} />
+              ))}
+            </div>
+          ) : (
+            <div className="px-4 lg:px-8 py-8 border border-black border-solid border-t-0">
+              <p className="text-sans-16 text-gray-500">
+                {upcomingEvents.length === 0
+                  ? 'Inga kommande event för tillfället.'
+                  : 'Inga fler kommande event.'}
+              </p>
+            </div>
+          )}
         </div>
-        {remainingUpcoming.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-px border border-black border-solid">
-            {remainingUpcoming.map((event) => (
-              <EventCard key={event._id} event={event} />
-            ))}
-          </div>
-        ) : (
-          <div className="px-4 lg:px-8 py-8">
-            <p className="text-sans-16 text-gray-500">
-              {upcomingEvents.length === 0
-                ? 'Inga kommande event för tillfället.'
-                : 'Inga fler kommande event.'}
-            </p>
-          </div>
-        )}
       </section>
 
       {/* ── Past events ─────────────────────────────────────────── */}
@@ -234,15 +239,20 @@ const EventGrid = () => {
           aria-label="Tidigare event"
           className="uppercase"
         >
-          <div className="px-4 lg:px-8 py-10 lg:py-16 border-t border-black border-solid">
-            <h2 className="text-sans-35 lg:text-sans-60 font-600 mb-8 border-b border-black border-solid pb-4">
-              Tidigare event
-            </h2>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-px border border-black border-solid">
-            {pastEvents.map((event) => (
-              <EventCard key={event._id} event={event} />
-            ))}
+          <div className="border-t border-black border-solid">
+            {/* Section header */}
+            <div className="px-4 lg:px-8 py-10 lg:py-16 border-b border-black border-solid">
+              <h2 className="text-sans-35 lg:text-sans-60 font-600">
+                Tidigare event
+              </h2>
+            </div>
+            
+            {/* Events grid */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-px border border-black border-solid">
+              {pastEvents.map((event) => (
+                <EventCard key={event._id} event={event} />
+              ))}
+            </div>
           </div>
         </section>
       )}
