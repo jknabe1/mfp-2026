@@ -5,8 +5,7 @@ import Link from 'next/link';
 import { client } from '@/sanity/client';
 import imageUrlBuilder from '@sanity/image-url';
 import { generateMetadata } from './metadata';
-import { PortableText, PortableTextBlock } from 'next-sanity'; // Updated import
-
+import { PortableText, PortableTextBlock } from 'next-sanity';
 
 export const revalidate = 30;
 
@@ -17,17 +16,12 @@ interface SanityImageSource {
   };
 }
 
-// Define the artist data structure
-interface Artist {
-  currentSlug: string;
-  name: string;
-  Biography: PortableTextBlock[];
-  image: SanityImageSource;
-  Instagram?: string;
-  Facebook?: string;
-  spotify?: string;
-  excerpt?: string;
-  date?: string;
+// Define the arrangemang data structure matching arrangemangType
+interface Arrangemang {
+  currentURL: string;
+  Namn: string;
+  Beskrivning: PortableTextBlock[];
+  Bild: SanityImageSource;
 }
 
 const builder = imageUrlBuilder(client);
@@ -36,44 +30,38 @@ function urlFor(source: SanityImageSource) {
   return builder.image(source);
 }
 
-async function getData(slug: string): Promise<Artist | null> {
+async function getData(slug: string): Promise<Arrangemang | null> {
   const query = `
-    *[_type == "artist" && slug.current == '${slug}'] {
-        "currentSlug": slug.current,
-          name,
-          Biography,
-          image,
-          Instagram,
-          Facebook,
-          spotify,
-          excerpt,
-          date,
+    *[_type == "arrangemang" && URL.current == '${slug}'] {
+        "currentURL": URL.current,
+        Namn,
+        Beskrivning,
+        Bild,
       }[0]`;
 
-  const artist = await client.fetch<Artist>(query);
-  return artist;
+  const arrangemang = await client.fetch<Arrangemang>(query);
+  return arrangemang;
 }
 
 // Export metadata from the separate file
 export { generateMetadata };
 
 // Type params as a Promise and await it
-export default async function BlogArticle({ params }: { params: Promise<{ slug: string }> }) {
+export default async function ArrangemangDetail({ params }: { params: Promise<{ slug: string }> }) {
   const resolvedParams = await params;
-  const artist = await getData(resolvedParams.slug);
+  const arrangemang = await getData(resolvedParams.slug);
 
-  if (!artist) {
-    return <div>Artist not found</div>;
+  if (!arrangemang) {
+    return <div>Arrangemang not found</div>;
   }
 
   const jsonLd = {
     '@context': 'https://schema.org',
-    '@type': 'MusicGroup',
-    name: artist.name,
-    description: artist.Biography,
-    image: artist.image ? urlFor(artist.image).url() : undefined,
-    url: `https://musicforpennies.se/artists/${artist.currentSlug}`,
-    sameAs: [artist.Instagram || '', artist.Facebook || '', artist.spotify || ''].filter(Boolean),
+    '@type': 'Event',
+    name: arrangemang.Namn,
+    description: arrangemang.Beskrivning,
+    image: arrangemang.Bild ? urlFor(arrangemang.Bild).url() : undefined,
+    url: `https://musicforpennies.se/arrangemang/${arrangemang.currentURL}`,
   };
 
   return (
@@ -89,53 +77,18 @@ export default async function BlogArticle({ params }: { params: Promise<{ slug: 
             <div className="col-span-12 lg:col-span-6 grid-col-border">
               <ul className="flex flex-col gap-px">
                 <li className="px-2 py-3 lg:px-5">
-                  <h1 className="text-sans-35 lg:text-sans-60 font-600">{artist.name}</h1>
+                  <h1 className="text-sans-35 lg:text-sans-60 font-600">{arrangemang.Namn}</h1>
                   <div className="mt-4 text-lg leading-relaxed prose">
-                    <PortableText value={artist.Biography} />
+                    <PortableText value={arrangemang.Beskrivning} />
                   </div>
                 </li>
-                <div className="text-lg leading-relaxed border-t border-solid border-black px-2 py-3 lg:px-5">
-                  <h1>Följ {artist.name} på sociala medier:</h1>
-                  <div className="flex gap-4 mt-2">
-                    {artist.Instagram && (
-                      <Link
-                        href={artist.Instagram}
-                        target="_blank"
-                        className="hover:italic"
-                        rel="noopener noreferrer"
-                      >
-                        Instagram
-                      </Link>
-                    )}
-                    {artist.Facebook && (
-                      <Link
-                        href={artist.Facebook}
-                        target="_blank"
-                        className="hover:italic"
-                        rel="noopener noreferrer"
-                      >
-                        Facebook
-                      </Link>
-                    )}
-                    {artist.spotify && (
-                      <Link
-                        href={artist.spotify}
-                        className="hover:italic"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        Spotify
-                      </Link>
-                    )}
-                  </div>
-                </div>
               </ul>
             </div>
             <div className="hidden lg:block col-span-6 grid-col-border sticky top-7 min-h-hero-minus-header overflow-hidden">
               <div className="image overflow-hidden absolute inset-0">
                 <Image
-                  src={urlFor(artist.image).url()}
-                  alt={artist.name}
+                  src={urlFor(arrangemang.Bild).url()}
+                  alt={arrangemang.Namn}
                   className="w-full h-full object-cover noise"
                   width={1000}
                   height={1000}
