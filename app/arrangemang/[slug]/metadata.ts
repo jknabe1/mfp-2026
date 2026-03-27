@@ -57,12 +57,6 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
       description: arrangemang.Beskrivning?.map(block => block.children?.map(child => child.text).join(' ')).join(' ') || 'Explore this arrangemang.',
       images: arrangemang.Bild ? [{ url: urlFor(arrangemang.Bild).url() }] : [],
     },
-    twitter: {
-      card: 'summary_large_image',
-      title: arrangemang.Namn,
-      description: arrangemang.Beskrivning?.map(block => block.children?.map(child => child.text).join(' ')).join(' ') || 'Explore this arrangemang.',
-      images: arrangemang.Bild ? [{ url: urlFor(arrangemang.Bild).url() }] : [],
-    },
   };
 }
 
