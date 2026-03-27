@@ -12,8 +12,13 @@ export async function POST(request: Request) {
     }
 
     // Kontrollera om API-nycklarna är konfigurerade
+    console.log('[v0] Checking environment variables...');
+    console.log('[v0] NEWSLETTER_API_KEY exists:', !!process.env.NEWSLETTER_API_KEY);
+    console.log('[v0] NEWSLETTER_LIST_ID:', process.env.NEWSLETTER_LIST_ID);
+    
     if (!process.env.NEWSLETTER_API_KEY || !process.env.NEWSLETTER_LIST_ID) {
       console.error('[v0] Newsletter API keys not configured');
+      console.error('[v0] Missing keys - API_KEY:', !process.env.NEWSLETTER_API_KEY, 'LIST_ID:', !process.env.NEWSLETTER_LIST_ID);
       return NextResponse.json(
         { error: 'Nyhetsbrev-tjänsten är inte konfigurerad. Kontakta administratörer.' },
         { status: 503 }
@@ -21,6 +26,7 @@ export async function POST(request: Request) {
     }
 
     console.log('[v0] Newsletter subscription attempt for:', email);
+    console.log('[v0] API key first 20 chars:', process.env.NEWSLETTER_API_KEY.substring(0, 20));
 
     // Anropa Get a Newsletter API
     const response = await fetch('https://api.getanewsletter.com/v3/subscribers', {
