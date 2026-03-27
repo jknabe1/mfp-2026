@@ -18,7 +18,7 @@ interface ArtistsListProps {
   initialArtists: Artist[];
 }
 
-export default function ArtistsList({ initialArtists }: ArtistsListProps) {
+export default function ArrangemangList({ initialArtists }: ArtistsListProps) {
   const [selectedArtist, setSelectedArtist] = useState<Artist | null>(
     initialArtists[0] || null
   );

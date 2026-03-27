@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import Header from "@/components/Global/Header/Header";
 import Footer from "@/components/Global/Footer/Footer";
-import LenisScrollProvider from "@/providers/lenis-providers";
+import LenisScrollProvider from "@/providers/LenisProvider";
 import { Analytics } from '@vercel/analytics/next';
 import { SpeedInsights } from "@vercel/speed-insights/next"
 

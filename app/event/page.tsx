@@ -1,5 +1,5 @@
 import React from 'react';
-import EventGrid from '@/components/Events/EventGrid';
+import EventGrid from '@/components/Event/EventGrid';
 import { client } from '@/sanity/client';
 import type { Metadata } from 'next';
 import imageUrlBuilder from '@sanity/image-url';
@@ -62,9 +62,5 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default function Page() {
-  return (
-    <div>
-      <EventGrid />
-    </div>
-  );
+  return <EventGrid />;
 }

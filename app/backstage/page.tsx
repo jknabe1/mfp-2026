@@ -1,4 +1,4 @@
-import LoginForm from '@/components/Backstage/login-form'
+import LoginForm from '@/components/Backstage/LoginForm'
 import React from 'react'
 import type { Metadata } from 'next'
 

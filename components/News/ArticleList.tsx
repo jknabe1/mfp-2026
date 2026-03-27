@@ -24,7 +24,7 @@ interface ArtistsListProps {
   initialArtists: Artist[];
 }
 
-export default function ArtistsList({ initialArtists }: ArtistsListProps) {
+export default function ArticleList({ initialArtists }: ArtistsListProps) {
   const [artists] = useState<Artist[]>(initialArtists);
   const [displayedArtists, setDisplayedArtists] = useState<Artist[]>([]);
   const [selectedArtist, setSelectedArtist] = useState<Artist | null>(initialArtists[0] || null);

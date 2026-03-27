@@ -1,7 +1,7 @@
 import { client } from "@/sanity/client";
 import imageUrlBuilder from "@sanity/image-url";
 import { SanityDocument } from "next-sanity";
-import DynamicSlider from "@/components/General/Slider";
+import ContentSlider from "@/components/General/ContentSlider";
 
 export const revalidate = 30; 
 
@@ -37,5 +37,5 @@ export default async function EventGrid() {
     imageUrl: urlFor(event.image), // Convert image to URL
   }));
 
-  return <DynamicSlider items={eventsWithUrls} itemType="event" />;
+  return <ContentSlider items={eventsWithUrls} itemType="event" />;
 }

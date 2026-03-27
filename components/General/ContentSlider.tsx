@@ -22,7 +22,7 @@ interface SliderProps {
 
 export const revalidate = 30
 
-export default function DynamicSlider({ items, itemType }: SliderProps) {
+export default function ContentSlider({ items, itemType }: SliderProps) {
   const [isMobile, setIsMobile] = useState(false)
 
   useEffect(() => {

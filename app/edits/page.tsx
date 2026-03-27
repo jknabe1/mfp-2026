@@ -1,6 +1,6 @@
 import '@/app/globals.css';
 import { client } from '@/sanity/client';
-import NewsList from '@/components/News/NewsSection';
+import ArticleList from '@/components/News/ArticleList';
 import { Metadata } from 'next';
 interface SanityImageSource {
   asset: { _ref: string };
@@ -65,5 +65,5 @@ export default async function Page() {
     publishedAt: news.publishedAt,
   }));
 
-  return <NewsList initialArtists={newsItems} />;
+  return <ArticleList initialArtists={newsItems} />;
 }

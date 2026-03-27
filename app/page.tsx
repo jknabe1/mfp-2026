@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import AboutSection from "@/components/Landing/About/AboutSection";
 import ConcertSection from "@/components/Landing/ConcertSection";
 import NewsSection from "@/components/Landing/NewsSection";
-import VaraArrangemang from "@/components/Landing/Arrangemang/VaraArrangemang";
+import ArrangemangSection from "@/components/Landing/Arrangemang/ArrangemangSection";
 import ForeningarSection from '@/components/Landing/Foreningar/ForeningarSection';
 
 export const metadata: Metadata = {
@@ -62,7 +62,7 @@ export default function Home() {
       <AboutSection />
       <ConcertSection />
       <NewsSection />
-      <VaraArrangemang />
+      <ArrangemangSection />
       <ForeningarSection />
     </main>
   );
