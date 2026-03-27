@@ -294,7 +294,7 @@ const Header = () => {
             className="flex items-center justify-center text-sans-35 font-600 border-b border-black border-solid hover:italic py-5"
             onClick={handleLinkClick}
           >
-            ARTISTER
+            FÖRENINGAR
           </Link>
           <Link
             href="/edits"
@@ -311,53 +311,13 @@ const Header = () => {
             EVENTS
           </Link>
 
-          {/* Social Links - Grouped in two rows: 3 links on top, 2 links on bottom */}
-          <div className="py-6 border-b border-black border-solid">
-            <div className="flex flex-col items-center gap-4">
-              {/* First row - 3 links */}
-              <div className="flex justify-center items-center space-x-4">
-                <Link
-                  href="https://www.instagram.com/musicforpennies.se"
-                  className="text-sm font-medium hover:italic px-2 py-1 whitespace-nowrap"
-                  onClick={handleLinkClick}
-                >
-                  INSTAGRAM
-                </Link>
-                <Link
-                  href="https://www.facebook.com/kkmusicrecords"
-                  className="text-sm font-medium hover:italic px-2 py-1 whitespace-nowrap"
-                  onClick={handleLinkClick}
-                >
-                  FACEBOOK
-                </Link>
-                <Link
-                  href="https://www.tiktok.com/@kkrecordssweden"
-                  className="text-sm font-medium hover:italic px-2 py-1 whitespace-nowrap"
-                  onClick={handleLinkClick}
-                >
-                  TIKTOK
-                </Link>
-              </div>
-
-              {/* Second row - 2 links */}
-              <div className="flex justify-center items-center space-x-4">
-                <Link
-                  href="https://open.spotify.com/user/rp0di7du2vijxmhev2mp6vugo"
-                  className="text-sm font-medium hover:italic px-2 py-1 whitespace-nowrap"
-                  onClick={handleLinkClick}
-                >
-                  SPOTIFY
-                </Link>
-                <Link
-                  href="https://www.youtube.com/@kkrec"
-                  className="text-sm font-medium hover:italic px-2 py-1 whitespace-nowrap"
-                  onClick={handleLinkClick}
-                >
-                  YOUTUBE
-                </Link>
-              </div>
-            </div>
-          </div>
+            <Link
+            href="/event"
+            className="flex items-center justify-center text-sans-35 font-600 border-b border-black border-solid hover:italic py-5"
+            onClick={handleLinkClick}
+          >
+            ARRANGEMANG
+          </Link>
         </div>
 
         {/* Desktop: Keep the original grid layout */}
@@ -380,11 +340,11 @@ const Header = () => {
 
           {/* Middle row */}
           <Link
-            href="/artists"
+            href="/foreningar"
             className="flex items-center justify-center text-sans-60 font-600 border-r border-b border-black border-solid hover:italic"
             onClick={handleLinkClick}
           >
-            ARTISTER
+            FÖRENINGAR
           </Link>
           <Link
             href="/edits"
@@ -401,63 +361,10 @@ const Header = () => {
             </Link>
           </div>
 
-          {/* Footer area */}
-          <div className="flex items-center justify-center border-gray-800 right-0">
-            <div className="w-full h-full flex flex-col items-center justify-center p-8">
-              {/* Social Links */}
-              <ul className="flex flex-row items-center space-x-6 list-none">
-                <li>
-                  <Link
-                    className="block w-full text-sans-14 uppercase tracking-wider p-2 text-center"
-                    title="Instagram"
-                    aria-label="Instagram"
-                    href="https://www.instagram.com/musicforpennies.se"
-                  >
-                    Instagram
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    className="block w-full text-sans-14 uppercase tracking-wider p-2 text-center"
-                    title="Facebook"
-                    aria-label="Facebook"
-                    href="https://www.facebook.com/kkmusicrecords"
-                  >
-                    Facebook
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    className="block w-full text-sans-14 uppercase tracking-wider p-2 text-center"
-                    title="TikTok"
-                    aria-label="TikTok"
-                    href="https://www.tiktok.com/@kkrecordssweden"
-                  >
-                    TikTok
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    className="block w-full text-sans-14 uppercase tracking-wider p-2 text-center"
-                    title="Spotify"
-                    aria-label="Spotify"
-                    href="https://open.spotify.com/user/rp0di7du2vijxmhev2mp6vugo"
-                  >
-                    Spotify
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    className="block w-full text-sans-14 uppercase tracking-wider p-2 text-center"
-                    title="Youtube"
-                    aria-label="Youtube"
-                    href="https://www.youtube.com/@kkrec"
-                  >
-                    Youtube
-                  </Link>
-                </li>
-              </ul>
-            </div>
+            <div className="relative flex items-center justify-center text-sans-60 font-600 border-r border-black border-solid hover:italic">
+            <Link href="/arrangemang" className="w-full h-full flex items-center justify-center" onClick={handleLinkClick}>
+              ARRANGEMANG
+            </Link>
           </div>
         </div>
       </div>

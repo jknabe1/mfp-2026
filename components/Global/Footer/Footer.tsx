@@ -47,7 +47,10 @@ export default function Footer() {
                                 <div>
                                     <ul className="flex flex-col gap-px border-t border-solid">
                                         <li className="grid-col-border">
-                                            <Link className="block w-full text-sans-14 uppercase tracking-wider p-2 text-left" title="Artister" aria-label="Artister" href="/artists">Artister</Link>
+                                            <Link className="block w-full text-sans-14 uppercase tracking-wider p-2 text-left" title="Artister" aria-label="Artister" href="/arrangemang">Arrangemang</Link>
+                                        </li>
+                                        <li className="grid-col-border">
+                                            <Link className="block w-full text-sans-14 uppercase tracking-wider p-2 text-left" title="Föreningar" aria-label="Föreningar" href="/foreningar">Föreningar</Link>
                                         </li>
                                         <li className="grid-col-border">
                                             <Link className="block w-full text-sans-14 uppercase tracking-wider p-2 text-left" title="Edits" aria-label="Edits" href="/edits">Edits</Link>
@@ -121,7 +124,10 @@ export default function Footer() {
                             <h2 className="text-sans-60 font-600 mb-2 tracking-tighter ml-[-0.08em]">Genvägar</h2>
                             <ul>
                                 <li>
-                                    <Link className="inline-block text-sans-16 uppercase tracking-wider font-800 link-primary pb-1" title="Artister" aria-label="Artister" href="/artists">Artister</Link>
+                                    <Link className="inline-block text-sans-16 uppercase tracking-wider font-800 link-primary pb-1" title="Arrangemang" aria-label="Arrangemang" href="/arrangemang">Arrangemang</Link>
+                                </li>
+                                <li>
+                                    <Link className="inline-block text-sans-16 uppercase tracking-wider font-800 link-primary pb-1" title="Föreningar" aria-label="Föreningar" href="/foreningar">Föreningar</Link>
                                 </li>
                                 <li>
                                     <Link className="inline-block text-sans-16 uppercase tracking-wider font-800 link-primary pb-1" title="Edits" aria-label="Edits" href="/edits">Edits</Link>

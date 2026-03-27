@@ -7,7 +7,7 @@ const staticPages = [
   "om-oss",
   "kontakta-oss",
   "backstage",
-  "artists",
+  "arrangemang",
   "events",
   "edits",
 ].map((path) => ({
