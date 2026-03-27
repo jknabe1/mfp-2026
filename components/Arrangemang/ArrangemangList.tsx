@@ -150,11 +150,5 @@ export default function ArrangemangList({ initialArrangemang }: ArrangemangListP
       </section>
     </main>
   );
-
-interface ArtistData {
-  _id: string;
-  name: string;
-  slug: { current: string };
-  date: string;
-  image: SanityImageSource;
 }
+
