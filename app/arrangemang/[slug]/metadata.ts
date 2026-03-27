@@ -67,24 +67,6 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 }
 
 
-async function getData(slug: string): Promise<Artist | null> {
-  const query = `
-    *[_type == "artist" && slug.current == '${slug}'] {
-        "currentSlug": slug.current,
-          name,
-          Biography,
-          image,
-          Instagram,
-          Facebook,
-          spotify,
-          excerpt,
-          date,
-      }[0]`;
-
-  const artist = await client.fetch<Artist>(query);
-  return artist;
-}
-
 // Explicitly use Metadata as the return type
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const resolvedParams = await params;
