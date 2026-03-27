@@ -3,7 +3,7 @@ import ArrangemangList from '@/components/Arrangemang/ArrangemangList';
 import { SanityImageSource } from '@/lib/utils';
 import type { Metadata } from 'next';
 
-interface Artist {
+interface ArtistData {
   _id: string;
   name: string;
   slug: { current: string };
@@ -13,13 +13,13 @@ interface Artist {
 
 export const revalidate = 30;
 
-async function fetchArtists(): Promise<Artist[]> {
-  const query = `*[_type == "artist" && defined(slug.current) && defined(date)]{_id, name, slug, date, image} | order(date desc)`;
-  return await client.fetch<Artist[]>(query);
+async function fetchArrangemangArtists(): Promise<ArtistData[]> {
+  const arrangemangQuery = `*[_type == "artist" && defined(slug.current) && defined(date)]{_id, name, slug, date, image} | order(date desc)`;
+  return await client.fetch<ArtistData[]>(arrangemangQuery);
 }
 
 export async function generateMetadata(): Promise<Metadata> {
-  const artists = await fetchArtists();
+  const arrangemangArtists = await fetchArrangemangArtists();
   
   return {
     title: 'Artister',
@@ -29,7 +29,7 @@ export async function generateMetadata(): Promise<Metadata> {
       description: 'Se hela listan av artister som är del av Music For Pennies och upptäck nya namn.',
       url: 'https://musicforpennies.se/arrangemang',
       siteName: 'Music For Pennies',
-      images: artists.length > 0 ? artists.slice(0, 1).map(artist => ({
+      images: arrangemangArtists.length > 0 ? arrangemangArtists.slice(0, 1).map(artist => ({
         url: artist.image ? `https://musicforpennies.se/api` : 'https://musicforpennies.se/assets/default-artist.jpg'
       })) : [{ url: 'https://musicforpennies.se/assets/default-artist.jpg' }],
       type: 'website',
@@ -37,8 +37,8 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-export default async function Page() {
-  const artists = await fetchArtists();
+export default async function ArrangemangPage() {
+  const arrangemangArtists = await fetchArrangemangArtists();
 
-  return <ArrangemangList initialArtists={artists} />;
+  return <ArrangemangList initialArtists={arrangemangArtists} />;
 }
