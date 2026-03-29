@@ -223,8 +223,9 @@ export default async function EventPage({ params }: { params: Promise<{ slug: st
 
       {/* ── Full-width banner ──────────────────────────────────────────────── */}
       <div className="relative w-full overflow-hidden border-b border-black border-solid">
+
         {/* Banner image */}
-        <div className="relative w-full h-[56vw] min-h-[300px] max-h-[90vh]">
+        <div className="relative w-full h-[56vw] min-h-[220px] max-h-[90vh]">
           {event.image ? (
             <Image
               src={urlFor(event.image).width(2400).quality(90).url()}
@@ -238,21 +239,21 @@ export default async function EventPage({ params }: { params: Promise<{ slug: st
             <div className="absolute inset-0 bg-black" />
           )}
 
-          {/* Gradient scrim — stronger at bottom for text legibility */}
-          <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
+          {/* Gradient scrim — only on md+ where overlay text sits on image */}
+          <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent hidden md:block" />
 
           {/* Past event badge */}
           {isPast && (
-            <div className="absolute top-3 left-3 sm:top-4 sm:left-4 lg:top-6 lg:left-6 z-10">
-              <span className="inline-flex items-center gap-1.5 bg-black text-[var(--vividGreen)] text-sans-11 sm:text-sans-12 font-600 px-2.5 py-1.5 sm:px-3 sm:py-1.5 uppercase tracking-widest border border-[var(--vividGreen)]">
+            <div className="absolute top-3 left-3 lg:top-6 lg:left-6 z-10">
+              <span className="inline-flex items-center gap-1.5 bg-black text-[var(--vividGreen)] text-sans-11 font-600 px-2.5 py-1.5 uppercase tracking-widest border border-[var(--vividGreen)]">
                 Tidigare event
               </span>
             </div>
           )}
 
-          {/* Ticket CTA — top right (hidden on mobile, shown in content area instead) */}
+          {/* Ticket CTA — top right on desktop */}
           {tickets && !isPast && (
-            <div className="absolute top-3 right-3 sm:top-4 sm:right-4 lg:top-6 lg:right-6 z-10 hidden sm:block">
+            <div className="absolute top-4 right-4 lg:top-6 lg:right-6 z-10 hidden md:block">
               <Link
                 href={tickets}
                 target="_blank"
@@ -264,44 +265,103 @@ export default async function EventPage({ params }: { params: Promise<{ slug: st
             </div>
           )}
 
-          {/* Bottom overlay: event name + date block */}
-          <div className="absolute bottom-0 left-0 right-0 z-10 px-3 pb-4 sm:px-4 sm:pb-5 lg:px-8 lg:pb-8 flex flex-col md:flex-row md:items-end md:justify-between gap-3 sm:gap-4">
-            <h1 className="text-white uppercase font-600 text-sans-24 sm:text-sans-35 lg:text-sans-60 xl:text-sans-120 leading-[1.1] text-balance max-w-[85%] sm:max-w-[75%]">
+          {/* md+ overlay: event name + date block over image */}
+          <div className="absolute bottom-0 left-0 right-0 z-10 px-6 pb-8 lg:px-8 lg:pb-10 hidden md:flex md:flex-row md:items-end md:justify-between gap-4">
+            <h1 className="text-white uppercase font-600 text-sans-35 lg:text-sans-60 xl:text-sans-120 leading-[1.05] text-balance max-w-[75%]">
               {event.name}
             </h1>
-
             {dateBlock && (
               <div className="flex items-stretch shrink-0 border border-white/50">
-                <div className="flex flex-col items-center justify-center px-3 py-2 sm:px-4 sm:py-3 bg-white/10 backdrop-blur-sm min-w-[56px] sm:min-w-[64px]">
-                  <span className="text-white text-sans-24 sm:text-sans-35 lg:text-sans-60 font-600 leading-none">{dateBlock.day}</span>
-                  <span className="text-white text-sans-9 sm:text-sans-10 font-600 tracking-widest mt-0.5 sm:mt-1">{dateBlock.month}</span>
+                <div className="flex flex-col items-center justify-center px-4 py-3 bg-white/10 backdrop-blur-sm min-w-[64px]">
+                  <span className="text-white text-sans-35 lg:text-sans-60 font-600 leading-none">{dateBlock.day}</span>
+                  <span className="text-white text-sans-10 font-600 tracking-widest mt-1">{dateBlock.month}</span>
                 </div>
-                <div className="flex flex-col items-center justify-center px-3 py-2 sm:px-4 sm:py-3 bg-white/10 backdrop-blur-sm border-l border-white/50">
-                  <span className="text-white text-sans-12 sm:text-sans-16 font-600 tracking-widest">{dateBlock.year}</span>
-                  <span className="text-white text-sans-9 sm:text-sans-10 font-600 tracking-widest mt-0.5 sm:mt-1">{dateBlock.time}</span>
+                <div className="flex flex-col items-center justify-center px-4 py-3 bg-white/10 backdrop-blur-sm border-l border-white/50">
+                  <span className="text-white text-sans-16 font-600 tracking-widest">{dateBlock.year}</span>
+                  <span className="text-white text-sans-10 font-600 tracking-widest mt-1">{dateBlock.time}</span>
                 </div>
               </div>
             )}
           </div>
         </div>
 
-        {/* ── Banner info bar (compact) ──────────────────────────────────── */}
-        <div className="flex flex-wrap items-center justify-between gap-2 sm:gap-3 px-3 py-3 sm:px-4 sm:py-3 lg:px-8 lg:py-4 bg-black text-white uppercase">
-          <div className="flex flex-wrap items-center gap-2 sm:gap-4 lg:gap-8">
+        {/* ── Mobile banner bar — event name + date prominently displayed ── */}
+        <div className="md:hidden bg-black text-white border-t border-white/10">
+          {/* Event name */}
+          <div className="px-4 pt-5 pb-4 border-b border-white/10">
+            <h1 className="text-sans-28 font-700 uppercase leading-[1.05] text-balance">
+              {event.name}
+            </h1>
+          </div>
+
+          {/* Date + venue row */}
+          {dateBlock && (
+            <div className="flex items-stretch">
+              {/* Day block */}
+              <div className="flex flex-col items-center justify-center bg-[var(--vividGreen)] text-black px-5 py-4 shrink-0 min-w-[72px]">
+                <span className="text-sans-35 font-700 leading-none">{dateBlock.day}</span>
+                <span className="text-sans-10 font-700 tracking-widest mt-0.5 uppercase">{dateBlock.month}</span>
+                <span className="text-sans-10 font-600 tracking-widest opacity-70">{dateBlock.year}</span>
+              </div>
+
+              {/* Time + venue */}
+              <div className="flex flex-col justify-center px-4 py-4 gap-1.5 min-w-0">
+                <div className="flex items-center gap-2">
+                  <span className="text-sans-10 font-600 uppercase tracking-widest opacity-50 shrink-0">Tid</span>
+                  <span className="text-sans-14 font-700 uppercase">{dateBlock.time}</span>
+                </div>
+                {venue?.name && (
+                  <div className="flex items-center gap-2">
+                    <span className="text-sans-10 font-600 uppercase tracking-widest opacity-50 shrink-0">Plats</span>
+                    <span className="text-sans-14 font-700 uppercase truncate">{[venue.name, venue.City].filter(Boolean).join(', ')}</span>
+                  </div>
+                )}
+              </div>
+
+              {/* Back link */}
+              <Link
+                href="/event"
+                className="hidden xs:flex flex-col items-center justify-center px-4 border-l border-white/10 text-[var(--vividGreen)] text-sans-18 font-700 shrink-0 min-w-[52px] min-h-[44px]"
+                aria-label="Alla event"
+              >
+                ←
+              </Link>
+            </div>
+          )}
+
+          {/* Mobile ticket CTA */}
+          {tickets && !isPast && (
+            <div className="px-4 py-4 border-t border-white/10">
+              <Link
+                href={tickets}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center justify-center gap-2 w-full bg-[var(--vividGreen)] text-black text-sans-14 font-700 uppercase tracking-widest px-6 py-4 min-h-[52px] hover:opacity-90 transition-opacity"
+              >
+                <span aria-hidden="true">■</span>
+                Köp biljetter
+              </Link>
+            </div>
+          )}
+        </div>
+
+        {/* ── Desktop info bar ─────────────────────────────────────────────── */}
+        <div className="hidden md:flex flex-wrap items-center justify-between gap-3 px-6 py-3 lg:px-8 lg:py-4 bg-black text-white uppercase">
+          <div className="flex flex-wrap items-center gap-4 lg:gap-8">
             {event.date && (
-              <span className="text-sans-11 sm:text-sans-12 lg:text-sans-14 font-600 tracking-wide capitalize">
+              <span className="text-sans-12 lg:text-sans-14 font-600 tracking-wide capitalize">
                 {formatLongDate(event.date)} — {formatTime(event.date)}
               </span>
             )}
             {venue?.name && (
-              <span className="text-sans-11 sm:text-sans-12 lg:text-sans-14 font-600 tracking-wide opacity-60 hidden sm:inline">
+              <span className="text-sans-12 lg:text-sans-14 font-600 tracking-wide opacity-60">
                 {[venue.name, venue.City].filter(Boolean).join(', ')}
               </span>
             )}
           </div>
           <Link
             href="/event"
-            className="text-sans-11 sm:text-sans-12 font-600 tracking-widest text-[var(--vividGreen)] hover:italic transition-all min-h-[44px] flex items-center"
+            className="text-sans-12 font-600 tracking-widest text-[var(--vividGreen)] hover:italic transition-all min-h-[44px] flex items-center"
           >
             ← Alla event
           </Link>
@@ -313,21 +373,6 @@ export default async function EventPage({ params }: { params: Promise<{ slug: st
 
         {/* Left column: description */}
         <div className="lg:col-span-7 grid-col-border">
-
-          {/* Mobile ticket CTA - prominent at top for easy access */}
-          {tickets && !isPast && (
-            <div className="px-3 py-5 sm:px-4 sm:py-6 lg:px-8 lg:py-8 border-b border-black border-solid sm:hidden">
-              <Link
-                href={tickets}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="button button-secondary-vividGreen inline-flex items-center justify-center gap-3 px-6 py-4 text-sans-14 font-600 uppercase tracking-widest w-full min-h-[52px]"
-              >
-                <span aria-hidden="true">■</span>
-                Köp biljetter
-              </Link>
-            </div>
-          )}
 
           {/* Description */}
           {event.details && (
