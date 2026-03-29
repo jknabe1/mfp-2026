@@ -11,9 +11,9 @@ interface CursorFollowImageProps {
 }
 
 /**
- * CursorFollowImage - Wraps children and displays an image that follows the cursor on hover.
- * Uses GPU-accelerated transforms for smooth performance.
- * Respects reduced-motion preferences for accessibility.
+ * CursorFollowImage — on desktop hover, expands a full-viewport-width image
+ * panel that fades in beneath the row and fades out on mouse leave.
+ * Respects prefers-reduced-motion for accessibility.
  */
 export default function CursorFollowImage({
   imageUrl,
@@ -21,109 +21,77 @@ export default function CursorFollowImage({
   children,
   className = '',
 }: CursorFollowImageProps) {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const [isHovering, setIsHovering] = useState(false);
-  const [position, setPosition] = useState({ x: 0, y: 0 });
   const [isVisible, setIsVisible] = useState(false);
-  const rafRef = useRef<number | null>(null);
+  const [isMounted, setIsMounted] = useState(false);
   const prefersReducedMotion = useRef(false);
+  const hideTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  // Check for reduced motion preference
   useEffect(() => {
     if (typeof window !== 'undefined') {
       prefersReducedMotion.current = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     }
   }, []);
 
-  const handleMouseMove = useCallback((e: React.MouseEvent) => {
-    if (prefersReducedMotion.current) return;
-
-    // Cancel any pending animation frame
-    if (rafRef.current) {
-      cancelAnimationFrame(rafRef.current);
-    }
-
-    // Use requestAnimationFrame for smooth updates
-    rafRef.current = requestAnimationFrame(() => {
-      const rect = containerRef.current?.getBoundingClientRect();
-      if (rect) {
-        // Position image offset from cursor (bottom-right of cursor)
-        const x = e.clientX - rect.left + 16;
-        const y = e.clientY - rect.top + 16;
-        setPosition({ x, y });
-      }
-    });
-  }, []);
-
   const handleMouseEnter = useCallback(() => {
     if (prefersReducedMotion.current || !imageUrl) return;
-    setIsHovering(true);
-    // Small delay for fade-in effect
-    requestAnimationFrame(() => {
-      setIsVisible(true);
-    });
+    if (hideTimeout.current) clearTimeout(hideTimeout.current);
+    setIsMounted(true);
+    // Defer visibility by one frame so the mount transition fires
+    requestAnimationFrame(() => setIsVisible(true));
   }, [imageUrl]);
 
   const handleMouseLeave = useCallback(() => {
     setIsVisible(false);
-    // Wait for fade-out animation to complete before removing
-    setTimeout(() => {
-      setIsHovering(false);
-    }, 200);
-
-    if (rafRef.current) {
-      cancelAnimationFrame(rafRef.current);
-    }
+    hideTimeout.current = setTimeout(() => setIsMounted(false), 300);
   }, []);
 
-  // Cleanup on unmount
   useEffect(() => {
     return () => {
-      if (rafRef.current) {
-        cancelAnimationFrame(rafRef.current);
-      }
+      if (hideTimeout.current) clearTimeout(hideTimeout.current);
     };
   }, []);
 
-  // Don't render hover image on touch devices or if no image
-  if (!imageUrl) {
-    return <div className={className}>{children}</div>;
-  }
+  if (!imageUrl) return <div className={className}>{children}</div>;
 
   return (
     <div
-      ref={containerRef}
       className={`relative ${className}`}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
-      onMouseMove={handleMouseMove}
     >
       {children}
 
-      {/* Cursor-following image */}
-      {isHovering && (
+      {/* Full-width image panel — desktop only, expands beneath the row */}
+      {isMounted && (
         <div
-          className="pointer-events-none fixed z-50 hidden lg:block"
+          className="pointer-events-none hidden lg:block absolute left-0 right-0 top-full z-40 overflow-hidden border-b border-black"
           style={{
-            left: containerRef.current?.getBoundingClientRect().left ?? 0,
-            top: containerRef.current?.getBoundingClientRect().top ?? 0,
-            transform: `translate3d(${position.x}px, ${position.y}px, 0)`,
+            // Expand from 0 → auto height via max-height transition
+            maxHeight: isVisible ? '60vw' : '0px',
+            transition: isVisible
+              ? 'max-height 380ms cubic-bezier(0.4,0,0.2,1), opacity 200ms ease-out'
+              : 'max-height 300ms cubic-bezier(0.4,0,0.2,1), opacity 250ms ease-out',
             opacity: isVisible ? 1 : 0,
-            transition: 'opacity 200ms ease-out',
-            willChange: 'transform, opacity',
+            willChange: 'max-height, opacity',
           }}
+          aria-hidden="true"
         >
-          <div className="relative w-[200px] h-[250px] lg:w-[240px] lg:h-[300px] overflow-hidden border border-black shadow-xl">
+          <div className="relative w-full" style={{ paddingBottom: '42%' }}>
             <Image
               src={imageUrl}
               alt={alt}
               fill
-              className="object-cover"
-              sizes="240px"
+              className="object-cover object-center noise"
+              sizes="100vw"
               loading="eager"
             />
-            {/* Subtle noise overlay for consistency */}
-            <div className="absolute inset-0 noise opacity-30 pointer-events-none" />
+            {/* Bottom fade so the panel blends into the next row */}
+            <div
+              className="absolute inset-0"
+              style={{
+                background: 'linear-gradient(to bottom, transparent 50%, rgba(0,0,0,0.35) 100%)',
+              }}
+            />
           </div>
         </div>
       )}
