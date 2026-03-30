@@ -149,7 +149,7 @@ const Header = () => {
                   </button>
                 </li>
                 <li>
-                  <Link className="block px-[7px] lg:pr-0" title="Backstage" href="/backstage">
+                  <Link className="block px-[7px] lg:pr-0" title="Repan" href="/repan">
                     <div className="h-[70px] flex flex-col justify-center hidden lg:flex">
                       <div className="relative">
                         <svg width="35" height="36" viewBox="0 0 35 36" className="icon-fill">
@@ -290,11 +290,11 @@ const Header = () => {
             OM OSS
           </Link>
           <Link
-            href="/artists"
+            href="/arrangemang"
             className="flex items-center justify-center text-sans-35 font-600 border-b border-black border-solid hover:italic py-5"
             onClick={handleLinkClick}
           >
-            ARTISTER
+            ARRANGEMANG
           </Link>
           <Link
             href="/edits"
@@ -380,11 +380,11 @@ const Header = () => {
 
           {/* Middle row */}
           <Link
-            href="/artists"
+            href="/arrangemang"
             className="flex items-center justify-center text-sans-60 font-600 border-r border-b border-black border-solid hover:italic"
             onClick={handleLinkClick}
           >
-            ARTISTER
+            ARRANGEMANG
           </Link>
           <Link
             href="/edits"
@@ -411,7 +411,7 @@ const Header = () => {
                     className="block w-full text-sans-14 uppercase tracking-wider p-2 text-center"
                     title="Instagram"
                     aria-label="Instagram"
-                    href="https://www.instagram.com/musicforpennies.se"
+                    href="https://www.instagram.com/music_for_pennies"
                   >
                     Instagram
                   </Link>
@@ -421,7 +421,7 @@ const Header = () => {
                     className="block w-full text-sans-14 uppercase tracking-wider p-2 text-center"
                     title="Facebook"
                     aria-label="Facebook"
-                    href="https://www.facebook.com/kkmusicrecords"
+                    href="https://www.facebook.com/musicforpennies"
                   >
                     Facebook
                   </Link>
@@ -431,7 +431,7 @@ const Header = () => {
                     className="block w-full text-sans-14 uppercase tracking-wider p-2 text-center"
                     title="TikTok"
                     aria-label="TikTok"
-                    href="https://www.tiktok.com/@kkrecordssweden"
+                    href="https://www.tiktok.com/@musicforpennies"
                   >
                     TikTok
                   </Link>
@@ -451,7 +451,7 @@ const Header = () => {
                     className="block w-full text-sans-14 uppercase tracking-wider p-2 text-center"
                     title="Youtube"
                     aria-label="Youtube"
-                    href="https://www.youtube.com/@kkrec"
+                    href="https://www.youtube.com/@musicforpennies"
                   >
                     Youtube
                   </Link>

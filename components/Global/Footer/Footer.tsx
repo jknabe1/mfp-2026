@@ -47,7 +47,7 @@ export default function Footer() {
                                 <div>
                                     <ul className="flex flex-col gap-px border-t border-solid">
                                         <li className="grid-col-border">
-                                            <Link className="block w-full text-sans-14 uppercase tracking-wider p-2 text-left" title="Artister" aria-label="Artister" href="/artists">Artister</Link>
+                                            <Link className="block w-full text-sans-14 uppercase tracking-wider p-2 text-left" title="Arrangemang" aria-label="Arrangemang" href="/arrangemang">Arrangemang</Link>
                                         </li>
                                         <li className="grid-col-border">
                                             <Link className="block w-full text-sans-14 uppercase tracking-wider p-2 text-left" title="Edits" aria-label="Edits" href="/edits">Edits</Link>
@@ -56,7 +56,7 @@ export default function Footer() {
                                             <Link className="block w-full text-sans-14 uppercase tracking-wider p-2 text-left" title="Event" aria-label="Event" href="/event">Event</Link>
                                         </li>
                                         <li>
-                                            <Link className='block w-full text-sans-14 uppercase tracking-wider p-2 text-left' title="Backstage" aria-label="Backstage" href="/backstage">Backstage</Link>
+                                            <Link className='block w-full text-sans-14 uppercase tracking-wider p-2 text-left' title="Repan" aria-label="Repan" href="/repan">Repan</Link>
                                         </li>
                                     </ul>
                                 </div>
@@ -121,7 +121,7 @@ export default function Footer() {
                             <h2 className="text-sans-60 font-600 mb-2 tracking-tighter ml-[-0.08em]">Genvägar</h2>
                             <ul>
                                 <li>
-                                    <Link className="inline-block text-sans-16 uppercase tracking-wider font-800 link-primary pb-1" title="Artister" aria-label="Artister" href="/artists">Artister</Link>
+                                    <Link className="inline-block text-sans-16 uppercase tracking-wider font-800 link-primary pb-1" title="Arrangemang" aria-label="Arrangemang" href="/arrangemang">Arrangemang</Link>
                                 </li>
                                 <li>
                                     <Link className="inline-block text-sans-16 uppercase tracking-wider font-800 link-primary pb-1" title="Edits" aria-label="Edits" href="/edits">Edits</Link>
@@ -130,7 +130,7 @@ export default function Footer() {
                                     <Link className="inline-block text-sans-16 uppercase tracking-wider font-800 link-primary pb-1" title="Event" aria-label="Event" href="/event">Event</Link>
                                 </li>
                                 <li>
-                                    <Link className='inline-block text-sans-16 uppercase tracking-wider font-800 link-primary pb-1' title="Backstage" aria-label="Backstage" href="/backstage">Backstage</Link>
+                                    <Link className='inline-block text-sans-16 uppercase tracking-wider font-800 link-primary pb-1' title="Repan" aria-label="Repan" href="/repan">Repan</Link>
                                 </li>
                             </ul>
                         </div>

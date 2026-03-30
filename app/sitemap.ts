@@ -6,7 +6,7 @@ const staticPages = [
   "",
   "om-oss",
   "kontakta-oss",
-  "backstage",
+  "repan",
   "artists",
   "events",
   "edits",
@@ -29,7 +29,7 @@ async function fetchDynamicRoutes() {
 
   // Convert Sanity data to sitemap format
   const artistRoutes = artists.map(({ slug }) => ({
-    url: `https://musicforpennies.se/artists/${slug.current}`,
+    url: `https://musicforpennies.se/forening/${slug.current}`,
     lastModified: new Date().toISOString(),
   }));
 
