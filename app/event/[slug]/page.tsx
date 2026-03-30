@@ -170,7 +170,7 @@ function PreviousEventCard({ event }: { event: Event }) {
             </p>
           )}
         </div>
-        <span className="text-[var(--vividGreen)] text-sans-14 sm:text-sans-16 font-600 shrink-0">→</span>
+        <span className="text-white text-sans-14 sm:text-sans-16 font-600 shrink-0">→</span>
       </div>
     </Link>
   )
@@ -245,8 +245,8 @@ export default async function EventPage({ params }: { params: Promise<{ slug: st
           {/* Past event badge */}
           {isPast && (
             <div className="absolute top-3 left-3 lg:top-6 lg:left-6 z-10">
-              <span className="inline-flex items-center gap-1.5 bg-black text-[var(--vividGreen)] text-sans-11 font-600 px-2.5 py-1.5 uppercase tracking-widest border border-[var(--vividGreen)]">
-                Tidigare event
+              <span className="inline-flex items-center gap-1.5 bg-white text-black text-sans-11 font-600 px-2.5 py-1.5 uppercase tracking-widest">
+                {event.name}
               </span>
             </div>
           )}
@@ -258,7 +258,7 @@ export default async function EventPage({ params }: { params: Promise<{ slug: st
                 href={tickets}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 bg-black text-white text-sans-12 font-600 px-4 py-2.5 uppercase tracking-widest hover:bg-white hover:text-black transition-colors border border-[var(--vividGreen)] min-h-[44px]"
+                className="inline-flex items-center gap-2 bg-black text-white text-sans-12 font-600 px-4 py-2.5 uppercase tracking-widest hover:bg-white hover:text-black transition-colors border border-white/50 min-h-[44px]"
               >
                 Köp biljetter
               </Link>
@@ -266,13 +266,13 @@ export default async function EventPage({ params }: { params: Promise<{ slug: st
           )}
 
           {/* md+ overlay: event name + date block over image */}
-          <div className="absolute bottom-0 left-0 right-0 z-10 px-6 pb-8 lg:px-8 lg:pb-10 hidden md:flex md:flex-row md:items-end md:justify-between gap-4">
+          <div className="absolute bottom-0 left-0 right-0 z-10 px-2 lg:px-5 lg:pb-10 hidden md:flex md:flex-row md:items-end md:justify-between gap-4">
             <h1 className="text-white uppercase font-600 text-sans-35 lg:text-sans-60 xl:text-sans-120 leading-[1.05] text-balance max-w-[75%]">
               {event.name}
             </h1>
             {dateBlock && (
               <div className="flex items-stretch shrink-0 border border-white/50">
-                <div className="flex flex-col items-center justify-center px-4 py-3 bg-white/10 backdrop-blur-sm min-w-[64px]">
+                <div className="flex flex-col items-center justify-center mx-2 px-4 py-3 bg-white/10 backdrop-blur-sm min-w-[64px]">
                   <span className="text-white text-sans-35 lg:text-sans-60 font-600 leading-none">{dateBlock.day}</span>
                   <span className="text-white text-sans-10 font-600 tracking-widest mt-1">{dateBlock.month}</span>
                 </div>
@@ -286,9 +286,9 @@ export default async function EventPage({ params }: { params: Promise<{ slug: st
         </div>
 
         {/* ── Mobile banner bar — event name + date prominently displayed ── */}
-        <div className="md:hidden bg-black text-white border-t border-white/10">
+        <div className="md:hidden bg-white text-black">
           {/* Event name */}
-          <div className="px-4 pt-5 pb-4 border-b border-white/10">
+          <div className="px-4 pt-5 pb-4 border- border-solid border-black">
             <h1 className="text-sans-28 font-700 uppercase leading-[1.05] text-balance">
               {event.name}
             </h1>
@@ -298,7 +298,7 @@ export default async function EventPage({ params }: { params: Promise<{ slug: st
           {dateBlock && (
             <div className="flex items-stretch">
               {/* Day block */}
-              <div className="flex flex-col items-center justify-center bg-[var(--vividGreen)] text-black px-5 py-4 shrink-0 min-w-[72px]">
+              <div className="flex flex-col items-center justify-center bg-white text-black px-5 py-4 shrink-0 min-w-[72px] border-r border-solid border-black">
                 <span className="text-sans-35 font-700 leading-none">{dateBlock.day}</span>
                 <span className="text-sans-10 font-700 tracking-widest mt-0.5 uppercase">{dateBlock.month}</span>
                 <span className="text-sans-10 font-600 tracking-widest opacity-70">{dateBlock.year}</span>
@@ -321,7 +321,7 @@ export default async function EventPage({ params }: { params: Promise<{ slug: st
               {/* Back link */}
               <Link
                 href="/event"
-                className="hidden xs:flex flex-col items-center justify-center px-4 border-l border-white/10 text-[var(--vividGreen)] text-sans-18 font-700 shrink-0 min-w-[52px] min-h-[44px]"
+                className="hidden xs:flex flex-col items-center justify-center px-4 border-l border-white/10 text-white text-sans-18 font-700 shrink-0 min-w-[52px] min-h-[44px]"
                 aria-label="Alla event"
               >
                 ←
@@ -336,7 +336,7 @@ export default async function EventPage({ params }: { params: Promise<{ slug: st
                 href={tickets}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center justify-center gap-2 w-full bg-[var(--vividGreen)] text-black text-sans-14 font-700 uppercase tracking-widest px-6 py-4 min-h-[52px] hover:opacity-90 transition-opacity"
+                className="inline-flex items-center justify-center gap-2 w-full bg-white text-black text-sans-14 font-700 uppercase tracking-widest px-6 py-4 min-h-[52px] hover:opacity-90 transition-opacity"
               >
                 <span aria-hidden="true">■</span>
                 Köp biljetter
@@ -361,7 +361,7 @@ export default async function EventPage({ params }: { params: Promise<{ slug: st
           </div>
           <Link
             href="/event"
-            className="text-sans-12 font-600 tracking-widest text-[var(--vividGreen)] hover:italic transition-all min-h-[44px] flex items-center"
+            className="text-sans-12 font-600 tracking-widest text-white hover:italic transition-all min-h-[44px] flex items-center"
           >
             ← Alla event
           </Link>

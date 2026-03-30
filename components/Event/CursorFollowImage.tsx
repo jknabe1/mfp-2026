@@ -82,7 +82,7 @@ export default function CursorFollowImage({
               alt={alt}
               fill
               className="object-cover object-center noise"
-              sizes="100vw"
+              sizes="10vw"
               loading="eager"
             />
             {/* Bottom fade so the panel blends into the next row */}
