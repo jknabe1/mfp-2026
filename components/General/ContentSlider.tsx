@@ -64,14 +64,14 @@ export default function ContentSlider({ items, itemType }: SliderProps) {
                 className="group block"
                 rel="noopener"
               >
-                {/* Aspect-ratio wrapper — image never crops */}
-                <div className="noise relative w-full aspect-[4/5] overflow-hidden bg-gray-100">
+                {/* Aspect-ratio wrapper — image shown in full, no cropping */}
+                <div className="relative w-full aspect-[4/5] bg-black overflow-hidden">
                   <Image
                     alt={item.name}
                     loading={index === 0 ? "eager" : "lazy"}
                     priority={index === 0}
                     fill
-                    className="object-cover border border-solid border-black transition-transform duration-500 group-hover:scale-105"
+                    className="object-contain border border-solid border-black"
                     sizes="(max-width: 640px) 90vw, (max-width: 1024px) 50vw, 33vw"
                     src={item.imageUrl || "/placeholder.svg"}
                   />
