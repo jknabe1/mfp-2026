@@ -5,8 +5,6 @@ import { client } from "@/sanity/client"
 import imageUrlBuilder from "@sanity/image-url"
 import Link from "next/link"
 import Image from "next/image"
-import { useKeenSlider } from "keen-slider/react"
-import "keen-slider/keen-slider.min.css"
 
 // Define the Sanity image source type
 interface SanityImageSource {
@@ -32,32 +30,6 @@ export default function ArrangemangSection() {
   const [arrangemang, setArrangemang] = useState<Arrangemang[]>([])
   const [loading, setLoading] = useState(true)
   const [currentIndex, setCurrentIndex] = useState(0)
-  const sliderRef = useRef<any>(null)
-
-  const [sliderInstRef] = useKeenSlider(
-    {
-      initial: 0,
-      slideChanged(slider) {
-        setCurrentIndex(slider.track.details.rel)
-      },
-      slides: {
-        perView: 1,
-        spacing: 0,
-      },
-      loop: true,
-      created(slider) {
-        // Enable autoplay
-        slider.moveToIdx(Math.ceil(slider.track.details.slides.length / 2), true)
-        const autoplayInterval = setInterval(() => {
-          slider.next()
-        }, 5000)
-        return () => clearInterval(autoplayInterval)
-      },
-    },
-    [(slider) => {
-      sliderRef.current = slider
-    }],
-  )
 
   useEffect(() => {
     const fetchArrangemang = async () => {
@@ -77,6 +49,15 @@ export default function ArrangemangSection() {
     fetchArrangemang()
   }, [])
 
+  // Auto-rotate items every 5 seconds
+  useEffect(() => {
+    if (arrangemang.length === 0) return
+    const interval = setInterval(() => {
+      setCurrentIndex((prev) => (prev + 1) % arrangemang.length)
+    }, 5000)
+    return () => clearInterval(interval)
+  }, [arrangemang.length])
+
   if (loading || arrangemang.length === 0) {
     return <div className="px-2 py-3 lg:px-5"></div>
   }
@@ -90,59 +71,57 @@ export default function ArrangemangSection() {
         <h2 className="text-sans-35 lg:text-sans-60 font-600 uppercase">Våra Arrangemang</h2>
       </section>
 
-      {/* Carousel section — 50% image left, 50% text right */}
+      {/* Grid layout: 3 columns where left half (1.5 cols) has image + title stacked */}
       <section className="relative mb-12">
-        <div
-          ref={sliderInstRef}
-          className="keen-slider"
-        >
-          {arrangemang.map((item) => (
-            <div key={item._id} className="keen-slider__slide">
-              {/* Full-width image with centered text overlay */}
-              <Link
-                href={`/arrangemang/${item.URL.current}`}
-                className="group block relative w-full overflow-hidden border-4 border-black"
-              >
-                {/* Image fills entire container */}
-                <div className="relative w-full aspect-[3/4] sm:aspect-[4/3] lg:aspect-[16/9]">
-                  <Image
-                    src={urlFor(item.Bild)}
-                    alt={item.Namn}
-                    fill
-                    priority={arrangemang[0]._id === item._id}
-                    loading={arrangemang[0]._id === item._id ? "eager" : "lazy"}
-                    className="object-cover w-full h-full transition-transform duration-500 group-hover:scale-105"
-                    sizes="100vw"
-                  />
-                </div>
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-px bg-black">
+          {/* Left half: image (col 1) + title overlay (col 1-2, rows 1-2) */}
+          <div className="lg:col-span-1 lg:row-span-2 relative overflow-hidden border-4 border-black bg-gray-100">
+            <Link
+              href={`/arrangemang/${featuredItem.URL.current}`}
+              className="group block relative w-full h-full aspect-[3/4] lg:aspect-auto"
+            >
+              <Image
+                src={urlFor(featuredItem.Bild)}
+                alt={featuredItem.Namn}
+                fill
+                priority
+                loading="eager"
+                className="object-cover w-full h-full transition-transform duration-500 group-hover:scale-105"
+                sizes="(max-width: 1024px) 100vw, 33vw"
+              />
+              {/* Semi-transparent overlay */}
+              <div className="absolute inset-0 bg-black/30" />
+            </Link>
+          </div>
 
-                {/* Semi-transparent overlay for text readability */}
-                <div className="absolute inset-0 bg-black/40" />
+          {/* Right half: title area (cols 2-3, row 1) */}
+          <div className="lg:col-span-2 lg:row-span-1 px-6 py-8 sm:px-8 lg:px-10 lg:py-12 flex flex-col justify-center bg-white border-4 border-black">
+            <span className="inline-flex items-center gap-1.5 text-sans-10 font-600 uppercase tracking-widest text-black/50 mb-4 w-fit">
+              <span className="text-[var(--vividGreen)]" aria-hidden="true">■</span>
+              Arrangerat av Music For Pennies
+            </span>
+            <h3 className="text-sans-28 sm:text-sans-35 lg:text-sans-45 font-700 uppercase leading-[1.1] text-balance mb-6">
+              {featuredItem.Namn}
+            </h3>
+            <Link
+              href={`/arrangemang/${featuredItem.URL.current}`}
+              className="inline-flex items-center gap-2 border-2 border-black px-6 py-3 text-sans-14 font-600 uppercase tracking-widest hover:bg-black hover:text-white transition-colors w-fit"
+            >
+              Läs mer
+              <span className="text-[var(--vividGreen)] group-hover:text-white" aria-hidden="true">→</span>
+            </Link>
+          </div>
 
-                {/* Centered text overlay */}
-                <div className="absolute inset-0 flex flex-col items-center justify-center px-6 py-8 text-center">
-                  <span className="inline-flex items-center gap-1.5 text-sans-10 font-600 uppercase tracking-widest text-white/90 mb-6">
-                    <span className="text-[var(--vividGreen)]" aria-hidden="true">■</span>
-                    Arrangerat av Music For Pennies
-                  </span>
-                  <h3 className="text-sans-28 sm:text-sans-35 lg:text-sans-60 font-700 uppercase leading-[1.1] text-white text-balance">
-                    {item.Namn}
-                  </h3>
-                </div>
-              </Link>
-            </div>
-          ))}
-        </div>
-
-        {/* See all arrangemang button at bottom */}
-        <div className="mt-10 flex justify-center lg:justify-start">
-          <Link
-            href="/arrangemang"
-            className="inline-flex items-center gap-2 border-2 border-black px-8 py-4 text-sans-14 font-600 uppercase tracking-widest hover:bg-black hover:text-white transition-colors"
-          >
-            Se alla arrangemang
-            <span className="text-[var(--vividGreen)] group-hover:text-white" aria-hidden="true">→</span>
-          </Link>
+          {/* Right half bottom: CTA button area (cols 2-3, row 2) */}
+          <div className="lg:col-span-2 lg:row-span-1 px-6 py-8 sm:px-8 lg:px-10 lg:py-12 flex items-center justify-center bg-white border-4 border-black">
+            <Link
+              href="/arrangemang"
+              className="inline-flex items-center gap-2 border-2 border-black px-8 py-4 text-sans-14 font-600 uppercase tracking-widest hover:bg-black hover:text-white transition-colors"
+            >
+              Se alla arrangemang
+              <span className="text-[var(--vividGreen)] group-hover:text-white" aria-hidden="true">→</span>
+            </Link>
+          </div>
         </div>
       </section>
     </div>
