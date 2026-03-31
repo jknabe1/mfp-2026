@@ -105,7 +105,7 @@ export default function ForeningarSection() {
   const SeeMoreSlide = () => (
     <div className="keen-slider__slide">
       <Link
-        href="/forening"
+        href="/om-oss/vara-foreningar"
         className="group block relative aspect-[4/5] lg:aspect-[6/5] overflow-hidden bg-black flex items-center justify-center"
       >
         <div className="text-white text-center p-5">
@@ -131,7 +131,7 @@ export default function ForeningarSection() {
             {[...randomArtists, ...filteredArtists.slice(0, 3)].map((artist, index) => (
               <div key={artist._id} className="keen-slider__slide">
                 <Link
-                  href={`/forening/${artist.URL.current}`}  // Changed from slug to URL
+                  href={`/om-oss/vara-foreningar/${artist.URL.current}`}  // Changed from slug to URL
                   className="group block relative aspect-[4/5] overflow-hidden"
                 >
                   <Image
@@ -165,7 +165,7 @@ export default function ForeningarSection() {
                 {randomArtists.map((artist, index) => (
                   <Link
                     key={artist._id}
-                    href={`/forening/${artist.URL.current}`}  // Changed from slug to URL
+                    href={`/om-oss/vara-foreningar/${artist.URL.current}`}  // Changed from slug to URL
                     className="group block relative aspect-[4/5] lg:aspect-[6/5] overflow-hidden"
                   >
                     <Image
@@ -195,7 +195,7 @@ export default function ForeningarSection() {
                 {filteredArtists.slice(0, 2).map((artist, index) => (
                   <Link
                     key={artist._id}
-                    href={`/forening/${artist.URL.current}`}  // Changed from slug to URL
+                    href={`/om-oss/vara-foreningar/${artist.URL.current}`}  // Changed from slug to URL
                     className="group block relative aspect-[4/5] lg:aspect-[6/5] overflow-hidden"
                   >
                     <Image
@@ -216,7 +216,7 @@ export default function ForeningarSection() {
 
                 {/* Static "See More" panel */}
                 <Link
-                  href="/forening"
+                  href="/om-oss/vara-foreningar"
                   className="group block relative aspect-[4/5] lg:aspect-[6/5] overflow-hidden bg-black flex items-center justify-center"
                 >
                   <div className="text-white text-center p-5">
