@@ -52,8 +52,9 @@ export default function ArrangemangSection() {
     return <div className="px-2 py-3 lg:px-5"></div>
   }
 
-  const featuredItem = arrangemang[0]
-  const remainingItems = arrangemang.slice(1, 4)
+  // Pick a random arrangemang
+  const randomIndex = Math.floor(Math.random() * arrangemang.length)
+  const featuredItem = arrangemang[randomIndex]
 
   return (
     <div className="px-2 py-3 lg:px-5">
@@ -99,61 +100,26 @@ export default function ArrangemangSection() {
               </p>
             </div>
 
-            {/* Bottom: link */}
-            <Link
-              href={`/arrangemang/${featuredItem.URL.current}`}
-              className="inline-flex items-center gap-2 border border-black px-6 py-3 text-sans-14 font-600 uppercase tracking-widest hover:bg-black hover:text-white transition-colors w-fit"
-            >
-              Läs mer
-              <span className="text-[var(--vividGreen)] group-hover:text-white" aria-hidden="true">→</span>
-            </Link>
+            {/* Bottom: CTAs */}
+            <div className="flex flex-col sm:flex-row gap-3">
+              <Link
+                href={`/arrangemang/${featuredItem.URL.current}`}
+                className="inline-flex items-center gap-2 border border-black px-6 py-3 text-sans-14 font-600 uppercase tracking-widest hover:bg-black hover:text-white transition-colors w-fit"
+              >
+                Läs mer
+                <span className="text-[var(--vividGreen)] group-hover:text-white" aria-hidden="true">→</span>
+              </Link>
+              <Link
+                href="/arrangemang"
+                className="inline-flex items-center gap-2 border border-black px-6 py-3 text-sans-14 font-600 uppercase tracking-widest hover:bg-black hover:text-white transition-colors w-fit"
+              >
+                Se alla arrangemang
+                <span className="text-[var(--vividGreen)] group-hover:text-white" aria-hidden="true">→</span>
+              </Link>
+            </div>
           </div>
         </div>
       </section>
-
-      {/* Additional arrangemang list */}
-      {remainingItems.length > 0 && (
-        <section className="relative">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {remainingItems.map((item) => (
-              <Link
-                key={item._id}
-                href={`/arrangemang/${item.URL.current}`}
-                className="group relative overflow-hidden bg-gray-100 aspect-[3/4]"
-              >
-                <Image
-                  src={urlFor(item.Bild)}
-                  alt={item.Namn}
-                  fill
-                  loading="lazy"
-                  className="object-cover w-full h-full transition-transform duration-500 group-hover:scale-105"
-                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                />
-                {/* Overlay with title */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex items-end">
-                  <h4 className="text-white text-sans-16 sm:text-sans-18 font-600 uppercase p-4">
-                    {item.Namn}
-                  </h4>
-                </div>
-              </Link>
-            ))}
-
-            {/* See more link */}
-            <Link
-              href="/arrangemang"
-              className="group relative overflow-hidden bg-black aspect-[3/4] flex items-center justify-center"
-            >
-              <div className="text-center">
-                <h3 className="text-white text-sans-20 font-700 uppercase mb-2">Se fler</h3>
-                <p className="text-white/60 text-sans-12 mb-4">Utforska alla arrangemang</p>
-                <div className="inline-flex items-center gap-2 border border-white px-4 py-2 text-white text-sans-12 font-600 uppercase tracking-widest group-hover:bg-white group-hover:text-black transition-colors">
-                  Arkivet →
-                </div>
-              </div>
-            </Link>
-          </div>
-        </section>
-      )}
     </div>
   )
 }
