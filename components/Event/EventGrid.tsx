@@ -6,7 +6,6 @@ import { client } from '@/sanity/client';
 import Link from 'next/link';
 import Image from 'next/image';
 import CursorGradientHero from './CursorGradientHero';
-import CursorFollowImage from './CursorFollowImage';
 
 interface SanityImageSource {
   asset: { _ref: string };
@@ -86,23 +85,39 @@ function EventHeroBanner({ event }: { event: Event }) {
             <div className="absolute inset-0 bg-black" />
           )}
           {/* Label */}
-          <div className="absolute top-4 left-4 lg:top-6 lg:left-6 z-10">
-            <span className="inline-flex items-center gap-1.5 bg-[var(--vividGreen)] text-black text-sans-12 font-600 px-2 py-1 uppercase tracking-widest">
-              <span aria-hidden="true">■</span> Nästa event
+          <div className="absolute top-4 left-4 lg:top-6 lg:left-6 z-10 hidden">
+            <span className="inline-flex items-center gap-1.5 bg-white text-black text-sans-12 font-600 px-2 py-1 uppercase tracking-widest">
+               {event.name}
             </span>
+          </div>
+          <div className="absolute bottom-0 left-0 right-0 z-10 px-2 lg:px-5 lg:pb-10 hidden md:flex md:flex-row md:items-end md:justify-between gap-4">
+            <h1 className="text-white uppercase font-600 text-sans-35 lg:text-sans-60 xl:text-sans-120 leading-[1.05] text-balance max-w-[75%]">
+              {event.name}
+            </h1>
+            
+              <div className="flex items-stretch shrink-0 border border-white/50">
+                <div className="flex flex-col items-center justify-center mx-2 px-4 py-3 bg-white/10 backdrop-blur-sm min-w-[64px]">
+                  <span className="text-white text-sans-35 lg:text-sans-60 font-600 leading-none">{day}</span>
+                  <span className="text-white text-sans-10 font-600 tracking-widest mt-1">{month}</span>
+                </div>
+                <div className="flex flex-col items-center justify-center px-4 py-3 bg-white/10 backdrop-blur-sm border-l border-white/50">
+                  <span className="text-white text-sans-16 font-600 tracking-widest">{year}</span>
+                </div>
+              </div>
+           
           </div>
           {/* Bottom overlay */}
           <div className="absolute bottom-0 left-0 right-0 z-10 px-4 pb-6 lg:px-8 lg:pb-10 flex flex-col md:flex-row md:items-end md:justify-between gap-4">
-            <h1 className="text-white uppercase font-600 text-sans-35 lg:text-sans-60 xl:text-sans-120 leading-none text-balance max-w-[80%]">
+            <h1 className="text-white uppercase font-600 text-sans-35 lg:text-sans-60 xl:text-sans-120 leading-none text-balance max-w-[80%] hidden">
               {event.name}
             </h1>
             <div className="flex items-stretch shrink-0 border border-white/60">
               <div className="flex flex-col items-center justify-center px-4 py-3 min-w-[64px]">
-                <span className="text-white text-sans-35 lg:text-sans-60 font-600 leading-none">{day}</span>
-                <span className="text-white text-sans-10 font-600 tracking-widest mt-1">{month}</span>
+                <span className="text-white text-sans-35 lg:text-sans-60 font-600 leading-none hidden">{day}</span>
+                <span className="text-white text-sans-10 font-600 tracking-widest mt-1 hidden">{month}</span>
               </div>
               <div className="flex flex-col items-center justify-center px-4 py-3 border-l border-white/60">
-                <span className="text-white text-sans-16 font-600 tracking-widest">{year}</span>
+                <span className="text-white text-sans-16 font-600 tracking-widest hidden">{year}</span>
               </div>
             </div>
           </div>
@@ -111,8 +126,8 @@ function EventHeroBanner({ event }: { event: Event }) {
 
       {/* Info bar */}
       <div className="flex items-center justify-between px-4 py-3 lg:px-8 lg:py-4 bg-black text-white uppercase">
-        <span className="text-sans-14 lg:text-sans-16 font-600 tracking-wide">{formatDate(event.date)}</span>
-        <span className="text-sans-12 lg:text-sans-14 font-600 tracking-widest text-[var(--vividGreen)] group-hover:italic transition-all">
+        <span className="text-sans-14 lg:text-sans-16 font-600 tracking-wide">{formatDate(event.date)} {event.venue?.name && `— ${event.venue.name}`}</span>
+        <span className="text-sans-12 lg:text-sans-14 font-600 tracking-widest text-white group-hover:italic transition-all">
           Se event →
         </span>
       </div>
@@ -127,7 +142,6 @@ function EventRow({ event, isPast }: { event: Event; isPast: boolean }) {
   const imageUrl = event.image ? urlFor(event.image).width(480).quality(80).url() : '';
 
   return (
-    <CursorFollowImage imageUrl={imageUrl} alt={event.name}>
       <Link
         href={`/event/${event.slug.current}`}
         className="group grid grid-cols-[auto_1fr] md:grid-cols-[120px_auto_1fr_auto] items-center gap-px border-b border-black border-solid hover:bg-black hover:text-white transition-colors duration-150"
@@ -178,7 +192,6 @@ function EventRow({ event, isPast }: { event: Event; isPast: boolean }) {
           <span className="text-sans-18 font-700 group-hover:translate-x-1 transition-transform" aria-hidden="true">→</span>
         </div>
       </Link>
-    </CursorFollowImage>
   );
 }
 

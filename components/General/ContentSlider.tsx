@@ -115,7 +115,7 @@ export default function ContentSlider({ items, itemType }: SliderProps) {
     renderedItems.push(
       <div key="discover-more" className={isMobile ? "keen-slider__slide" : ""}>
         <Link
-          href={itemType === "playlist" ? "" : itemType === "event" ? "/event" : "/artists"}
+          href={itemType === "playlist" ? "" : itemType === "event" ? "/event" : "/forening"}
           className="relative group overflow-hidden h-full bg-black flex items-center justify-center"
         >
           <div className="text-white text-center p-5">

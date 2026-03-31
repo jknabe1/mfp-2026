@@ -18,7 +18,7 @@ export default function Icon() {
       <div
         style={{
           fontSize: 16,
-          background: '#f05136',
+          background: '#fff',
           width: '100%',
           height: '100%',
           display: 'flex',
@@ -27,7 +27,7 @@ export default function Icon() {
           color: 'black',
         }}
       >
-        K&K
+        MFP
       </div>
     ),
     // ImageResponse options

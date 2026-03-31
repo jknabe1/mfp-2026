@@ -58,9 +58,12 @@ function ArrangemangCard({ arrangemang }: { arrangemang: ArrangemangData }) {
 function SectionHeader({ title }: { title: string }) {
   return (
     <div className="mb-8 border-b border-black border-solid pb-4">
-      <h2 className="text-sans-35 lg:text-sans-60 font-600 uppercase tracking-tight">
+      <h2 className="text-sans-35 lg:text-sans-60 font-600 uppercase mb-4 lg:mb-6">
         {title}
       </h2>
+      <p className="text-sans-14 lg:text-sans-22 text-gray-700 leading-relaxed">
+        Här hittar du alla arrangemang och evenemang som Music For Pennies har varit en del av. Klicka på varje arrangemang för att läsa mer om det och se bilder, beskrivningar och länkar till eventuella biljettsidor.
+      </p>
     </div>
   );
 }
@@ -145,7 +148,7 @@ export default function ArrangemangList({ initialArrangemang }: ArrangemangListP
         aria-label="Alla arrangemang"
         className="px-2 py-3 lg:px-5 mt-12 lg:mt-20 mb-16 lg:mb-20 uppercase"
       >
-        <SectionHeader title="Alla arrangemang" />
+        <SectionHeader title="Våra arrangemang" />
         <ArrangemangGrid arrangemang={arrangemang} />
       </section>
     </main>
