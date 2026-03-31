@@ -44,6 +44,15 @@ export default function ArrangemangSection() {
         perView: 1,
         spacing: 0,
       },
+      loop: true,
+      created(slider) {
+        // Enable autoplay
+        slider.moveToIdx(Math.ceil(slider.track.details.slides.length / 2), true)
+        const autoplayInterval = setInterval(() => {
+          slider.next()
+        }, 5000)
+        return () => clearInterval(autoplayInterval)
+      },
     },
     [(slider) => {
       sliderRef.current = slider
@@ -108,31 +117,29 @@ export default function ArrangemangSection() {
                   </div>
                 </Link>
 
-                {/* Right: 50% text content */}
-                <div className="w-full lg:w-1/2 px-6 sm:px-8 lg:px-10 py-8 lg:py-12 flex flex-col justify-center">
-                  <span className="inline-flex items-center gap-1.5 text-sans-10 font-600 uppercase tracking-widest text-black/50 mb-4 w-fit">
-                    <span className="text-[var(--vividGreen)]" aria-hidden="true">■</span>
-                    Arrangerat av Music For Pennies
-                  </span>
-                  <h3 className="text-sans-28 sm:text-sans-35 lg:text-sans-45 font-700 uppercase leading-[1.1] text-balance mb-6">
-                    {item.Namn}
-                  </h3>
-                  <p className="text-sans-14 sm:text-sans-16 text-black/60 leading-relaxed mb-8">
-                    Utforska alla arrangemang som Music For Pennies har skapat och varit en del av. Klicka för att läsa mer om detta event.
-                  </p>
-                  <div className="flex flex-col sm:flex-row gap-3">
+                {/* Right: 50% text content — title centered, read more right */}
+                <div className="w-full lg:w-1/2 px-6 sm:px-8 lg:px-10 py-8 lg:py-12 flex flex-col justify-between">
+                  <div>
+                    <span className="inline-flex items-center gap-1.5 text-sans-10 font-600 uppercase tracking-widest text-black/50 mb-4 w-fit">
+                      <span className="text-[var(--vividGreen)]" aria-hidden="true">■</span>
+                      Arrangerat av Music For Pennies
+                    </span>
+                  </div>
+
+                  {/* Title centered in middle */}
+                  <div className="flex-1 flex items-center">
+                    <h3 className="text-sans-28 sm:text-sans-35 lg:text-sans-45 font-700 uppercase leading-[1.1] text-balance">
+                      {item.Namn}
+                    </h3>
+                  </div>
+
+                  {/* Read more button at bottom right */}
+                  <div className="flex justify-end">
                     <Link
                       href={`/arrangemang/${item.URL.current}`}
                       className="inline-flex items-center gap-2 border-2 border-black px-6 py-3 text-sans-14 font-600 uppercase tracking-widest hover:bg-black hover:text-white transition-colors w-fit"
                     >
                       Läs mer
-                      <span className="text-[var(--vividGreen)] group-hover:text-white" aria-hidden="true">→</span>
-                    </Link>
-                    <Link
-                      href="/arrangemang"
-                      className="inline-flex items-center gap-2 border-2 border-black px-6 py-3 text-sans-14 font-600 uppercase tracking-widest hover:bg-black hover:text-white transition-colors w-fit"
-                    >
-                      Se alla
                       <span className="text-[var(--vividGreen)] group-hover:text-white" aria-hidden="true">→</span>
                     </Link>
                   </div>
@@ -142,31 +149,16 @@ export default function ArrangemangSection() {
           ))}
         </div>
 
-        {/* Navigation controls */}
-        {arrangemang.length > 1 && (
-          <div className="flex items-center justify-between mt-6 px-2">
-            <button
-              onClick={() => sliderRef.current?.prev()}
-              className="inline-flex items-center gap-2 border-2 border-black px-4 py-2 text-sans-12 font-600 uppercase tracking-widest hover:bg-black hover:text-white transition-colors"
-              aria-label="Föregående arrangemang"
-            >
-              ← Föregående
-            </button>
-
-            {/* Slide counter */}
-            <span className="text-sans-12 font-600 uppercase text-black/60">
-              {currentIndex + 1} av {arrangemang.length}
-            </span>
-
-            <button
-              onClick={() => sliderRef.current?.next()}
-              className="inline-flex items-center gap-2 border-2 border-black px-4 py-2 text-sans-12 font-600 uppercase tracking-widest hover:bg-black hover:text-white transition-colors"
-              aria-label="Nästa arrangemang"
-            >
-              Nästa →
-            </button>
-          </div>
-        )}
+        {/* See all arrangemang button at bottom */}
+        <div className="mt-10 flex justify-center lg:justify-start">
+          <Link
+            href="/arrangemang"
+            className="inline-flex items-center gap-2 border-2 border-black px-8 py-4 text-sans-14 font-600 uppercase tracking-widest hover:bg-black hover:text-white transition-colors"
+          >
+            Se alla arrangemang
+            <span className="text-[var(--vividGreen)] group-hover:text-white" aria-hidden="true">→</span>
+          </Link>
+        </div>
       </section>
     </div>
   )
