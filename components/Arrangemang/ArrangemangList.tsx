@@ -17,153 +17,98 @@ interface ArrangemangListProps {
   initialArrangemang: ArrangemangData[];
 }
 
-// ─── Hero Section ───────────────────────────────────────────────────────────
-function HeroSection({ featuredItem }: { featuredItem: ArrangemangData | null }) {
+// ─── Page header — standalone, no hero image ────────────────────────────────
+function PageHeader({ count }: { count: number }) {
   return (
-    <div className="relative w-full overflow-hidden border-b border-black border-solid">
-      {/* Hero background */}
-      <div className="relative w-full h-[50vw] min-h-[280px] max-h-[70vh] bg-black">
-        {featuredItem?.Bild ? (
-          <Image
-            src={urlFor(featuredItem.Bild).width(2400).quality(90).url()}
-            alt={featuredItem.Namn}
-            fill
-            priority
-            className="object-cover noise opacity-60"
-            sizes="100vw"
-          />
-        ) : (
-          <div className="absolute inset-0 bg-gradient-to-br from-black via-gray-900 to-black" />
-        )}
-
-        {/* Gradient overlay */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
-
-        {/* Hero content */}
-        <div className="absolute inset-0 flex flex-col justify-end px-4 pb-8 sm:px-6 sm:pb-12 lg:px-8 lg:pb-16">
-          <span className="inline-flex items-center gap-1.5 bg-[var(--vividGreen)] text-black text-sans-10 sm:text-sans-12 font-600 px-2 py-1 uppercase tracking-widest w-fit mb-4">
-            <span aria-hidden="true">■</span> Arrangemang
-          </span>
-          <h1 className="text-white uppercase font-600 text-sans-35 sm:text-sans-45 lg:text-sans-60 xl:text-sans-120 leading-[0.95] text-balance max-w-[90%]">
-            Våra Arrangemang
-          </h1>
-          <p className="text-white/70 text-sans-14 sm:text-sans-16 lg:text-sans-18 mt-4 max-w-2xl leading-relaxed">
-            Upptäck alla evenemang och arrangemang som Music For Pennies har skapat och varit en del av.
-          </p>
-        </div>
-      </div>
-
-      {/* Info bar */}
-      <div className="flex items-center justify-between px-4 py-3 lg:px-8 lg:py-4 bg-black text-white uppercase">
-        <span className="text-sans-12 lg:text-sans-14 font-600 tracking-wide">
+    <header className="border-b border-black border-solid px-4 sm:px-6 lg:px-8 py-10 lg:py-14 flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
+      <div>
+        <span className="inline-flex items-center gap-1.5 text-sans-10 font-600 uppercase tracking-widest text-black/40 mb-3">
+          <span className="text-[var(--vividGreen)]" aria-hidden="true">■</span>
           Music For Pennies
         </span>
-        <span className="text-sans-12 font-600 tracking-widest text-[var(--vividGreen)]">
-          {featuredItem ? `${1} arrangemang` : 'Arrangemang'}
+        <h1 className="text-sans-35 sm:text-sans-45 lg:text-sans-72 font-700 uppercase leading-[0.92] tracking-tight">
+          Arrangemang
+        </h1>
+        <p className="text-sans-13 sm:text-sans-14 text-black/55 mt-3 max-w-md leading-relaxed">
+          Evenemang och arrangemang som Music For Pennies har skapat och varit en del av.
+        </p>
+      </div>
+      {count > 0 && (
+        <div className="flex flex-col items-start sm:items-end shrink-0">
+          <span className="text-sans-35 lg:text-sans-48 font-700 text-[var(--vividGreen)] leading-none">{count}</span>
+          <span className="text-sans-10 font-600 uppercase tracking-widest text-black/40 mt-0.5">totalt</span>
+        </div>
+      )}
+    </header>
+  );
+}
+
+// ─── Arrangemang row — image left, title + CTA right ────────────────────────
+function ArrangemangRow({ arrangemang, index }: {
+  arrangemang: ArrangemangData;
+  index: number;
+}) {
+  const href = `/arrangemang/${arrangemang.URL.current}`;
+
+  return (
+    <div className="group border-b border-black border-solid grid grid-cols-[auto_1fr] sm:grid-cols-[260px_1fr] lg:grid-cols-[360px_1fr] items-stretch">
+
+      {/* Left: full-width image within its column */}
+      <Link
+        href={href}
+        className="relative block overflow-hidden bg-gray-100 w-[120px] sm:w-auto self-stretch"
+        tabIndex={-1}
+        aria-hidden="true"
+      >
+        <div className="relative h-full min-h-[120px] sm:min-h-[180px] lg:min-h-[220px]">
+          {arrangemang.Bild ? (
+            <Image
+              src={urlFor(arrangemang.Bild).width(720).quality(85).url()}
+              alt=""
+              fill
+              loading={index < 4 ? 'eager' : 'lazy'}
+              className="object-cover noise transition-transform duration-500 group-hover:scale-105"
+              sizes="(max-width: 640px) 120px, (max-width: 1024px) 260px, 360px"
+            />
+          ) : (
+            <div className="absolute inset-0 bg-gray-200" />
+          )}
+        </div>
+      </Link>
+
+      {/* Right: index, title, read-more */}
+      <div className="flex flex-col justify-between px-4 py-4 sm:px-6 sm:py-5 lg:px-8 lg:py-6 border-l border-black border-solid">
+        {/* Top: index badge */}
+        <span className="inline-flex items-center bg-black text-white text-sans-10 font-700 uppercase tracking-widest px-2 py-0.5 w-fit">
+          {String(index + 1).padStart(2, '0')}
         </span>
-      </div>
-    </div>
-  );
-}
 
-// ─── Arrangemang Card Component ─────────────────────────────────────────────
-function ArrangemangCard({ arrangemang, index }: { arrangemang: ArrangemangData; index: number }) {
-  return (
-    <Link
-      href={`/arrangemang/${arrangemang.URL.current}`}
-      className="group relative flex flex-col overflow-hidden border border-black border-solid bg-white hover:bg-black transition-colors duration-300"
-      aria-label={arrangemang.Namn}
-    >
-      {/* Image container */}
-      <div className="relative aspect-[4/5] overflow-hidden bg-gray-100">
-        {arrangemang.Bild ? (
-          <Image
-            src={urlFor(arrangemang.Bild).width(800).quality(80).url()}
-            alt={arrangemang.Namn}
-            fill
-            loading={index < 6 ? 'eager' : 'lazy'}
-            className="object-cover noise transition-transform duration-500 group-hover:scale-105"
-            sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
-          />
-        ) : (
-          <div className="absolute inset-0 flex items-center justify-center bg-gray-200 text-black text-sans-12 uppercase font-600">
-            Bild saknas
-          </div>
-        )}
-
-        {/* Hover overlay */}
-        <div className="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-colors duration-300" />
-        
-        {/* Index badge */}
-        <div className="absolute top-3 left-3 z-10">
-          <span className="inline-flex items-center justify-center w-8 h-8 bg-black text-white text-sans-12 font-600 group-hover:bg-[var(--vividGreen)] group-hover:text-black transition-colors duration-300">
-            {String(index + 1).padStart(2, '0')}
-          </span>
-        </div>
-      </div>
-
-      {/* Card footer */}
-      <div className="flex flex-col px-4 py-4 border-t border-black border-solid group-hover:bg-black transition-colors duration-300">
-        <h2 className="text-sans-14 lg:text-sans-16 font-600 uppercase leading-tight line-clamp-2 group-hover:text-white group-hover:italic transition-all duration-300">
-          {arrangemang.Namn}
+        {/* Middle: title */}
+        <h2 className="text-sans-18 sm:text-sans-22 lg:text-sans-35 font-600 uppercase leading-[1.05] text-balance mt-3 group-hover:italic transition-all duration-200">
+          <Link href={href} className="hover:text-black">
+            {arrangemang.Namn}
+          </Link>
         </h2>
-        <div className="flex items-center justify-between mt-3 pt-3 border-t border-black/10 group-hover:border-white/20 transition-colors duration-300">
-          <span className="text-sans-10 font-600 tracking-wider uppercase opacity-50 group-hover:text-white/60 transition-colors duration-300">
-            Läs mer
-          </span>
-          <span className="text-[var(--vividGreen)] text-sans-14 font-700 group-hover:translate-x-1 transition-transform duration-300" aria-hidden="true">
-            →
-          </span>
-        </div>
-      </div>
-    </Link>
-  );
-}
 
-// ─── Stats Section ──────────────────────────────────────────────────────────
-function StatsSection({ count }: { count: number }) {
-  return (
-    <div className="border-b border-black border-solid">
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-px">
-        <div className="flex flex-col items-center justify-center py-8 lg:py-12 bg-[var(--vividGreen)] text-black">
-          <span className="text-sans-35 lg:text-sans-60 font-700">{count}</span>
-          <span className="text-sans-10 lg:text-sans-12 font-600 uppercase tracking-widest mt-1">Arrangemang</span>
-        </div>
-        <div className="flex flex-col items-center justify-center py-8 lg:py-12 bg-black text-white">
-          <span className="text-sans-35 lg:text-sans-60 font-700">MFP</span>
-          <span className="text-sans-10 lg:text-sans-12 font-600 uppercase tracking-widest mt-1 opacity-60">Producent</span>
-        </div>
-        <div className="flex flex-col items-center justify-center py-8 lg:py-12 bg-white text-black border-l border-black">
-          <span className="text-sans-35 lg:text-sans-60 font-700">★</span>
-          <span className="text-sans-10 lg:text-sans-12 font-600 uppercase tracking-widest mt-1 opacity-60">Kvalitet</span>
-        </div>
-        <div className="flex flex-col items-center justify-center py-8 lg:py-12 bg-black text-[var(--vividGreen)]">
-          <span className="text-sans-35 lg:text-sans-60 font-700">♫</span>
-          <span className="text-sans-10 lg:text-sans-12 font-600 uppercase tracking-widest mt-1 text-white/60">Musik</span>
+        {/* Bottom: read-more link */}
+        <div className="mt-4 sm:mt-6">
+          <Link
+            href={href}
+            className="inline-flex items-center gap-2 border border-black px-4 py-2.5 text-sans-11 font-700 uppercase tracking-widest hover:bg-black hover:text-white transition-colors min-h-[44px]"
+          >
+            Läs mer
+            <span className="text-[var(--vividGreen)] group-hover:text-white transition-colors" aria-hidden="true">→</span>
+          </Link>
         </div>
       </div>
     </div>
   );
 }
 
-// ─── Main Arrangemang List Component ────────────────────────────────────────
+// ─── Main Component ──────────────────────────────────────────────────────────
 export default function ArrangemangList({ initialArrangemang }: ArrangemangListProps) {
-  if (!initialArrangemang || initialArrangemang.length === 0) {
-    return (
-      <main>
-        <HeroSection featuredItem={null} />
-        <div className="px-4 lg:px-8 py-16 text-center">
-          <p className="text-sans-18 text-gray-500 uppercase">
-            Inga arrangemang tillgängliga för tillfället.
-          </p>
-        </div>
-      </main>
-    );
-  }
+  const items = initialArrangemang ?? [];
 
-  const featuredItem = initialArrangemang[0];
-
-  // Structured data for search engines
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'CollectionPage',
@@ -172,7 +117,7 @@ export default function ArrangemangList({ initialArrangemang }: ArrangemangListP
     url: 'https://musicforpennies.se/arrangemang',
     mainEntity: {
       '@type': 'ItemList',
-      itemListElement: initialArrangemang.map((item, index) => ({
+      itemListElement: items.map((item, index) => ({
         '@type': 'ListItem',
         position: index + 1,
         name: item.Namn,
@@ -188,43 +133,36 @@ export default function ArrangemangList({ initialArrangemang }: ArrangemangListP
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
 
-      {/* Hero section with featured image */}
-      <HeroSection featuredItem={featuredItem} />
+      {/* Clean standalone header — no hero image */}
+      <PageHeader count={items.length} />
 
-      {/* Stats section */}
-      <StatsSection count={initialArrangemang.length} />
-
-      {/* Section header */}
+      {/* Arrangemang rows */}
       <section aria-label="Alla arrangemang">
-        <div className="flex items-baseline justify-between px-4 lg:px-8 py-10 lg:py-14 border-b border-black border-solid">
-          <h2 className="text-sans-35 lg:text-sans-60 font-700 uppercase tracking-tight">
-            Alla Arrangemang
-          </h2>
-          <span className="text-sans-12 font-600 uppercase tracking-widest opacity-50">
-            {initialArrangemang.length} totalt
-          </span>
-        </div>
-
-        {/* Arrangemang grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-px border-b border-black border-solid">
-          {initialArrangemang.map((item, index) => (
-            <ArrangemangCard key={item._id} arrangemang={item} index={index} />
-          ))}
-        </div>
+        {items.length === 0 ? (
+          <p className="px-4 lg:px-8 py-20 text-sans-16 text-black/40 uppercase text-center">
+            Inga arrangemang tillgängliga för tillfället.
+          </p>
+        ) : (
+          items.map((item, index) => (
+            <ArrangemangRow key={item._id} arrangemang={item} index={index} />
+          ))
+        )}
       </section>
 
-      {/* Bottom CTA section */}
-      <section className="bg-black text-white">
-        <div className="px-4 lg:px-8 py-12 lg:py-20 text-center">
-          <h3 className="text-sans-22 lg:text-sans-35 font-600 uppercase mb-4">
-            Vill du veta mer?
-          </h3>
-          <p className="text-sans-14 lg:text-sans-16 text-white/60 mb-8 max-w-xl mx-auto">
-            Kontakta oss för samarbeten, bokningar eller frågor om våra arrangemang.
-          </p>
+      {/* Bottom CTA */}
+      <section className="bg-black text-white border-t border-black">
+        <div className="px-4 sm:px-6 lg:px-8 py-12 lg:py-16 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
+          <div>
+            <h3 className="text-sans-22 lg:text-sans-28 font-600 uppercase">
+              Vill du veta mer?
+            </h3>
+            <p className="text-sans-13 lg:text-sans-14 text-white/50 mt-1 max-w-sm">
+              Kontakta oss för samarbeten, bokningar eller frågor.
+            </p>
+          </div>
           <Link
             href="/om-oss/kontakta-oss"
-            className="inline-flex items-center gap-2 bg-[var(--vividGreen)] text-black px-8 py-4 text-sans-14 font-600 uppercase tracking-widest hover:bg-white transition-colors"
+            className="inline-flex items-center gap-2 bg-[var(--vividGreen)] text-black px-8 py-4 text-sans-14 font-600 uppercase tracking-widest hover:bg-white transition-colors min-h-[52px] shrink-0"
           >
             <span aria-hidden="true">■</span>
             Kontakta oss
@@ -234,4 +172,5 @@ export default function ArrangemangList({ initialArrangemang }: ArrangemangListP
     </main>
   );
 }
+
 
