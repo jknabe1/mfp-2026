@@ -104,7 +104,7 @@ export default function Page() {
                                 alt="A coiled black power cord with a two-prong plug against a light background."/>
                         </div>
                     </div>
-                    <div className="col-span-12 bg-[lightPink] py-8 border-black border-solid border-b">
+                    <div className="col-span-12 bg-pink-100 py-8 border-black border-solid border-b">
                         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                             <h2 className="text-sans-35 lg:text-sans-60 font-600 text-black text-center">
                                 Mer än ett skivbolag
