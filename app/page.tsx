@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import AboutSection from "@/components/Landing/About/AboutSection";
-import EventGrid from "@/components/Event/EventGrid";
+import UpcomingEventsList from "@/components/Landing/UpcomingEventsList";
 import NewsSection from "@/components/Landing/NewsSection";
 import ArrangemangSection from "@/components/Landing/Arrangemang/ArrangemangSection";
 import ForeningarSection from '@/components/Landing/Foreningar/ForeningarSection';
@@ -60,7 +60,7 @@ export default function Home() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
       <AboutSection />
-      <EventGrid />
+      <UpcomingEventsList />
       <NewsSection />
       <ArrangemangSection />
       <ForeningarSection />
