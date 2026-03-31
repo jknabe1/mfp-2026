@@ -98,53 +98,38 @@ export default function ArrangemangSection() {
         >
           {arrangemang.map((item) => (
             <div key={item._id} className="keen-slider__slide">
-              <div className="flex flex-col lg:flex-row items-stretch">
-                {/* Left: 50% image with border */}
-                <Link
-                  href={`/arrangemang/${item.URL.current}`}
-                  className="group w-full lg:w-1/2 block relative overflow-hidden border-4 border-black"
-                >
-                  <div className="relative w-full aspect-[3/4] lg:aspect-auto lg:h-full">
-                    <Image
-                      src={urlFor(item.Bild)}
-                      alt={item.Namn}
-                      fill
-                      priority={arrangemang[0]._id === item._id}
-                      loading={arrangemang[0]._id === item._id ? "eager" : "lazy"}
-                      className="object-cover w-full h-full transition-transform duration-500 group-hover:scale-105"
-                      sizes="(max-width: 1024px) 100vw, 50vw"
-                    />
-                  </div>
-                </Link>
-
-                {/* Right: 50% text content — title centered, read more right */}
-                <div className="w-full lg:w-1/2 px-6 sm:px-8 lg:px-10 py-8 lg:py-12 flex flex-col justify-between">
-                  <div>
-                    <span className="inline-flex items-center gap-1.5 text-sans-10 font-600 uppercase tracking-widest text-black/50 mb-4 w-fit">
-                      <span className="text-[var(--vividGreen)]" aria-hidden="true">■</span>
-                      Arrangerat av Music For Pennies
-                    </span>
-                  </div>
-
-                  {/* Title centered in middle */}
-                  <div className="flex-1 flex items-center">
-                    <h3 className="text-sans-28 sm:text-sans-35 lg:text-sans-45 font-700 uppercase leading-[1.1] text-balance">
-                      {item.Namn}
-                    </h3>
-                  </div>
-
-                  {/* Read more button at bottom right */}
-                  <div className="flex justify-end">
-                    <Link
-                      href={`/arrangemang/${item.URL.current}`}
-                      className="inline-flex items-center gap-2 border-2 border-black px-6 py-3 text-sans-14 font-600 uppercase tracking-widest hover:bg-black hover:text-white transition-colors w-fit"
-                    >
-                      Läs mer
-                      <span className="text-[var(--vividGreen)] group-hover:text-white" aria-hidden="true">→</span>
-                    </Link>
-                  </div>
+              {/* Full-width image with centered text overlay */}
+              <Link
+                href={`/arrangemang/${item.URL.current}`}
+                className="group block relative w-full overflow-hidden border-4 border-black"
+              >
+                {/* Image fills entire container */}
+                <div className="relative w-full aspect-[3/4] sm:aspect-[4/3] lg:aspect-[16/9]">
+                  <Image
+                    src={urlFor(item.Bild)}
+                    alt={item.Namn}
+                    fill
+                    priority={arrangemang[0]._id === item._id}
+                    loading={arrangemang[0]._id === item._id ? "eager" : "lazy"}
+                    className="object-cover w-full h-full transition-transform duration-500 group-hover:scale-105"
+                    sizes="100vw"
+                  />
                 </div>
-              </div>
+
+                {/* Semi-transparent overlay for text readability */}
+                <div className="absolute inset-0 bg-black/40" />
+
+                {/* Centered text overlay */}
+                <div className="absolute inset-0 flex flex-col items-center justify-center px-6 py-8 text-center">
+                  <span className="inline-flex items-center gap-1.5 text-sans-10 font-600 uppercase tracking-widest text-white/90 mb-6">
+                    <span className="text-[var(--vividGreen)]" aria-hidden="true">■</span>
+                    Arrangerat av Music For Pennies
+                  </span>
+                  <h3 className="text-sans-28 sm:text-sans-35 lg:text-sans-60 font-700 uppercase leading-[1.1] text-white text-balance">
+                    {item.Namn}
+                  </h3>
+                </div>
+              </Link>
             </div>
           ))}
         </div>
