@@ -35,27 +35,12 @@ function formatDate(dateStr: string) {
 }
 
 // ─── Section header ─────────────────────────────────────────────────────────
-function SectionHeader({ count }: { count: number }) {
+function SectionHeader() {
   return (
-    <header className="border-b border-black border-solid px-4 sm:px-6 lg:px-8 py-10 lg:py-14 flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
+    <header className="px-2 lg:px-5 lg:py-14 flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
       <div>
-        <span className="inline-flex items-center gap-1.5 text-sans-10 font-600 uppercase tracking-widest text-black/40 mb-3">
-          <span className="text-[var(--vividGreen)]" aria-hidden="true">■</span>
-          Music For Pennies
-        </span>
-        <h2 className="text-sans-35 sm:text-sans-45 lg:text-sans-72 font-700 uppercase leading-[0.92] tracking-tight">
-          Kommande Events
-        </h2>
-        <p className="text-sans-13 sm:text-sans-14 text-black/55 mt-3 max-w-md leading-relaxed">
-          Missa inte våra kommande konserter och evenemang.
-        </p>
+        <h1 className="text-sans-35 lg:text-sans-60 font-600">EVENTS</h1>
       </div>
-      {count > 0 && (
-        <div className="flex flex-col items-start sm:items-end shrink-0">
-          <span className="text-sans-35 lg:text-sans-48 font-700 text-[var(--vividGreen)] leading-none">{count}</span>
-          <span className="text-sans-10 font-600 uppercase tracking-widest text-black/40 mt-0.5">kommande</span>
-        </div>
-      )}
     </header>
   );
 }
@@ -65,7 +50,7 @@ function EventRow({ event, index }: { event: Event; index: number }) {
   const href = `/event/${event.slug.current}`;
 
   return (
-    <div className="group border-b border-black border-solid flex flex-col sm:flex-row items-stretch">
+    <div className="group py-2 border-black border-solid flex flex-col sm:flex-row items-stretch px-2 lg:px-5">
       {/* Left: image at natural aspect ratio */}
       <Link
         href={href}
@@ -80,7 +65,7 @@ function EventRow({ event, index }: { event: Event; index: number }) {
             width={720}
             height={540}
             loading={index < 4 ? 'eager' : 'lazy'}
-            className="w-full h-full object-cover noise transition-transform duration-500 group-hover:scale-105"
+            className="w-full h-full object-cover noise transition-transform duration-500 group-hover:scale-105 border border-solid border-black"
             sizes="(max-width: 640px) 100vw, (max-width: 1024px) 260px, 360px"
           />
         ) : (
@@ -98,16 +83,16 @@ function EventRow({ event, index }: { event: Event; index: number }) {
         {/* Middle: title + button on same row */}
         <div className="flex items-start gap-4 mt-3">
           <h3 className="text-sans-18 sm:text-sans-22 lg:text-sans-35 font-600 uppercase leading-[1.05] text-balance flex-1 group-hover:italic transition-all duration-200">
-            <Link href={href} className="hover:text-black">
+            <Link href={href} className="hover:text-white transition-colors">
               {event.name}
             </Link>
           </h3>
           <Link
             href={href}
-            className="inline-flex items-center gap-2 border border-black px-4 py-2.5 text-sans-11 font-700 uppercase tracking-widest hover:bg-black hover:text-white transition-colors min-h-[44px] shrink-0"
+            className="inline-flex items-center gap-2 border border-black border-solid px-4 py-2.5 text-sans-11 font-700 uppercase tracking-widest hover:bg-black hover:text-white transition-colors min-h-[44px] shrink-0"
           >
             {event.tickets ? 'Biljetter' : 'Läs mer'}
-            <span className="text-[var(--vividGreen)] group-hover:text-white transition-colors" aria-hidden="true">→</span>
+            <span className="text-black hover:text-white transition-colors" aria-hidden="true">→</span>
           </Link>
         </div>
 
@@ -161,7 +146,7 @@ export default function UpcomingEventsList() {
   return (
     <section>
       {/* Section header */}
-      <SectionHeader count={upcomingEvents.length} />
+      <SectionHeader/>
 
       {/* Event rows */}
       <div aria-label="Kommande events">
@@ -174,27 +159,6 @@ export default function UpcomingEventsList() {
             <EventRow key={event._id} event={event} index={index} />
           ))
         )}
-      </div>
-
-      {/* Bottom CTA */}
-      <div className="bg-black text-white border-t border-black">
-        <div className="px-4 sm:px-6 lg:px-8 py-12 lg:py-16 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
-          <div>
-            <h3 className="text-sans-22 lg:text-sans-28 font-600 uppercase">
-              Se alla events
-            </h3>
-            <p className="text-sans-13 lg:text-sans-14 text-white/50 mt-1 max-w-sm">
-              Utforska alla kommande och tidigare konserter.
-            </p>
-          </div>
-          <Link
-            href="/event"
-            className="inline-flex items-center gap-2 bg-[var(--vividGreen)] text-black px-8 py-4 text-sans-14 font-600 uppercase tracking-widest hover:bg-white transition-colors min-h-[52px] shrink-0"
-          >
-            <span aria-hidden="true">■</span>
-            Alla events
-          </Link>
-        </div>
       </div>
     </section>
   );
