@@ -22,15 +22,15 @@ export const revalidate = 30
 export default function ContentSlider({ items, itemType }: SliderProps) {
   const [sliderRef] = useKeenSlider({
     slides: {
-      perView: 1.15,
-      spacing: 8,
+      perView: 1,
+      spacing: 0,
     },
     breakpoints: {
       "(min-width: 641px)": {
-        slides: { perView: 2.2, spacing: 12 },
+        slides: { perView: 2, spacing: 1 },
       },
       "(min-width: 1025px)": {
-        slides: { perView: 3, spacing: 20 },
+        slides: { perView: 3, spacing: 1 },
       },
     },
   })
@@ -54,7 +54,7 @@ export default function ContentSlider({ items, itemType }: SliderProps) {
         <h2 className="text-sans-35 lg:text-sans-60 font-600 uppercase">{sectionLabel}</h2>
       </section>
 
-      {/* Slider — always keen-slider, no JS-gated mobile/desktop switch */}
+      {/* Slider */}
       <section className="relative mt-10 lg:mt-16 mb-10 lg:mb-16">
         <div ref={sliderRef} className="keen-slider">
           {items.map((item, index) => (
@@ -64,19 +64,19 @@ export default function ContentSlider({ items, itemType }: SliderProps) {
                 className="group block"
                 rel="noopener"
               >
-                {/* Aspect-ratio wrapper — image shown in full, no cropping */}
-                <div className="relative w-full aspect-[4/5] bg-black overflow-hidden">
+                {/* Image fills entire slide — no background, no border, no padding */}
+                <div className="relative w-full aspect-[3/4]">
                   <Image
                     alt={item.name}
                     loading={index === 0 ? "eager" : "lazy"}
                     priority={index === 0}
                     fill
-                    className="object-contain border border-solid border-black"
-                    sizes="(max-width: 640px) 90vw, (max-width: 1024px) 50vw, 33vw"
+                    className="object-cover"
+                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                     src={item.imageUrl || "/placeholder.svg"}
                   />
 
-                  {/* Overlay labels */}
+                  {/* Overlay labels pinned to top-left */}
                   <div className="absolute top-4 left-4 z-10 flex flex-col items-start gap-1">
                     {itemType === "playlist" && (
                       <>
@@ -122,13 +122,10 @@ export default function ContentSlider({ items, itemType }: SliderProps) {
             </div>
           ))}
 
-          {/* "Discover more" slide — same aspect ratio as image slides */}
+          {/* "Discover more" slide */}
           <div key="discover-more" className="keen-slider__slide">
-            <Link
-              href={discoverHref}
-              className="group block"
-            >
-              <div className="relative w-full aspect-[4/5] bg-black flex flex-col items-center justify-center border border-solid border-black p-6 text-center">
+            <Link href={discoverHref} className="group block">
+              <div className="relative w-full aspect-[3/4] bg-black flex flex-col items-center justify-center p-6 text-center">
                 <h3 className="text-white text-sans-22 lg:text-sans-28 font-600 uppercase mb-4">
                   Se fler {discoverLabel}
                 </h3>
