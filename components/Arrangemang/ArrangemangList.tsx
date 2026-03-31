@@ -76,24 +76,22 @@ function ArrangemangRow({ arrangemang, index }: {
       </Link>
 
       {/* Right: index, title, read-more */}
-      <div className="flex flex-col justify-between px-4 py-4 sm:px-6 sm:py-5 lg:px-8 lg:py-6 border-t border-black sm:border-t-0 sm:border-l border-solid flex-1">
+      <div className="flex flex-col px-4 py-4 sm:px-6 sm:py-5 lg:px-8 lg:py-6 border-t border-black sm:border-t-0 sm:border-l border-solid flex-1">
         {/* Top: index badge */}
         <span className="inline-flex items-center bg-black text-white text-sans-10 font-700 uppercase tracking-widest px-2 py-0.5 w-fit">
           {String(index + 1).padStart(2, '0')}
         </span>
 
-        {/* Middle: title */}
-        <h2 className="text-sans-18 sm:text-sans-22 lg:text-sans-35 font-600 uppercase leading-[1.05] text-balance mt-3 group-hover:italic transition-all duration-200">
-          <Link href={href} className="hover:text-black">
-            {arrangemang.Namn}
-          </Link>
-        </h2>
-
-        {/* Bottom: read-more link — pinned to far right */}
-        <div className="mt-4 sm:mt-6 flex justify-end">
+        {/* Middle: title + button on same row */}
+        <div className="flex items-start gap-4 mt-3">
+          <h2 className="text-sans-18 sm:text-sans-22 lg:text-sans-35 font-600 uppercase leading-[1.05] text-balance flex-1 group-hover:italic transition-all duration-200">
+            <Link href={href} className="hover:text-black">
+              {arrangemang.Namn}
+            </Link>
+          </h2>
           <Link
             href={href}
-            className="inline-flex items-center gap-2 border border-black px-4 py-2.5 text-sans-11 font-700 uppercase tracking-widest hover:bg-black hover:text-white transition-colors min-h-[44px]"
+            className="inline-flex items-center gap-2 border border-black px-4 py-2.5 text-sans-11 font-700 uppercase tracking-widest hover:bg-black hover:text-white transition-colors min-h-[44px] shrink-0"
           >
             Läs mer
             <span className="text-[var(--vividGreen)] group-hover:text-white transition-colors" aria-hidden="true">→</span>
