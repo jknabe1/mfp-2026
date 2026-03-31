@@ -80,11 +80,11 @@ function EventRow({ event, index }: { event: Event; index: number }) {
             width={720}
             height={540}
             loading={index < 4 ? 'eager' : 'lazy'}
-            className="w-full h-auto object-cover noise transition-transform duration-500 group-hover:scale-105"
+            className="w-full h-full object-cover noise transition-transform duration-500 group-hover:scale-105"
             sizes="(max-width: 640px) 100vw, (max-width: 1024px) 260px, 360px"
           />
         ) : (
-          <div className="w-full aspect-[4/3] bg-gray-200" />
+          <div className="w-full h-full min-h-[180px] bg-gray-200" />
         )}
       </Link>
 
@@ -109,8 +109,8 @@ function EventRow({ event, index }: { event: Event; index: number }) {
           </p>
         )}
 
-        {/* Bottom: CTA link */}
-        <div className="mt-4 sm:mt-6">
+        {/* Bottom: CTA link — pinned to far right */}
+        <div className="mt-4 sm:mt-6 flex justify-end">
           <Link
             href={href}
             className="inline-flex items-center gap-2 border border-black px-4 py-2.5 text-sans-11 font-700 uppercase tracking-widest hover:bg-black hover:text-white transition-colors min-h-[44px]"
