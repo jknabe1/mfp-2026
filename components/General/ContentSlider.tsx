@@ -61,17 +61,18 @@ export default function ContentSlider({ items, itemType }: SliderProps) {
             <div key={item._id} className="keen-slider__slide">
               <Link
                 href={`/${itemType}/${item.slug.current}`}
-                className="group block"
+                className="group block relative"
                 rel="noopener"
               >
-                {/* Image fills entire slide — no background, no border, no padding */}
-                <div className="relative w-full aspect-[3/4]">
+                {/* Image rendered at natural dimensions — container matches image exactly */}
+                <div className="relative overflow-hidden">
                   <Image
                     alt={item.name}
                     loading={index === 0 ? "eager" : "lazy"}
                     priority={index === 0}
-                    fill
-                    className="object-cover"
+                    width={800}
+                    height={1000}
+                    className="w-full h-auto block"
                     sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                     src={item.imageUrl || "/placeholder.svg"}
                   />
