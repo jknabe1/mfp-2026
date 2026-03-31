@@ -53,7 +53,7 @@ function ArrangemangRow({ arrangemang, index }: {
   return (
     <div className="group border-b border-black border-solid flex flex-col sm:flex-row items-stretch">
 
-      {/* Left: image at natural aspect ratio, full column width */}
+      {/* Left: image fills column fully */}
       <Link
         href={href}
         className="block shrink-0 bg-gray-100 sm:w-[260px] lg:w-[360px] overflow-hidden"
@@ -67,11 +67,11 @@ function ArrangemangRow({ arrangemang, index }: {
             width={720}
             height={540}
             loading={index < 4 ? 'eager' : 'lazy'}
-            className="w-full h-auto object-contain noise transition-transform duration-500 group-hover:scale-105"
+            className="w-full h-full object-cover noise transition-transform duration-500 group-hover:scale-105"
             sizes="(max-width: 640px) 100vw, (max-width: 1024px) 260px, 360px"
           />
         ) : (
-          <div className="w-full aspect-[4/3] bg-gray-200" />
+          <div className="w-full h-full min-h-[180px] bg-gray-200" />
         )}
       </Link>
 
@@ -89,8 +89,8 @@ function ArrangemangRow({ arrangemang, index }: {
           </Link>
         </h2>
 
-        {/* Bottom: read-more link */}
-        <div className="mt-4 sm:mt-6">
+        {/* Bottom: read-more link — pinned to far right */}
+        <div className="mt-4 sm:mt-6 flex justify-end">
           <Link
             href={href}
             className="inline-flex items-center gap-2 border border-black px-4 py-2.5 text-sans-11 font-700 uppercase tracking-widest hover:bg-black hover:text-white transition-colors min-h-[44px]"
