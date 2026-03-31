@@ -63,50 +63,57 @@ export default function ArrangemangSection() {
         <h2 className="text-sans-35 lg:text-sans-60 font-600 uppercase">Våra Arrangemang</h2>
       </section>
 
-      {/* Featured hero section — full-width image with centered overlay text */}
+      {/* Featured hero section — 50% image left, 50% text right */}
       <section className="relative mb-12">
-        <Link
-          href={`/arrangemang/${featuredItem.URL.current}`}
-          className="group block relative overflow-hidden border-4 border-black"
-        >
-          {/* Full-width image */}
-          <div className="relative w-full aspect-[3/4] sm:aspect-[4/3] lg:aspect-video">
-            <Image
-              src={urlFor(featuredItem.Bild)}
-              alt={featuredItem.Namn}
-              fill
-              priority
-              loading="eager"
-              className="object-cover w-full h-full transition-transform duration-500 group-hover:scale-105"
-              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 100vw, 100vw"
-            />
-          </div>
+        <div className="flex flex-col lg:flex-row items-stretch">
+          {/* Left: 50% image with border */}
+          <Link
+            href={`/arrangemang/${featuredItem.URL.current}`}
+            className="group w-full lg:w-1/2 block relative overflow-hidden border-4 border-black"
+          >
+            <div className="relative w-full aspect-[3/4] lg:aspect-auto lg:h-full">
+              <Image
+                src={urlFor(featuredItem.Bild)}
+                alt={featuredItem.Namn}
+                fill
+                priority
+                loading="eager"
+                className="object-cover w-full h-full transition-transform duration-500 group-hover:scale-105"
+                sizes="(max-width: 1024px) 100vw, 50vw"
+              />
+            </div>
+          </Link>
 
-          {/* Gradient overlay for text readability */}
-          <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/20 to-black/60" />
-
-          {/* Centered text overlay */}
-          <div className="absolute inset-0 flex flex-col items-center justify-center px-6 py-12 text-center">
-            <span className="inline-flex items-center gap-1.5 text-sans-10 font-600 uppercase tracking-widest text-white/80 mb-4">
+          {/* Right: 50% text content */}
+          <div className="w-full lg:w-1/2 px-6 sm:px-8 lg:px-10 py-8 lg:py-12 flex flex-col justify-center">
+            <span className="inline-flex items-center gap-1.5 text-sans-10 font-600 uppercase tracking-widest text-black/50 mb-4 w-fit">
               <span className="text-[var(--vividGreen)]" aria-hidden="true">■</span>
               Arrangerat av Music For Pennies
             </span>
-            <h3 className="text-sans-28 sm:text-sans-35 lg:text-sans-60 font-700 uppercase leading-[1.1] text-white text-balance mb-6 max-w-3xl">
+            <h3 className="text-sans-28 sm:text-sans-35 lg:text-sans-45 font-700 uppercase leading-[1.1] text-balance mb-6">
               {featuredItem.Namn}
             </h3>
-            <div className="flex flex-col sm:flex-row gap-3 justify-center">
-              <button className="inline-flex items-center gap-2 border-2 border-white px-6 py-3 text-sans-14 font-600 uppercase tracking-widest text-white hover:bg-white hover:text-black transition-colors">
+            <p className="text-sans-14 sm:text-sans-16 text-black/60 leading-relaxed mb-8">
+              Utforska alla arrangemang som Music For Pennies har skapat och varit en del av. Klicka för att läsa mer om detta event.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-3">
+              <Link
+                href={`/arrangemang/${featuredItem.URL.current}`}
+                className="inline-flex items-center gap-2 border-2 border-black px-6 py-3 text-sans-14 font-600 uppercase tracking-widest hover:bg-black hover:text-white transition-colors w-fit"
+              >
                 Läs mer
-                <span className="text-[var(--vividGreen)]" aria-hidden="true">→</span>
-              </button>
-              <span className="hidden sm:inline-block text-white/60 px-2">eller</span>
-              <button className="inline-flex items-center gap-2 border-2 border-white px-6 py-3 text-sans-14 font-600 uppercase tracking-widest text-white hover:bg-white hover:text-black transition-colors">
+                <span className="text-[var(--vividGreen)] group-hover:text-white" aria-hidden="true">→</span>
+              </Link>
+              <Link
+                href="/arrangemang"
+                className="inline-flex items-center gap-2 border-2 border-black px-6 py-3 text-sans-14 font-600 uppercase tracking-widest hover:bg-black hover:text-white transition-colors w-fit"
+              >
                 Se alla
-                <span className="text-[var(--vividGreen)]" aria-hidden="true">→</span>
-              </button>
+                <span className="text-[var(--vividGreen)] group-hover:text-white" aria-hidden="true">→</span>
+              </Link>
             </div>
           </div>
-        </Link>
+        </div>
       </section>
     </div>
   )
