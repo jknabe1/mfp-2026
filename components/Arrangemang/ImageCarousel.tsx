@@ -28,7 +28,6 @@ export default function ImageCarousel({ images, title = 'Galleribilder' }: Image
   const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
-    console.log('[v0] ImageCarousel mounted with images:', images);
     setIsLoaded(true);
   }, [images]);
 
@@ -44,16 +43,12 @@ export default function ImageCarousel({ images, title = 'Galleribilder' }: Image
   }, [isAutoplay, images.length]);
 
   if (!isLoaded) {
-    console.log('[v0] ImageCarousel not yet loaded');
     return null;
   }
 
   if (!images || images.length === 0) {
-    console.log('[v0] ImageCarousel: No images provided, returning null');
     return null;
   }
-
-  console.log('[v0] ImageCarousel rendering with', images.length, 'images');
 
   const goToPrevious = () => {
     setIsAutoplay(false);
