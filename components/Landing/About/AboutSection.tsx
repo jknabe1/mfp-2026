@@ -30,7 +30,7 @@ const AboutSection = () => {
                                 Sedan 2019 har Music For Pennies arbetat med att stärka kulturlivet i Örebro län genom att stödja unga kulturutövare med finansiering och vägledning, med målet att främja en positiv kulturutveckling och stärka regionens musikexport.
                             </p>
                             <div className="flex gap-2 mt-7">
-                                <Link className="mt-6 inline-block border border-solid border-black px-6 py-3 hover:bg-black hover:text-white transition-colors" href="/om-oss">Läs mer →</Link>
+                                <Link className="inline-flex items-center gap-2 border border-black border-solid px-4 py-3 text-sans-11 font-700 uppercase tracking-widest hover:bg-black hover:text-white transition-colors min-h-[44px] shrink-0" href="/om-oss">Läs mer →</Link>
                             </div>
                         </div>
                     </div>

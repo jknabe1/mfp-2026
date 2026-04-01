@@ -41,11 +41,6 @@ function SectionHeader() {
       <div>
         <h1 className="text-sans-35 lg:text-sans-60 font-600">EVENTS</h1>
       </div>
-      <p className="text-sans-14 sm:text-sans-16 text-black/60 leading-relaxed max-w-2xl">
-        Utforska de kommande evenemangen arrangerade av Music For Pennies. Från konserter till 
-        workshops, hitta något som passar dina intressen. Boka dina biljetter eller få mer 
-        information om varje event direkt här.
-      </p>
     </header>
   );
 }
@@ -79,7 +74,7 @@ function EventRow({ event, index }: { event: Event; index: number }) {
       </Link>
 
       {/* Right: date, title, venue, CTA */}
-      <div className="flex flex-col px-4 py-4 sm:px-6 sm:py-5 lg:px-8 lg:py-6 border-t border-black sm:border-t-0 sm:border-l border-solid flex-1">
+      <div className="flex flex-col py-4 sm:pl-6 sm:py-5 lg:py-6 border-t border-black sm:border-t-0 sm:border-l border-solid flex-1">
         {/* Top: date badge */}
         <span className="inline-flex items-center bg-black text-white text-sans-10 font-700 uppercase tracking-widest px-2 py-0.5 w-fit">
           {formatDate(event.date)}
@@ -96,7 +91,7 @@ function EventRow({ event, index }: { event: Event; index: number }) {
             href={href}
             className="inline-flex items-center gap-2 border border-black border-solid px-4 py-3 text-sans-11 font-700 uppercase tracking-widest hover:bg-black hover:text-white transition-colors min-h-[44px] shrink-0"
           >
-            {event.tickets ? 'Biljetter' : 'Läs mer'}
+            {event.tickets ? 'Biljetter' : 'Se event'}
             <span className=" transition-colors" aria-hidden="true">→</span>
           </Link>
         </div>
@@ -171,10 +166,10 @@ export default function UpcomingEventsList() {
         <div className="px-2 lg:px-5 py-10 lg:py-14 flex justify-center border-t border-black">
           <Link
             href="/event"
-            className="inline-flex items-center gap-2 border-2 border-black px-8 py-4 text-sans-14 font-600 uppercase tracking-widest hover:bg-black hover:text-white transition-colors"
+            className="inline-flex items-center gap-2 border border-black border-solid px-4 py-3 text-sans-11 font-700 uppercase tracking-widest hover:bg-black hover:text-white transition-colors min-h-[44px] shrink-0"
           >
             Se alla events
-            <span className="text-[var(--vividGreen)] group-hover:text-white transition-colors" aria-hidden="true">→</span>
+            <span aria-hidden="true">→</span>
           </Link>
         </div>
       )}
