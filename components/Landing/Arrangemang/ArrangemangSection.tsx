@@ -73,7 +73,7 @@ export default function ArrangemangSection() {
                 <div className={`w-full lg:w-1/2 relative overflow-hidden border-4 border-black bg-gray-100 ${isEven ? "lg:order-1" : "lg:order-2"}`}>
                   <Link
                     href={`/arrangemang/${item.URL.current}`}
-                    className="group block relative w-full h-full aspect-[4/3] lg:aspect-auto lg:min-h-[400px]"
+                    className="group block relative w-full h-full aspect-[3/4] lg:aspect-auto lg:min-h-[400px]"
                   >
                     <Image
                       src={urlFor(item.Bild)}
@@ -81,14 +81,14 @@ export default function ArrangemangSection() {
                       fill
                       priority={index < 2}
                       loading={index < 2 ? "eager" : "lazy"}
-                      className="object-cover w-full h-full transition-transform duration-500 group-hover:scale-105"
+                      className="object-contain w-full h-full transition-transform duration-500 group-hover:scale-105"
                       sizes="(max-width: 1024px) 100vw, 50vw"
                     />
                   </Link>
                 </div>
 
                 {/* Text column — below image on mobile */}
-                <div className={`w-full lg:w-1/2 px-6 py-8 sm:px-8 lg:px-10 lg:py-12 flex flex-col justify-center bg-white border-4 border-black ${isEven ? "lg:order-2" : "lg:order-1"}`}>
+                <div className={`w-full lg:w-1/2 px-6 py-8 sm:px-8 lg:px-10 lg:py-12 flex flex-col justify-center border-b lg:border-b-0 lg:border-l border-black ${isEven ? "lg:order-2" : "lg:order-1"}`}>
                   {/* Mobile layout: title left, button right */}
                   <div className="flex flex-col lg:flex-col gap-4">
                     <div className="flex items-start justify-between gap-4 lg:gap-0 lg:flex-col">
