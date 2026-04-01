@@ -37,10 +37,15 @@ function formatDate(dateStr: string) {
 // ─── Section header ─────────────────────────────────────────────────────────
 function SectionHeader() {
   return (
-    <header className="px-2 lg:px-5 lg:py-14 flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
+    <header className="px-2 lg:px-5 pb-6 lg:pb-8 flex flex-col gap-4">
       <div>
         <h1 className="text-sans-35 lg:text-sans-60 font-600">EVENTS</h1>
       </div>
+      <p className="text-sans-14 sm:text-sans-16 text-black/60 leading-relaxed max-w-2xl">
+        Utforska de kommande evenemangen arrangerade av Music For Pennies. Från konserter till 
+        workshops, hitta något som passar dina intressen. Boka dina biljetter eller få mer 
+        information om varje event direkt här.
+      </p>
     </header>
   );
 }
@@ -89,7 +94,7 @@ function EventRow({ event, index }: { event: Event; index: number }) {
           </h3>
           <Link
             href={href}
-            className="inline-flex items-center gap-2 border border-black border-solid px-4 py-2.5 text-sans-11 font-700 uppercase tracking-widest hover:bg-black hover:text-white transition-colors min-h-[44px] shrink-0"
+            className="inline-flex items-center gap-2 border border-black border-solid px-4 py-3 text-sans-11 font-700 uppercase tracking-widest hover:bg-black hover:text-white transition-colors min-h-[44px] shrink-0"
           >
             {event.tickets ? 'Biljetter' : 'Läs mer'}
             <span className="text-black hover:text-white transition-colors" aria-hidden="true">→</span>
@@ -145,7 +150,7 @@ export default function UpcomingEventsList() {
 
   return (
     <section>
-      {/* Section header */}
+      {/* Section header with description */}
       <SectionHeader/>
 
       {/* Event rows */}
@@ -160,6 +165,19 @@ export default function UpcomingEventsList() {
           ))
         )}
       </div>
+
+      {/* See all events CTA */}
+      {upcomingEvents.length > 0 && (
+        <div className="px-2 lg:px-5 py-10 lg:py-14 flex justify-center border-t border-black">
+          <Link
+            href="/event"
+            className="inline-flex items-center gap-2 border-2 border-black px-8 py-4 text-sans-14 font-600 uppercase tracking-widest hover:bg-black hover:text-white transition-colors"
+          >
+            Se alla events
+            <span className="text-[var(--vividGreen)] group-hover:text-white transition-colors" aria-hidden="true">→</span>
+          </Link>
+        </div>
+      )}
     </section>
   );
 }
