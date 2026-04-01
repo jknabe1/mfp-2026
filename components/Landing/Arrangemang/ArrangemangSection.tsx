@@ -89,10 +89,6 @@ export default function ArrangemangSection() {
 
                 {/* Text column */}
                 <div className={`w-full lg:w-1/2 px-6 py-8 sm:px-8 lg:px-10 lg:py-12 flex flex-col justify-center bg-white border-4 border-black ${isEven ? "lg:order-2" : "lg:order-1"}`}>
-                  <span className="inline-flex items-center gap-1.5 text-sans-10 font-600 uppercase tracking-widest text-black/50 mb-4 w-fit">
-                    <span className="text-[var(--vividGreen)]" aria-hidden="true">■</span>
-                    Arrangerat av Music For Pennies
-                  </span>
                   <h3 className="text-sans-28 sm:text-sans-35 lg:text-sans-45 font-700 uppercase leading-[1.1] text-balance mb-6">
                     {item.Namn}
                   </h3>
