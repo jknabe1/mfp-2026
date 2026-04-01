@@ -83,7 +83,7 @@ function EventRow({ event, index }: { event: Event; index: number }) {
         {/* Middle: title + button on same row */}
         <div className="flex items-start gap-4 mt-3">
           <h3 className="text-sans-18 sm:text-sans-22 lg:text-sans-35 font-600 uppercase leading-[1.05] text-balance flex-1 group-hover:italic transition-all duration-200">
-            <Link href={href} className="hover:text-white transition-colors">
+            <Link href={href}>
               {event.name}
             </Link>
           </h3>
@@ -92,7 +92,7 @@ function EventRow({ event, index }: { event: Event; index: number }) {
             className="inline-flex items-center gap-2 border border-black border-solid px-4 py-2.5 text-sans-11 font-700 uppercase tracking-widest hover:bg-black hover:text-white transition-colors min-h-[44px] shrink-0"
           >
             {event.tickets ? 'Biljetter' : 'Läs mer'}
-            <span className="text-black hover:text-white transition-colors" aria-hidden="true">→</span>
+            <span className=" transition-colors" aria-hidden="true">→</span>
           </Link>
         </div>
 

@@ -70,7 +70,7 @@ export default function ArrangemangSection() {
                 className="flex flex-col lg:flex-row items-stretch gap-px bg-black"
               >
                 {/* Image column */}
-                <div className={`w-full lg:w-1/2 relative overflow-hidden border-4 border-black bg-gray-100 ${isEven ? "lg:order-1" : "lg:order-2"}`}>
+                <div className={`w-full lg:w-1/2 relative overflow-hidden border-4 border-black ${isEven ? "lg:order-1" : "lg:order-2"}`}>
                   <Link
                     href={`/arrangemang/${item.URL.current}`}
                     className="group block relative w-full h-full aspect-[4/3] lg:aspect-auto lg:min-h-[400px]"
@@ -94,10 +94,10 @@ export default function ArrangemangSection() {
                   </h3>
                   <Link
                     href={`/arrangemang/${item.URL.current}`}
-                    className="inline-flex items-center gap-2 border-2 border-black px-6 py-3 text-sans-14 font-600 uppercase tracking-widest hover:bg-black hover:text-white transition-colors w-fit"
+                    className="inline-flex items-center gap-2 border-2 border-black px-6 py-3 text-sans-14 font-600 uppercase tracking-widest transition-colors w-fit"
                   >
                     Läs mer
-                    <span className="text-[var(--vividGreen)] group-hover:text-white" aria-hidden="true">→</span>
+                    <span className="text-[var(--vividGreen)]" aria-hidden="true">→</span>
                   </Link>
                 </div>
               </div>
