@@ -61,9 +61,9 @@ export default function ForeningarSection() {
     const fetchArtists = async () => {
       try {
         setLoading(true)
-        // Fetch all föreningar - using Swedish field names
+        // Fetch all artists - using Swedish field names
         const allArtists = await client.fetch<Artist[]>(
-          `*[_type == "förening" && defined(URL.current)]{_id, Namn, URL, Bild}|order(Namn asc)`,
+          `*[_type == "artist" && defined(URL.current)]{_id, Namn, URL, Bild}|order(Namn asc)`,
         )
 
         setArtists(allArtists)
@@ -102,6 +102,21 @@ export default function ForeningarSection() {
   }
 
   // Custom See More component for the slider
+  const SeeMoreSlide = () => (
+    <div className="keen-slider__slide">
+      <Link
+        href="/om-oss/vara-foreningar"
+        className="group block relative aspect-[4/5] lg:aspect-[6/5] overflow-hidden bg-black flex items-center justify-center"
+      >
+        <div className="text-white text-center p-5">
+          <h2 className="text-3xl font-bold mb-4">Se våra föreningar</h2>
+          <div className="mt-6 inline-block border border-white px-6 py-3 hover:bg-white hover:text-black transition-colors">
+            Utforska →
+          </div>
+        </div>
+      </Link>
+    </div>
+  )
 
   return (
     <div className="px-2 py-3 lg:px-5">
@@ -198,6 +213,19 @@ export default function ForeningarSection() {
                     </div>
                   </Link>
                 ))}
+
+                {/* Static "See More" panel */}
+                <Link
+                  href="/om-oss/vara-foreningar"
+                  className="group block relative aspect-[4/5] lg:aspect-[6/5] overflow-hidden bg-black flex items-center justify-center"
+                >
+                  <div className="text-white text-center p-5">
+                    <h2 className="text-2xl font-bold">Se våra föreningar</h2>
+                    <div className="mt-6 inline-block border border-white px-6 py-3 hover:bg-white hover:text-black transition-colors">
+                      Utforska →
+                    </div>
+                  </div>
+                </Link>
               </div>
             </div>
           )}

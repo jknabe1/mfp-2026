@@ -19,7 +19,25 @@
   --blue: rgb(0, 95, 245);
   --orange: rgb(240, 81, 54 );
   --pink: rgb(212, 88, 122);
+}
 
+:root.dark {
+  --background: #0f0f0f;
+  --foreground: #f8f8f8;
+  --brighPink: rgb(255, 102, 178);
+  --yellow: rgb(255, 246, 57);
+  --coral : rgb(255, 133, 113);
+  --red: rgb(219, 0, 77);
+  --lightGreen : rgb(139, 238, 104);
+  --lightBlue: rgb(233, 255, 255);
+  --green : rgb(69, 165, 75);
+  --vividGreen: #00ff00;
+  --lightPink: rgb(248, 237, 241);
+  --darkBlue: rgb(0, 0, 151);
+  --aqua: rgb(33, 255, 243);
+  --blue: rgb(0, 95, 245);
+  --orange: rgb(240, 81, 54 );
+  --pink: rgb(212, 88, 122);
 }
 
 @font-face {
@@ -50,6 +68,7 @@ body {
   line-height: 1;
   margin: 0;
   line-height: inherit;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 body,html {
@@ -4747,94 +4766,6 @@ input.cursor-loading,input.cursor-loading *,input.cursor-wait,input.cursor-wait 
   opacity: .15;
   --tw-content: "";
   content: var(--tw-content)
-}
-
-/* ─── Enhanced Transitions & Animations ─────────────────────────────────── */
-
-/* Smooth transitions for interactive elements */
-button, a, input, select {
-  transition: all 0.2s ease-out;
-}
-
-/* Focus states for accessibility */
-button:focus-visible,
-a:focus-visible,
-input:focus-visible,
-select:focus-visible {
-  outline: 2px solid var(--vividGreen);
-  outline-offset: 2px;
-}
-
-/* Pulse animation for skeletons */
-@keyframes skeleton-pulse {
-  0%, 100% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0.5;
-  }
-}
-
-.animate-pulse {
-  animation: skeleton-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-}
-
-/* Smooth scroll behavior */
-html {
-  scroll-behavior: smooth;
-}
-
-/* Enhanced button states */
-.button-secondary-vividGreen {
-  @apply border border-black px-6 py-4 text-sans-14 font-600 uppercase tracking-widest bg-[var(--vividGreen)] text-black hover:bg-black hover:text-white transition-all duration-200;
-}
-
-/* Link hover effect enhancement */
-a {
-  position: relative;
-}
-
-/* Input placeholder styling */
-input::placeholder {
-  color: rgb(0 0 0 / 0.4);
-}
-
-/* Form elements styling */
-select {
-  cursor: pointer;
-}
-
-/* Improved hover effects for cards */
-.group {
-  transition: all 0.3s ease-out;
-}
-
-.group:hover {
-  transition: all 0.3s ease-out;
-}
-
-/* Smooth page transitions */
-@media (prefers-reduced-motion: no-preference) {
-  * {
-    scroll-behavior: smooth;
-  }
-}
-
-/* ─── Accessibility improvements ───────────────────────────────────────── */
-
-/* Visible focus indicator */
-*:focus {
-  outline: none;
-}
-
-*:focus-visible {
-  outline: 2px solid var(--vividGreen);
-  outline-offset: 2px;
-}
-
-/* Remove outline from elements that don't need it */
-*:focus:not(:focus-visible) {
-  outline: none;
 }
 
 @keyframes noise {

@@ -3,6 +3,7 @@ import imageUrlBuilder from "@sanity/image-url"
 import Image from "next/image"
 import { PortableText, PortableTextBlock } from 'next-sanity'
 import Link from "next/link"
+import { notFound } from "next/navigation"
 import type { SanityImageSource } from "@sanity/image-url/lib/types/types"
 
 const builder = imageUrlBuilder(client)
@@ -15,258 +16,280 @@ function urlFor(source: SanityImageSource) {
 
 interface Venue {
   name?: string
-  City?: string
-  Country?: string
+  address?: string
 }
 
 interface Headline {
   name?: string
+  slug?: {
+    current: string
+  }
+}
+
+interface GalleryImage {
+  asset: SanityImageSource
+  alt?: string
+  caption?: string
 }
 
 interface Event {
   name: string
-  slug: { current: string }
+  slug: {
+    current: string
+  }
   date?: string
+  endDate?: string
   image?: SanityImageSource
+  gallery?: GalleryImage[]
+  shortDescription?: string
   details?: PortableTextBlock[]
   headline?: Headline
   venue?: Venue
   tickets?: string
-  eventType?: string
+  ticketPrice?: string
+  eventType?: 'in-person' | 'virtual' | 'hybrid'
+  eventCategory?: string
+  ageRestriction?: string
+  lineup?: Headline[]
+  specialGuests?: string
   doorsOpen?: number
 }
 
+// Helper function to convert Portable Text to plain text for meta descriptions
 function portableTextToPlainText(blocks: PortableTextBlock[] = []): string {
   return blocks
     .map((block) => {
-      if (block._type !== "block" || !block.children) return ""
+      if (block._type !== "block" || !block.children) {
+        return ""
+      }
       return block.children.map((child: any) => child.text).join("")
     })
     .join("\n\n")
 }
 
 async function getEvent(slug: string): Promise<Event | null> {
-  const EVENT_QUERY = `*[_type == "event" && slug.current == $slug][0]{
+  // Validate slug format - should only contain alphanumeric, hyphens, underscores
+  if (!slug || !/^[a-z0-9-_]+$/i.test(slug)) {
+    return null
+  }
+
+  const EVENT_QUERY = `*[
+    _type == "event" &&
+    slug.current == $slug
+  ][0]{
     ...,
-    headline->,
+    headline->{name, slug},
     venue->,
     tickets,
+    ticketPrice,
+    eventType,
+    eventCategory,
+    ageRestriction,
+    endDate,
+    doorsOpen,
+    shortDescription,
+    specialGuests,
+    "lineup": lineup[]->{name, slug},
+    "gallery": gallery[]{
+      asset,
+      alt,
+      caption
+    }
   }`
-  return await client.fetch(EVENT_QUERY, { slug })
-}
-
-async function getRelatedEvents(currentSlug: string): Promise<Event[]> {
-  const EVENTS_QUERY = `*[_type == "event" && slug.current != $slug && date < now()] | order(date desc)[0..6]`
-  return await client.fetch(EVENTS_QUERY, { slug: currentSlug })
+  
+  try {
+    return await client.fetch(EVENT_QUERY, { slug })
+  } catch (error) {
+    console.error(`[v0] Error fetching event with slug "${slug}":`, error)
+    return null
+  }
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
-  const { slug } = await params
-  const event = await getEvent(slug)
+  try {
+    const { slug } = await params
+    const event = await getEvent(slug)
 
-  if (!event) {
+    if (!event) {
+      return {
+        title: "Event Not Found - K&K Records",
+        description: "The requested event does not exist.",
+      }
+    }
+
+    const plainTextDescription = event.shortDescription || (event.details ? portableTextToPlainText(event.details) : "")
+
     return {
-      title: "Event hittades inte - Music For Pennies",
-      description: "Det begärda eventet finns inte.",
+      title: `${event.name}`,
+      description: plainTextDescription.slice(0, 160) || `Event by K&K Records: ${event.name}`,
+      alternates: {
+        canonical: `https://kkrecords.se/event/${event.slug.current}`,
+      },
+      openGraph: {
+        title: `${event.name} - K&K Records`,
+        description: plainTextDescription.slice(0, 160) || `Event by K&K Records: ${event.name}`,
+        url: `https://kkrecords.se/event/${event.slug.current}`,
+        siteName: "K&K Records",
+        locale: "sv_SE",
+        type: "website",
+        images: event.image ? [{ url: urlFor(event.image).url(), width: 1200, height: 630, alt: event.name }] : [],
+      },
+      twitter: {
+        card: "summary_large_image",
+        title: `${event.name} - K&K Records`,
+        description: plainTextDescription.slice(0, 160) || `Event by K&K Records: ${event.name}`,
+        images: event.image ? [{ url: urlFor(event.image).url() }] : [],
+      },
+    }
+  } catch (error) {
+    console.error('[v0] Error generating metadata:', error)
+    return {
+      title: "Event - K&K Records",
+      description: "Browse upcoming events.",
     }
   }
-
-  const plainTextDescription = event.details ? portableTextToPlainText(event.details) : ""
-
-  return {
-    title: `${event.name}`,
-    description: plainTextDescription || `Event av Music For Pennies: ${event.name}`,
-    openGraph: {
-      title: `${event.name} - Music For Pennies`,
-      description: plainTextDescription || `Event av Music For Pennies: ${event.name}`,
-      url: `https://musicforpennies.se/event/${event.slug.current}`,
-      siteName: "Music For Pennies",
-      images: event.image ? [{ url: urlFor(event.image).url() }] : [],
-    },
-    twitter: {
-      card: "summary_large_image",
-      title: `${event.name} - Music For Pennies`,
-      description: plainTextDescription || `Event av Music For Pennies: ${event.name}`,
-      images: event.image ? [{ url: urlFor(event.image).url() }] : [],
-    },
-  }
 }
 
-// ─── Date helpers ────────────────────────────────────────────────────────────
-function formatLongDate(dateStr: string) {
-  return new Date(dateStr).toLocaleDateString('sv-SE', {
-    weekday: 'long',
-    day: 'numeric',
-    month: 'long',
-    year: 'numeric',
-  })
-}
-
-function formatTime(dateStr: string) {
-  return new Date(dateStr).toLocaleTimeString('sv-SE', {
-    hour: '2-digit',
-    minute: '2-digit',
-  })
-}
-
-function formatDateBlock(dateStr: string) {
-  const d = new Date(dateStr)
-  return {
-    day: d.toLocaleDateString('sv-SE', { day: '2-digit' }),
-    month: d.toLocaleDateString('sv-SE', { month: 'short' }).toUpperCase(),
-    year: d.getFullYear().toString(),
-    time: d.toLocaleTimeString('sv-SE', { hour: '2-digit', minute: '2-digit' }),
-  }
-}
-
-// ─── Metadata row ────────────────────────────────────────────────────────────
-function MetaRow({ label, value }: { label: string; value: React.ReactNode }) {
-  return (
-    <div className="flex flex-col sm:flex-row sm:items-start border-b border-black/20 sm:border-black border-solid py-3 sm:py-3 lg:py-4 gap-0.5 sm:gap-0">
-      <span className="text-sans-10 sm:text-sans-12 font-600 uppercase tracking-widest shrink-0 sm:w-36 lg:w-44 opacity-50">
-        {label}
-      </span>
-      <span className="text-sans-13 sm:text-sans-14 lg:text-sans-16 font-600 uppercase">
-        {value}
-      </span>
-    </div>
-  )
-}
-
-// ─── Previous Event Card ────────────────────────────────────────────────────
-function PreviousEventCard({ event }: { event: Event }) {
-  return (
-    <Link
-      href={`/event/${event.slug.current}`}
-      className="group block p-3 sm:p-4 lg:p-5 border border-black border-solid hover:bg-gray-50 transition-colors min-h-[72px]"
-    >
-      <div className="flex items-center justify-between gap-3 sm:gap-4">
-        {event.image && (
-          <div className="relative w-14 h-14 sm:w-16 sm:h-16 lg:w-20 lg:h-20 flex-shrink-0 overflow-hidden border border-black">
-            <Image
-              src={urlFor(event.image).width(200).quality(75).url()}
-              alt={event.name}
-              fill
-              className="object-cover"
-            />
-          </div>
-        )}
-        <div className="flex-grow min-w-0">
-          <h3 className="text-sans-12 sm:text-sans-14 lg:text-sans-16 font-600 uppercase group-hover:italic transition-all line-clamp-2">
-            {event.name}
-          </h3>
-          {event.date && (
-            <p className="text-sans-10 sm:text-sans-12 opacity-60 uppercase mt-0.5 sm:mt-1">
-              {new Date(event.date).toLocaleDateString('sv-SE', {
-                day: 'numeric',
-                month: 'short',
-                year: '2-digit',
-              })}
-            </p>
-          )}
-          {event.venue?.name && (
-            <p className="text-sans-10 sm:text-sans-12 opacity-50 uppercase mt-0.5 hidden sm:block">
-              {event.venue.name}
-            </p>
-          )}
-        </div>
-        <span className="text-white text-sans-14 sm:text-sans-16 font-600 shrink-0">→</span>
-      </div>
-    </Link>
-  )
-}
-
-// ─── Page ────────────────────────────────────────────────────────────────────
 export default async function EventPage({ params }: { params: Promise<{ slug: string }> }) {
-  const { slug } = await params
-  const event = await getEvent(slug)
-  const previousEvents = await getRelatedEvents(slug)
+  try {
+    const { slug } = await params
+    const event = await getEvent(slug)
 
-  if (!event) {
-    return (
-      <main className="flex items-center justify-center min-h-[60vh] px-4">
-        <p className="text-sans-35 font-600 uppercase">Event hittades inte</p>
-      </main>
-    )
-  }
+    if (!event) {
+      notFound()
+    }
 
-  const { venue, tickets } = event
-  const plainTextDescription = event.details ? portableTextToPlainText(event.details) : ""
-  const dateBlock = event.date ? formatDateBlock(event.date) : null
+  const { venue, tickets, ticketPrice, eventCategory, ageRestriction, lineup, specialGuests, gallery, shortDescription, doorsOpen } = event
+
+  const plainTextDescription = shortDescription || (event.details ? portableTextToPlainText(event.details) : "")
 
   const venueObject = venue
-    ? { "@type": "Place" as const, name: venue.name || "Music For Pennies", address: [venue.City, venue.Country].filter(Boolean).join(", ") || "Sweden" }
-    : { "@type": "Place" as const, name: "Music For Pennies", address: "Sweden" }
+    ? {
+        "@type": "Place" as const,
+        name: venue.name || "K&K Records Venue",
+        address: venue.address || "K&K Records, Sweden",
+      }
+    : {
+        "@type": "Place" as const,
+        name: "K&K Records Venue",
+        address: "K&K Records, Sweden",
+      }
+
+  const performerObject = {
+    "@type": "MusicGroup" as const,
+    name: event.headline?.name || event.name || "K&K Records Artist",
+  }
+
+  const breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "Hem",
+        item: "https://kkrecords.se"
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: "Event",
+        item: "https://kkrecords.se/event"
+      },
+      {
+        "@type": "ListItem",
+        position: 3,
+        name: event.name,
+        item: `https://kkrecords.se/event/${event.slug.current}`
+      }
+    ]
+  }
 
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "MusicEvent",
+    "@id": `https://kkrecords.se/event/${event.slug.current}`,
     name: event.name,
     startDate: event.date,
     eventStatus: "https://schema.org/EventScheduled",
     location: venueObject,
-    image: event.image ? urlFor(event.image).url() : "https://musicforpennies.se/default-event-image.jpg",
-    url: `https://musicforpennies.se/event/${event.slug.current}`,
-    description: plainTextDescription || `Music event: ${event.name} at Music For Pennies`,
-    performer: { "@type": "MusicGroup" as const, name: event.headline?.name || event.name },
-    organizer: { "@type": "Organization", name: "Music For Pennies", url: "https://musicforpennies.se" },
+    image: event.image ? urlFor(event.image).url() : "https://kkrecords.se/default-event-image.jpg",
+    url: `https://kkrecords.se/event/${event.slug.current}`,
+    description: plainTextDescription || `Music event: ${event.name} at K&K Records`,
+    performer: performerObject,
+    organizer: {
+      "@type": "Organization",
+      name: "K&K Records",
+      url: "https://kkrecords.se",
+      logo: "https://kkrecords.se/logo.png",
+    },
     offers: tickets
-      ? { "@type": "Offer", url: tickets, availability: "https://schema.org/InStock" }
+      ? {
+          "@type": "Offer",
+          url: tickets,
+          availability: "https://schema.org/InStock",
+          price: "0",
+          priceCurrency: "SEK",
+        }
       : undefined,
   }
 
-  const isPast = event.date ? new Date(event.date) < new Date() : false
+  // Format date for display
+  const formattedDate = event.date 
+    ? new Date(event.date).toLocaleDateString('sv-SE', {
+        weekday: 'long',
+        day: 'numeric',
+        month: 'long',
+        year: 'numeric',
+      })
+    : null
+
+  const formattedTime = event.date
+    ? new Date(event.date).toLocaleTimeString('sv-SE', {
+        hour: '2-digit',
+        minute: '2-digit',
+      })
+    : null
+
+  // Create a date block object for hero overlay
+  const dateBlock = event.date
+    ? {
+        day: new Date(event.date).getDate().toString().padStart(2, '0'),
+        month: new Date(event.date).toLocaleString('sv-SE', { month: 'short' }).toUpperCase(),
+        time: new Date(event.date).toLocaleTimeString('sv-SE', {
+          hour: '2-digit',
+          minute: '2-digit',
+        }),
+      }
+    : null
 
   return (
-    <main>
+    <article>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
-
-      {/* ── Full-width banner ──────────────────────────────────────────────── */}
-      <div className="relative w-full overflow-hidden border-b border-black border-solid">
-
-        {/* Banner image */}
-        <div className="relative w-full h-[56vw] min-h-[220px] max-h-[90vh]">
-          {event.image ? (
-            <Image
-              src={urlFor(event.image).width(2400).quality(90).url()}
-              alt={event.name}
-              fill
-              priority
-              className="object-cover noise"
-              sizes="100vw"
-            />
-          ) : (
-            <div className="absolute inset-0 bg-black" />
-          )}
-
-          {/* Gradient scrim — only on md+ where overlay text sits on image */}
-          <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent hidden md:block" />
-
-          {/* Past event badge */}
-          {isPast && (
-            <div className="absolute top-3 left-3 lg:top-6 lg:left-6 z-10">
-              <span className="inline-flex items-center gap-1.5 bg-white text-black text-sans-11 font-600 px-2.5 py-1.5 uppercase tracking-widest">
-                {event.name}
-              </span>
-            </div>
-          )}
-
-          {/* Ticket CTA — top right on desktop */}
-          {tickets && !isPast && (
-            <div className="absolute top-4 right-4 lg:top-6 lg:right-6 z-10 hidden md:block">
-              <Link
-                href={tickets}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 bg-black text-white text-sans-12 font-600 px-4 py-2.5 uppercase tracking-widest hover:bg-white hover:text-black transition-colors border border-white/50 min-h-[44px]"
-              >
-                Köp biljetter
-              </Link>
-            </div>
-          )}
-
-          {/* md+ overlay: event name + date block over image */}
-          <div className="absolute bottom-0 left-0 right-0 z-10 px-2 lg:px-5 lg:pb-10 hidden md:flex md:flex-row md:items-end md:justify-between gap-4">
+      
+      {/* Full-width Hero Image */}
+      <header className="relative w-full h-[50vh] md:h-[60vh] lg:h-[70vh] overflow-hidden">
+        {event.image ? (
+          <Image
+            src={urlFor(event.image).width(1920).height(1080).url()}
+            alt={event.name}
+            fill
+            priority
+            loading="eager"
+            className="object-cover"
+            sizes="100vw"
+          />
+        ) : (
+          <div className="absolute inset-0 bg-neutral-200 flex items-center justify-center">
+            <span className="text-neutral-500 text-lg">No Image Available</span>
+          </div>
+        )}
+        {/* Gradient overlay for better text readability */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
+        
+        {/* Hero content overlay */}
+        <div className="absolute bottom-0 left-0 right-0 z-10 px-2 lg:px-5 lg:pb-10 hidden md:flex md:flex-row md:items-end md:justify-between gap-4">
             <h1 className="text-white uppercase font-600 text-sans-35 lg:text-sans-60 xl:text-sans-120 leading-[1.05] text-balance max-w-[75%]">
               {event.name}
             </h1>
@@ -277,215 +300,290 @@ export default async function EventPage({ params }: { params: Promise<{ slug: st
                   <span className="text-white text-sans-10 font-600 tracking-widest mt-1">{dateBlock.month}</span>
                 </div>
                 <div className="flex flex-col items-center justify-center px-4 py-3 bg-white/10 backdrop-blur-sm border-l border-white/50">
-                  <span className="text-white text-sans-16 font-600 tracking-widest">{dateBlock.year}</span>
-                  <span className="text-white text-sans-10 font-600 tracking-widest mt-1">{dateBlock.time}</span>
+                  <span className="text-white text-sans-35 font-600 tracking-widest mt-1">{dateBlock.time}</span>
                 </div>
               </div>
             )}
           </div>
-        </div>
-
-        {/* ── Mobile banner bar — event name + date prominently displayed ── */}
+          {/* ── Mobile banner bar — event name + date prominently displayed ── */}
         <div className="md:hidden bg-white text-black">
-          {/* Event name */}
-          <div className="px-4 pt-5 pb-4 border- border-solid border-black">
-            <h1 className="text-sans-28 font-700 uppercase leading-[1.05] text-balance">
-              {event.name}
-            </h1>
-          </div>
-
-          {/* Date + venue row */}
-          {dateBlock && (
-            <div className="flex items-stretch">
-              {/* Day block */}
-              <div className="flex flex-col items-center justify-center bg-white text-black px-5 py-4 shrink-0 min-w-[72px] border-r border-solid border-black">
-                <span className="text-sans-35 font-700 leading-none">{dateBlock.day}</span>
-                <span className="text-sans-10 font-700 tracking-widest mt-0.5 uppercase">{dateBlock.month}</span>
-                <span className="text-sans-10 font-600 tracking-widest opacity-70">{dateBlock.year}</span>
-              </div>
-
-              {/* Time + venue */}
-              <div className="flex flex-col justify-center px-4 py-4 gap-1.5 min-w-0">
-                <div className="flex items-center gap-2">
-                  <span className="text-sans-10 font-600 uppercase tracking-widest opacity-50 shrink-0">Tid</span>
-                  <span className="text-sans-14 font-700 uppercase">{dateBlock.time}</span>
-                </div>
-                {venue?.name && (
-                  <div className="flex items-center gap-2">
-                    <span className="text-sans-10 font-600 uppercase tracking-widest opacity-50 shrink-0">Plats</span>
-                    <span className="text-sans-14 font-700 uppercase truncate">{[venue.name, venue.City].filter(Boolean).join(', ')}</span>
-                  </div>
-                )}
-              </div>
-
-              {/* Back link */}
-              <Link
-                href="/event"
-                className="hidden xs:flex flex-col items-center justify-center px-4 border-l border-white/10 text-white text-sans-18 font-700 shrink-0 min-w-[52px] min-h-[44px]"
-                aria-label="Alla event"
-              >
-                ←
-              </Link>
+          <div className="max-w-4xl mx-auto">
+            {/* Event name */}
+            <div className="px-6 py-5 border-b border-solid border-black">
+              <h1 className="text-sans-28 font-700 uppercase leading-[1.05] text-balance">
+                {event.name}
+              </h1>
             </div>
-          )}
-
-          {/* Mobile ticket CTA */}
-          {tickets && !isPast && (
-            <div className="px-4 py-4 border-t border-white/10">
-              <Link
-                href={tickets}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center justify-center gap-2 w-full bg-white text-black text-sans-14 font-700 uppercase tracking-widest px-6 py-4 min-h-[52px] hover:opacity-90 transition-opacity"
-              >
-                <span aria-hidden="true">■</span>
-                Köp biljetter
-              </Link>
-            </div>
-          )}
-        </div>
-
-        {/* ── Desktop info bar ─────────────────────────────────────────────── */}
-        <div className="hidden md:flex flex-wrap items-center justify-between gap-3 px-6 py-3 lg:px-8 lg:py-4 bg-black text-white uppercase">
-          <div className="flex flex-wrap items-center gap-4 lg:gap-8">
-            {event.date && (
-              <span className="text-sans-12 lg:text-sans-14 font-600 tracking-wide capitalize">
-                {formatLongDate(event.date)} — {formatTime(event.date)}
-              </span>
-            )}
-            {venue?.name && (
-              <span className="text-sans-12 lg:text-sans-14 font-600 tracking-wide opacity-60">
-                {[venue.name, venue.City].filter(Boolean).join(', ')}
-              </span>
-            )}
           </div>
-          <Link
-            href="/event"
-            className="text-sans-12 font-600 tracking-widest text-white hover:italic transition-all min-h-[44px] flex items-center"
-          >
-            ← Alla event
-          </Link>
         </div>
-      </div>
+        <div className="absolute inset-0 z-10 flex flex-col justify-end bg-gradient-to-t from-transparent to-gray-950/50 p-5">
+              <div className="absolute top-4 left-4 z-10 flex flex-col items-start gap-1">
+                <nav aria-label="Breadcrumb" className="mb-4 bg-white px-2 py-1">
+                  <ol className="flex items-center gap-2 text-black text-sm">
+                  <li>
+                    <Link href="/" className="hover:text-white transition-colors">Hem</Link>
+                  </li>
+                  <li aria-hidden="true">/</li>
+                  <li>
+                    <Link href="/event" className="hover:text-white transition-colors">Event</Link>
+                  </li>
+                  <li aria-hidden="true">/</li>
+                  <li aria-current="page" className="text-black">{event.name}</li>
+                  </ol>
+                </nav>
+              </div>
+            </div>
+      </header>
 
-      {/* ── Content below banner ───────────────────────────────────────────── */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-px">
-
-        {/* Left column: description */}
-        <div className="lg:col-span-7 grid-col-border">
-
-          {/* Description */}
-          {event.details && (
-            <div className="px-3 py-5 sm:px-4 sm:py-6 lg:px-8 lg:py-10 border-b border-black border-solid">
-              <p className="text-sans-11 sm:text-sans-12 font-600 uppercase tracking-widest opacity-50 mb-3 sm:mb-4">Om eventet</p>
-              <div className="prose prose-sm lg:prose-base max-w-none text-sans-14 sm:text-sans-16 leading-relaxed rich-text">
+      {/* Two-column content area */}
+      <div className="px-2 lg:px-5 py-8 md:py-12 lg:py-16">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12">
+          
+          {/* Left column - Main content */}
+          <section className="lg:col-span-7 xl:col-span-8 border border-black border-solid p-6 md:p-8">
+            <h2 className="sr-only">Om eventet</h2>
+            <p className="text-sans-11 sm:text-sans-12 font-600 uppercase tracking-widest opacity-50 mb-3 sm:mb-4">Om eventet</p>
+            
+            {/* Short description highlight */}
+            {shortDescription && (
+              <p className="text-xl md:text-2xl text-neutral-700 font-500 leading-relaxed mb-8 text-balance">
+                {shortDescription}
+              </p>
+            )}
+            
+            {event.details && (
+              <div className="prose prose-lg max-w-none leading-relaxed">
                 <PortableText value={event.details} />
               </div>
-            </div>
-          )}
+            )}
+            
+            {!event.details && !shortDescription && (
+              <p className="text-neutral-600 text-lg">
+                Mer information kommer snart.
+              </p>
+            )}
 
-          {/* Tickets CTA block (tablet/desktop only) */}
-          {tickets && !isPast && (
-            <div className="hidden sm:block px-4 py-6 lg:px-8 lg:py-8 border-b border-black border-solid">
-              <Link
-                href={tickets}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="button button-secondary-vividGreen inline-flex items-center gap-3 px-6 py-4 text-sans-14 font-600 uppercase tracking-widest min-h-[52px]"
+            {/* Image Gallery */}
+            {gallery && gallery.length > 0 && (
+              <div className="mt-12">
+                <h3 className="text-sans-22 font-600 mb-6 uppercase tracking-wide">Galleri</h3>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  {gallery.map((img, index) => (
+                    <figure key={index} className="relative aspect-video overflow-hidden bg-neutral-100">
+                      <Image
+                        src={urlFor(img.asset).width(800).height(450).url()}
+                        alt={img.alt || `Bild ${index + 1} från ${event.name}`}
+                        fill
+                        className="object-cover"
+                        sizes="(max-width: 640px) 100vw, 50vw"
+                      />
+                      {img.caption && (
+                        <figcaption className="absolute bottom-0 left-0 right-0 bg-black/60 text-white text-sm p-2">
+                          {img.caption}
+                        </figcaption>
+                      )}
+                    </figure>
+                  ))}
+                </div>
+              </div>
+            )}
+          </section>
+
+          {/* Right column - Event details sidebar */}
+          <aside className="lg:col-span-5 xl:col-span-4">
+            <div className="sticky top-24 space-y-6">
+              {/* Event info card */}
+              <div className="border border-black border-solid p-6 md:p-8">
+                <h2 className="text-sans-22 font-600 mb-6 uppercase tracking-wide">Eventinfo</h2>
+                
+                <dl className="space-y-4">
+                  {/* Date */}
+                  {formattedDate && (
+                    <div className="flex flex-col">
+                      <dt className="text-sm text-neutral-500 uppercase tracking-wide mb-1">Datum</dt>
+                      <dd className="text-lg font-600 capitalize">
+                        <time dateTime={event.date}>{formattedDate}</time>
+                      </dd>
+                    </div>
+                  )}
+
+                  {/* Time */}
+                  {formattedTime && (
+                    <div className="flex flex-col">
+                      <dt className="text-sm text-neutral-500 uppercase tracking-wide mb-1">Tid</dt>
+                      <dd className="text-lg font-600">{formattedTime}</dd>
+                      {doorsOpen && (
+                        <dd className="text-sm text-neutral-600 mt-1">Dörrar öppnar {doorsOpen} min innan</dd>
+                      )}
+                    </div>
+                  )}
+
+                  {/* Venue */}
+                  {venue?.name && (
+                    <div className="flex flex-col">
+                      <dt className="text-sm text-neutral-500 uppercase tracking-wide mb-1">Plats</dt>
+                      <dd className="text-lg font-600">{venue.name}</dd>
+                      {venue.address && (
+                        <dd className="text-sm text-neutral-600 mt-1">{venue.address}</dd>
+                      )}
+                    </div>
+                  )}
+
+                  {/* Event Category */}
+                  {eventCategory && (
+                    <div className="flex flex-col">
+                      <dt className="text-sm text-neutral-500 uppercase tracking-wide mb-1">Typ</dt>
+                      <dd className="text-lg font-600 capitalize">{eventCategory.replace('-', ' ')}</dd>
+                    </div>
+                  )}
+
+                  {/* Age Restriction */}
+                  {ageRestriction && (
+                    <div className="flex flex-col">
+                      <dt className="text-sm text-neutral-500 uppercase tracking-wide mb-1">Åldersgräns</dt>
+                      <dd className="text-lg font-600">{ageRestriction === 'all-ages' ? 'Alla åldrar' : ageRestriction === 'family' ? 'Familjevänligt' : ageRestriction}</dd>
+                    </div>
+                  )}
+
+                  {/* Headline artist */}
+                  {event.headline?.name && (
+                    <div className="flex flex-col">
+                      <dt className="text-sm text-neutral-500 uppercase tracking-wide mb-1">Huvudartist</dt>
+                      <dd className="text-lg font-600">
+                        {event.headline.slug?.current ? (
+                          <Link href={`/artists/${event.headline.slug.current}`} className="hover:underline">
+                            {event.headline.name}
+                          </Link>
+                        ) : (
+                          event.headline.name
+                        )}
+                      </dd>
+                    </div>
+                  )}
+
+                  {/* Additional lineup */}
+                  {lineup && lineup.length > 0 && (
+                    <div className="flex flex-col">
+                      <dt className="text-sm text-neutral-500 uppercase tracking-wide mb-1">Lineup</dt>
+                      <dd className="text-lg font-600">
+                        {lineup.map((artist, index) => (
+                          <span key={artist.slug?.current || index}>
+                            {artist.slug?.current ? (
+                              <Link href={`/artists/${artist.slug.current}`} className="hover:underline">
+                                {artist.name}
+                              </Link>
+                            ) : (
+                              artist.name
+                            )}
+                            {index < lineup.length - 1 && ', '}
+                          </span>
+                        ))}
+                      </dd>
+                    </div>
+                  )}
+
+                  {/* Special guests */}
+                  {specialGuests && (
+                    <div className="flex flex-col">
+                      <dt className="text-sm text-neutral-500 uppercase tracking-wide mb-1">Special guests</dt>
+                      <dd className="text-lg font-600">{specialGuests}</dd>
+                    </div>
+                  )}
+
+                  {/* Ticket Price */}
+                  {ticketPrice && (
+                    <div className="flex flex-col">
+                      <dt className="text-sm text-neutral-500 uppercase tracking-wide mb-1">Pris</dt>
+                      <dd className="text-lg font-600">{ticketPrice}</dd>
+                    </div>
+                  )}
+                  {tickets && (
+                 <div className="flex flex-col">
+                      <dt className="text-sm text-neutral-500 uppercase tracking-wide mb-1">Biljetter</dt>
+                      <dd className="text-lg font-600">
+                        <Link 
+                          href={tickets} 
+                          target="_blank" 
+                          rel="noopener noreferrer"
+                          className="hover:italic"
+                        >
+                          Tickster
+                        </Link>
+                    </dd>
+                    </div>
+                    )}
+
+                </dl>
+              </div>
+
+              {/* Share section */}
+              <div className="border border-black border-solid p-6 md:p-8">
+                <h2 className="text-sans-18 font-600 mb-4 uppercase tracking-wide">Dela event</h2>
+                <div className="flex gap-3">
+                  <Link
+                    href={`https://www.facebook.com/sharer/sharer.php?u=https://kkrecords.se/event/${event.slug.current}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center justify-center w-10 h-10 bg-black text-white hover:bg-neutral-800 transition-colors"
+                    aria-label="Dela på Facebook"
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                      <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                    </svg>
+                  </Link>
+                  <Link
+                    href={`https://twitter.com/intent/tweet?url=https://kkrecords.se/event/${event.slug.current}&text=${encodeURIComponent(event.name)}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center justify-center w-10 h-10 bg-black text-white hover:bg-neutral-800 transition-colors"
+                    aria-label="Dela på X (Twitter)"
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                      <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+                    </svg>
+                  </Link>
+                  <Link
+                    href={`mailto:?subject=${encodeURIComponent(event.name)}&body=${encodeURIComponent(`Kolla in detta event: https://kkrecords.se/event/${event.slug.current}`)}`}
+                    className="flex items-center justify-center w-10 h-10 bg-black text-white hover:bg-neutral-800 transition-colors"
+                    aria-label="Dela via e-post"
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                      <rect width="20" height="16" x="2" y="4" rx="2"/>
+                      <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
+                    </svg>
+                  </Link>
+                </div>
+              </div>
+
+              {/* Back to events link */}
+              <Link 
+                href="/event" 
+                className="inline-flex items-center gap-2 text-sm uppercase tracking-wide hover:underline"
               >
-                <span aria-hidden="true">■</span>
-                Köp biljetter
+                <svg 
+                  xmlns="http://www.w3.org/2000/svg" 
+                  width="16" 
+                  height="16" 
+                  viewBox="0 0 24 24" 
+                  fill="none" 
+                  stroke="currentColor" 
+                  strokeWidth="2" 
+                  strokeLinecap="round" 
+                  strokeLinejoin="round"
+                  aria-hidden="true"
+                >
+                  <path d="m15 18-6-6 6-6"/>
+                </svg>
+                <span>Tillbaka till alla event</span>
               </Link>
             </div>
-          )}
-        </div>
-
-        {/* Right column: event metadata */}
-        <div className="lg:col-span-5 grid-col-border">
-          <div className="px-3 py-5 sm:px-4 sm:py-6 lg:px-8 lg:py-10">
-            <p className="text-sans-11 sm:text-sans-12 font-600 uppercase tracking-widest opacity-50 mb-4 sm:mb-6">Eventinformation</p>
-
-            <div className="flex flex-col">
-              {event.date && (
-                <MetaRow
-                  label="Datum"
-                  value={
-                    <span className="capitalize">{formatLongDate(event.date)}</span>
-                  }
-                />
-              )}
-              {event.date && (
-                <MetaRow label="Tid" value={formatTime(event.date)} />
-              )}
-              {event.doorsOpen !== undefined && event.doorsOpen !== null && event.date && (
-                <MetaRow
-                  label="Dörrar öppnar"
-                  value={(() => {
-                    const d = new Date(event.date)
-                    d.setMinutes(d.getMinutes() - event.doorsOpen!)
-                    return d.toLocaleTimeString('sv-SE', { hour: '2-digit', minute: '2-digit' })
-                  })()}
-                />
-              )}
-              {venue?.name && (
-                <MetaRow label="Plats" value={venue.name} />
-              )}
-              {(venue?.City || venue?.Country) && (
-                <MetaRow
-                  label="Stad"
-                  value={[venue.City, venue.Country].filter(Boolean).join(', ')}
-                />
-              )}
-              {event.headline?.name && (
-                <MetaRow label="Headliner" value={event.headline.name} />
-              )}
-              {event.eventType && (
-                <MetaRow
-                  label="Typ"
-                  value={event.eventType === 'virtual' ? 'Online' : 'Live'}
-                />
-              )}
-              {tickets && (
-                <MetaRow
-                  label="Biljetter"
-                  value={
-                    <Link
-                      href={tickets}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="hover:italic transition-all underline underline-offset-2"
-                    >
-                      {isPast ? 'Arkivlänk' : 'Köp här →'}
-                    </Link>
-                  }
-                />
-              )}
-            </div>
-          </div>
+          </aside>
         </div>
       </div>
-
-      {/* ── Previous Events Section ────────────────────────────────────────── */}
-      {previousEvents && previousEvents.length > 0 && (
-        <section className="px-3 sm:px-4 lg:px-8 py-8 sm:py-12 lg:py-16 border-t border-black border-solid bg-gray-50">
-          <h2 className="text-sans-22 sm:text-sans-35 lg:text-sans-60 font-600 uppercase mb-5 sm:mb-8 pb-3 sm:pb-4 border-b border-black">
-            Tidigare event
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-px border border-black border-solid">
-            {previousEvents.map((prevEvent) => (
-              <PreviousEventCard key={prevEvent._id} event={prevEvent} />
-            ))}
-          </div>
-          <div className="mt-6 sm:mt-8 flex justify-center">
-            <Link
-              href="/event"
-              className="inline-flex items-center justify-center gap-2 px-6 sm:px-8 py-4 border border-black font-600 uppercase tracking-widest text-sans-12 sm:text-sans-14 hover:bg-black hover:text-white transition-colors w-full sm:w-auto min-h-[52px]"
-            >
-              Se alla event
-            </Link>
-          </div>
-        </section>
-      )}
-    </main>
-  )
+    </article>
+  ) 
+  } catch (error) {
+    console.error('[v0] Error rendering event page:', error)
+    notFound()
+  }
 }
