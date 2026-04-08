@@ -79,6 +79,17 @@ export const eventType = defineType({
       name: 'tickets',
       type: 'url',
     }),
+    defineField({
+      name: 'artist',
+      type: 'string',
+      description: 'The main artist performing at this event',
+    }),
+    defineField({
+      name: 'headliner',
+      type: 'reference',
+      to: [{type: 'förening'}],
+      description: 'Reference to the featured artist/förening',
+    }),
   ],
 
 preview: {

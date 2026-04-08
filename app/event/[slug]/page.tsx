@@ -53,6 +53,8 @@ interface Event {
   lineup?: Headline[]
   specialGuests?: string
   doorsOpen?: number
+  artist?: string
+  headliner?: Headline
 }
 
 // Helper function to convert Portable Text to plain text for meta descriptions
@@ -89,6 +91,8 @@ async function getEvent(slug: string): Promise<Event | null> {
     doorsOpen,
     shortDescription,
     specialGuests,
+    artist,
+    "headliner": headliner->{name, slug},
     "lineup": lineup[]->{name, slug},
     "gallery": gallery[]{
       asset,
@@ -159,7 +163,7 @@ export default async function EventPage({ params }: { params: Promise<{ slug: st
       notFound()
     }
 
-  const { venue, tickets, ticketPrice, eventCategory, ageRestriction, lineup, specialGuests, gallery, shortDescription, doorsOpen } = event
+  const { venue, tickets, ticketPrice, eventCategory, ageRestriction, lineup, specialGuests, gallery, shortDescription, doorsOpen, artist, headliner } = event
 
   const plainTextDescription = shortDescription || (event.details ? portableTextToPlainText(event.details) : "")
 
@@ -434,6 +438,30 @@ export default async function EventPage({ params }: { params: Promise<{ slug: st
                     <div className="flex flex-col">
                       <dt className="text-sm text-neutral-500 uppercase tracking-wide mb-1">Typ</dt>
                       <dd className="text-lg font-600 capitalize">{eventCategory.replace('-', ' ')}</dd>
+                    </div>
+                  )}
+
+                  {/* Artist */}
+                  {artist && (
+                    <div className="flex flex-col border-t border-neutral-200 pt-4">
+                      <dt className="text-sm text-neutral-500 uppercase tracking-wide mb-1">Artist</dt>
+                      <dd className="text-lg font-600">{artist}</dd>
+                    </div>
+                  )}
+
+                  {/* Headliner */}
+                  {headliner?.name && (
+                    <div className="flex flex-col">
+                      <dt className="text-sm text-neutral-500 uppercase tracking-wide mb-1">Huvudartist</dt>
+                      <dd className="text-lg font-600">
+                        {headliner.slug?.current ? (
+                          <Link href={`/om-oss/vara-foreningar/${headliner.slug.current}`} className="hover:underline">
+                            {headliner.name}
+                          </Link>
+                        ) : (
+                          headliner.name
+                        )}
+                      </dd>
                     </div>
                   )}
 
