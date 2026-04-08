@@ -4836,7 +4836,6 @@ select {
 *:focus:not(:focus-visible) {
   outline: none;
 }
-}
 
 @keyframes noise {
   0% {
