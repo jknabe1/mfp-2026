@@ -204,7 +204,7 @@ export default async function AboutArticle({ params }: { params: Promise<{ slug:
               </div>
 
               {/* Overlay content */}
-              <div className="absolute inset-0 flex flex-col justify-end p-6 md:p-8 lg:p-12">
+              <div className="absolute inset-0 flex flex-col justify-end px-2 py-3 lg:px-5">
                 <div className="max-w-4xl">
                   {/* Headline */}
                   <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-tight mb-6 text-balance">

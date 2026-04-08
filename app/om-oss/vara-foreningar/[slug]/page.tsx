@@ -6,6 +6,7 @@ import Link from "next/link"
 import { notFound } from "next/navigation"
 import type { SanityImageSource } from "@sanity/image-url/lib/types/types"
 import type { Metadata } from 'next'
+import ShareButtons from "@/components/Share/ShareButtons"
 
 const builder = imageUrlBuilder(client)
 
@@ -117,97 +118,94 @@ export default async function ForeningPage({
     notFound()
   }
 
+  const formattedDate = new Date().toLocaleDateString('sv-SE', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric'
+  })
+
   return (
-    <main className="min-h-screen bg-background">
-      {/* Hero Section with Image */}
-      {forening.Bild && (
-        <div className="relative w-full h-[40vh] md:h-[50vh] overflow-hidden">
-          <Image
-            src={urlFor(forening.Bild).width(1920).height(1080).auto('format').quality(85).url()}
-            alt={forening.Namn}
-            fill
-            priority
-            className="object-cover"
-            sizes="100vw"
-            quality={85}
-          />
-          <div className="absolute inset-0 bg-black/30" />
-        </div>
-      )}
-
-      {/* Content Section */}
-      <div className="container mx-auto px-4 py-12 md:py-16 lg:py-20 max-w-4xl">
-        {/* Breadcrumb */}
-        <nav className="mb-8 text-sm text-muted-foreground" aria-label="Breadcrumb">
-          <ol className="flex items-center gap-2">
-            <li>
-              <Link href="/" className="hover:text-foreground transition-colors">
-                Hem
-              </Link>
-            </li>
-            <li>/</li>
-            <li>
-              <Link href="/om-oss" className="hover:text-foreground transition-colors">
-                Om oss
-              </Link>
-            </li>
-            <li>/</li>
-            <li>
-              <Link href="/om-oss/vara-foreningar" className="hover:text-foreground transition-colors">
-                Vara foreningar
-              </Link>
-            </li>
-            <li>/</li>
-            <li className="text-foreground">{forening.Namn}</li>
-          </ol>
-        </nav>
-
-        {/* Title */}
-        <h1 className="text-4xl md:text-5xl font-bold mb-6 text-balance">
-          {forening.Namn}
-        </h1>
-
-        {/* Description */}
-        {forening.Beskrivning && (
-          <div className="prose prose-lg dark:prose-invert max-w-none mb-12">
-            <PortableText value={forening.Beskrivning} />
-          </div>
-        )}
-
-        {/* Related Foreningar */}
-        {relatedForeningar.length > 0 && (
-          <section className="mt-16 pt-16 border-t">
-            <h2 className="text-2xl md:text-3xl font-bold mb-8">Andra foreningar</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {relatedForeningar.map((related) => (
-                <Link
-                  key={related._id}
-                  href={`/om-oss/vara-foreningar/${related.URL.current}`}
-                  className="group overflow-hidden rounded-lg border bg-card hover:bg-accent transition-colors"
-                >
-                  {related.Bild && (
-                    <div className="relative aspect-square overflow-hidden">
-                      <Image
-                        src={urlFor(related.Bild).width(400).height(400).auto('format').quality(80).url()}
-                        alt={related.Namn}
-                        fill
-                        className="object-cover group-hover:scale-105 transition-transform duration-300"
-                        quality={80}
-                        sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                      />
-                    </div>
-                  )}
-                  <div className="p-4">
-                    <h3 className="font-semibold group-hover:text-accent-foreground transition-colors">
-                      {related.Namn}
-                    </h3>
-                  </div>
-                </Link>
-              ))}
+    <main className="relative">
+      <article className="relative">
+        {/* Hero Section with Featured Image */}
+        <header className="relative overflow-hidden bg-neutral-900">
+          <div className="relative w-full aspect-video lg:aspect-[2/1]">
+            {forening.Bild ? (
+              <>
+                <Image
+                  alt={forening.Namn}
+                  src={urlFor(forening.Bild).width(1920).height(960).url()}
+                  fill
+                  className="object-cover w-full h-full"
+                  priority
+                  quality={85}
+                />
+                {/* Gradient overlay for text readability */}
+                <div className="absolute inset-0 bg-gradient-to-t from-neutral-900 via-transparent to-transparent" />
+              </>
+            ) : (
+              <div className="absolute inset-0 bg-neutral-800" />
+            )}
+            
+            {/* Breadcrumb */}
+            <div className="absolute top-4 left-4 z-10 flex flex-col items-start gap-1">
+              <nav aria-label="Breadcrumb" className="mb-4 bg-white px-2 py-1">
+                <ol className="flex items-center gap-2 text-black text-sm">
+                  <li>
+                    <Link href="/" className="hover:italic transition-colors">Hem</Link>
+                  </li>
+                  <li aria-hidden="true">/</li>
+                  <li>
+                    <Link href="/om-oss" className="hover:italic transition-colors">Om oss</Link>
+                  </li>
+                  <li aria-hidden="true">/</li>
+                  <li aria-current="page" className="text-black">{forening.Namn}</li>
+                </ol>
+              </nav>
             </div>
-          </section>
-        )}
-      </div>
+
+            {/* Overlay content */}
+            <div className="absolute inset-0 flex flex-col justify-end px-2 py-3 lg:px-5">
+              <div className="max-w-4xl">
+                {/* Headline */}
+                <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-tight mb-6 text-balance">
+                  {forening.Namn}
+                </h1>
+              </div>
+            </div>
+          </div>
+        </header>
+
+        {/* Article Content */}
+        <section className="px-2 lg:px-5 py-8 md:py-12 lg:py-16">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12">
+            
+            {/* Left column - Main content */}
+            <div className="lg:col-span-7 xl:col-span-8">
+              {/* Main content */}
+              {forening.Beskrivning && (
+                <div className="prose prose-lg max-w-none prose-headings:font-bold prose-headings:text-neutral-900 prose-p:text-neutral-700 prose-p:leading-relaxed hover:prose-a:italic hover:prose-a:underline prose-strong:font-bold prose-strong:text-neutral-900 prose-em:text-neutral-600 border-black border border-solid p-6 md:p-8">
+                  <PortableText value={forening.Beskrivning} />
+                </div>
+              )}
+            </div>
+
+            {/* Right column - Share sidebar */}
+            <aside className="lg:col-span-5 xl:col-span-4">
+              <div className="sticky top-24">
+                {/* Share Section */}
+                <div>
+                  <ShareButtons 
+                    title={forening.Namn}
+                    url={`https://musicforpennies.se/om-oss/vara-foreningar/${forening.URL.current}`}
+                    variant="dark"
+                  />
+                </div>
+              </div>
+            </aside>
+          </div>
+        </section>          
+      </article>
     </main>
   )
 }
