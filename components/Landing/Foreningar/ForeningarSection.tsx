@@ -127,7 +127,7 @@ export default function ForeningarSection() {
                     className="h-full w-full object-cover border border-solid border-black transition-transform duration-500 group-hover:scale-105"
                   />
                   <div className="absolute inset-0 z-10 flex flex-col justify-end bg-gradient-to-t from-transparent to-gray-950/50 p-5">
-                    <div className="absolute bottom-4 left-4 z-10 flex flex-col items-start gap-1">
+                    <div className="absolute top-4 left-4 z-10 flex flex-col items-start gap-1">
                       <div className="bg-white text-black text-sm px-2 py-1 inline-block">{artist.Namn}</div>  {/* Changed from name to Namn */}
                     </div>
                   </div>
@@ -158,7 +158,7 @@ export default function ForeningarSection() {
                       className="h-full w-full object-cover border border-solid border-black transition-transform duration-500 group-hover:scale-105"
                     />
                     <div className="absolute inset-0 z-10 flex flex-col justify-end bg-gradient-to-b from-transparent to-gray-950/50 p-5">
-                      <div className="absolute bottom-4 left-4 z-10 flex flex-col items-start gap-1">
+                      <div className="absolute top-4 left-4 z-10 flex flex-col items-start gap-1">
                       <div className="bg-white text-black text-sm px-2 py-1 inline-block">{artist.Namn}</div>  {/* Changed from name to Namn */}
                       </div>
                     </div>
