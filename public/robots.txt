@@ -1,0 +1,19 @@
+# robots.txt for Music For Pennies
+User-agent: *
+Allow: /
+Disallow: /admin
+Disallow: /api/
+Disallow: /backstage
+
+# Specific rules for search engines
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+# Crawl delay (optional, in seconds)
+Crawl-delay: 1
+
+# Sitemap location
+Sitemap: https://musicforpennies.se/sitemap.xml

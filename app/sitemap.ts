@@ -3,16 +3,18 @@ import { MetadataRoute } from "next";
 
 // ✅ Define static pages manually
 const staticPages = [
-  "",
-  "om-oss",
-  "kontakta-oss",
-  "repan",
-  "artists",
-  "events",
-  "edits",
-].map((path) => ({
-  url: `https://musicforpennies.se/${path}`,
-  lastModified: new Date().toISOString(),
+  { path: "", priority: 1, changefreq: 'daily' as const },
+  { path: "om-oss", priority: 0.9, changefreq: 'weekly' as const },
+  { path: "om-oss/kontakta-oss", priority: 0.8, changefreq: 'monthly' as const },
+  { path: "arrangemang", priority: 0.9, changefreq: 'daily' as const },
+  { path: "event", priority: 0.9, changefreq: 'daily' as const },
+  { path: "edits", priority: 0.8, changefreq: 'weekly' as const },
+  { path: "repan", priority: 0.7, changefreq: 'monthly' as const },
+].map((page) => ({
+  url: `https://musicforpennies.se/${page.path}`,
+  lastModified: new Date(),
+  changeFrequency: page.changefreq,
+  priority: page.priority,
 }));
 
 // ✅ Fetch dynamic pages from Sanity
@@ -30,17 +32,23 @@ async function fetchDynamicRoutes() {
   // Convert Sanity data to sitemap format
   const artistRoutes = artists.map(({ slug }) => ({
     url: `https://musicforpennies.se/forening/${slug.current}`,
-    lastModified: new Date().toISOString(),
+    lastModified: new Date(),
+    changeFrequency: 'monthly' as const,
+    priority: 0.7,
   }));
 
   const newsRoutes = news.map(({ slug }) => ({
     url: `https://musicforpennies.se/edits/${slug.current}`,
-    lastModified: new Date().toISOString(),
+    lastModified: new Date(),
+    changeFrequency: 'never' as const,
+    priority: 0.6,
   }));
 
   const eventRoutes = events.map(({ slug }) => ({
     url: `https://musicforpennies.se/event/${slug.current}`,
-    lastModified: new Date().toISOString(),
+    lastModified: new Date(),
+    changeFrequency: 'weekly' as const,
+    priority: 0.8,
   }));
 
   return [...artistRoutes, ...newsRoutes, ...eventRoutes];

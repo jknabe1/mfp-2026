@@ -5,32 +5,38 @@ import Image from "next/image";
 
 // ✅ **Static Metadata for SEO**
 export const metadata: Metadata = {
-  title: "Om Oss",
+  title: "Om Music For Pennies - Musikproduktion och Artiststöd",
   description:
-    "Music For Pennies är en ledande aktör inom live- och underhållningsindustrin i Sverige och Europa. Vi representerar artister, producerar konserter, festivaler och musikaler.",
+    "Music For Pennies är en musikproducent och arrangör från Örebro. Vi representerar och stödjer artister, producerar konserter, festivaler och musikproduktioner.",
+  keywords: ['musikproduktion', 'skivbolag', 'artiststöd', 'evenemang', 'Örebro'],
+  alternates: {
+    canonical: "https://musicforpennies.se/om-oss",
+  },
   openGraph: {
-    title: "Om Music For Pennies - Mer än ett skivbolag",
+    title: "Om Music For Pennies - Musikproduktion och Artiststöd",
     description:
-      "Music For Pennies är en ledande aktör inom live- och underhållningsindustrin i Sverige och Europa. Vi representerar artister, producerar konserter, festivaler och musikaler.",
+      "Music For Pennies är en musikproducent från Örebro. Vi representerar artister, producerar konserter, festivaler och erbjuder artiststöd.",
     url: "https://musicforpennies.se/om-oss",
     siteName: "Music For Pennies",
+    locale: 'sv_SE',
+    type: "website",
     images: [
       {
-        url: "https://musicforpennies.se/api",
+        url: "https://images.unsplash.com/photo-1675099349521-58098de867d3?q=80&w=1200&auto=format&fit=crop",
         width: 1200,
         height: 800,
-        alt: "Music For Pennies - Om oss",
+        alt: "Music For Pennies - Musikproduktion och evenemang",
+        type: 'image/jpeg',
       },
     ],
-    type: "website",
   },
   twitter: {
     card: "summary_large_image",
     title: "Om Music For Pennies",
     description:
-      "Music For Pennies är en ledande aktör inom live- och underhållningsindustrin i Sverige och Europa. Vi representerar artister, producerar konserter, festivaler och musikaler.",
+      "Lär dig mer om Music For Pennies och vår musikproduktion, artiststöd och evenemang.",
     images: [
-      "https://musicforpennies.se/api",
+      "https://images.unsplash.com/photo-1675099349521-58098de867d3?q=80&w=1200&auto=format&fit=crop",
     ],
   },
 };
@@ -100,8 +106,10 @@ export default function Page() {
                                 height={1080}
                                 loading="lazy" 
                                 className="noise object-cover object-center w-full h-full" 
-                                src="https://images.unsplash.com/photo-1675099349521-58098de867d3?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" 
-                                alt="A coiled black power cord with a two-prong plug against a light background."/>
+                                src="https://images.unsplash.com/photo-1675099349521-58098de867d3?q=80&w=1080&auto=format&fit=crop" 
+                                alt="Music For Pennies studio och musikproduktion"
+                                quality={80}
+                                />
                         </div>
                     </div>
                     <div className="col-span-12 bg-pink-100 py-8 border-black border-solid border-b">

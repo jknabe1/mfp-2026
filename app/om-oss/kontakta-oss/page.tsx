@@ -6,28 +6,34 @@ import Image from 'next/image';
 
 // ✅ Static Metadata
 export const metadata: Metadata = {
-  title: "Kontakta oss",
+  title: "Kontakta Music For Pennies - Email och Kontaktuppgifter",
   description: "Kontakta oss på Music For Pennies. Här hittar du kontaktuppgifter till föreningen, press, ekonomi, och våra medarbetare.",
+  keywords: ['kontakt', 'email', 'telefon', 'Music For Pennies'],
+  alternates: {
+    canonical: "https://musicforpennies.se/om-oss/kontakta-oss",
+  },
   openGraph: {
     title: "Kontakta oss - Music For Pennies",
-    description: "Behöver du nå oss? Här hittar du kontaktuppgifter till Music For Pennies.",
+    description: "Behöver du nå oss? Här hittar du kontaktuppgifter till Music For Pennies och våra medarbetare.",
     url: "https://musicforpennies.se/om-oss/kontakta-oss",
     siteName: "Music For Pennies",
+    locale: 'sv_SE',
+    type: "website",
     images: [
       {
-        url: "https://musicforpennies.se/api",
+        url: "https://images.unsplash.com/photo-1659455741342-c623b151a62b?q=80&w=1200&auto=format&fit=crop",
         width: 1200,
         height: 800,
-        alt: "Music For Pennies Kontakt",
+        alt: "Music For Pennies studio och kontakt",
+        type: 'image/jpeg',
       },
     ],
-    type: "website",
   },
   twitter: {
     card: "summary_large_image",
     title: "Kontakta oss - Music For Pennies",
-    description: "Behöver du nå oss? Här hittar du kontaktuppgifter till Music For Pennies.",
-    images: ["https://musicforpennies.se/api"],
+    description: "Kontaktuppgifter till Music For Pennies och vår team.",
+    images: ["https://images.unsplash.com/photo-1659455741342-c623b151a62b?q=80&w=1200&auto=format&fit=crop"],
   },
 };
 
@@ -133,8 +139,10 @@ export default function page() {
                                 width={1080}
                                 height={1080}
                                 sizes="100vw" 
-                                src="https://images.unsplash.com/photo-1659455741342-c623b151a62b?q=80&w=1936&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" 
-                                alt="Guitar collection"/>
+                                src="https://images.unsplash.com/photo-1659455741342-c623b151a62b?q=80&w=1080&auto=format&fit=crop" 
+                                alt="Guitar collection och musikutrustning från Music For Pennies"
+                                quality={80}
+                                />
                         </div>
                 </div>
             </div>

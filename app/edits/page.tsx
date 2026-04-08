@@ -23,28 +23,34 @@ interface News {
 export const revalidate = 30;
 
 export const metadata: Metadata = {
-  title: 'Edits',
-  description: 'Senaste nyheterna från Music For Pennies. Håll dig uppdaterad med pressmeddelanden, evenemang och nyheter.',
+  title: 'Edits - Nyheter och Press från Music For Pennies',
+  description: 'Senaste nyheterna från Music For Pennies. Håll dig uppdaterad med pressmeddelanden, evenemang och nyheter om musikproduktion och artistsamarbeten.',
+  keywords: ['nyheter', 'press', 'edits', 'musiknyheter', 'Music For Pennies'],
+  alternates: {
+    canonical: 'https://musicforpennies.se/edits',
+  },
   openGraph: {
-    title: 'Edits - Music For Pennies',
-    description: 'Senaste nyheterna från Music For Pennies.',
+    title: 'Edits - Nyheter från Music For Pennies',
+    description: 'Senaste nyheterna från Music For Pennies. Pressmeddelanden och uppdateringar.',
     url: 'https://musicforpennies.se/edits',
     siteName: 'Music For Pennies',
+    locale: 'sv_SE',
+    type: 'website',
     images: [
       {
-        url: 'https://musicforpennies.se/api', // Replace with a valid image
+        url: 'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?q=80&w=1200&auto=format&fit=crop',
         width: 1200,
         height: 630,
         alt: 'Nyheter - Music For Pennies',
+        type: 'image/jpeg',
       },
     ],
-    type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
     title: 'Edits - Music For Pennies',
-    description: 'Håll dig uppdaterad med de senaste nyheterna från Music For Pennies.',
-    images: ['https://musicforpennies.se/api'],
+    description: 'Senaste nyheterna och pressmeddelanden från Music For Pennies.',
+    images: ['https://images.unsplash.com/photo-1470225620780-dba8ba36b745?q=80&w=1200&auto=format&fit=crop'],
   },
 };
 
