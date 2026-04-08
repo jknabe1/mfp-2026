@@ -1,10 +1,12 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import { client } from "@/sanity/client"
 import imageUrlBuilder from "@sanity/image-url"
 import Link from "next/link"
 import Image from "next/image"
+import { useKeenSlider } from "keen-slider/react"
+import "keen-slider/keen-slider.min.css"
 
 // Define the Sanity image source type
 interface SanityImageSource {
@@ -29,6 +31,33 @@ interface Arrangemang {
 export default function ArrangemangSection() {
   const [arrangemang, setArrangemang] = useState<Arrangemang[]>([])
   const [loading, setLoading] = useState(true)
+  const [currentIndex, setCurrentIndex] = useState(0)
+  const sliderRef = useRef<any>(null)
+
+  const [sliderInstRef] = useKeenSlider(
+    {
+      initial: 0,
+      slideChanged(slider) {
+        setCurrentIndex(slider.track.details.rel)
+      },
+      slides: {
+        perView: 1,
+        spacing: 0,
+      },
+      loop: true,
+      created(slider) {
+        // Enable autoplay
+        slider.moveToIdx(Math.ceil(slider.track.details.slides.length / 2), true)
+        const autoplayInterval = setInterval(() => {
+          slider.next()
+        }, 5000)
+        return () => clearInterval(autoplayInterval)
+      },
+    },
+    [(slider) => {
+      sliderRef.current = slider
+    }],
+  )
 
   useEffect(() => {
     const fetchArrangemang = async () => {
@@ -59,61 +88,62 @@ export default function ArrangemangSection() {
         <h2 className="text-sans-35 lg:text-sans-60 font-600 uppercase">Våra Arrangemang</h2>
       </section>
 
-      {/* Static grid layout — alternating image left/right */}
+      {/* Carousel section — full-width image with centered overlay text */}
       <section className="relative mb-12">
-        <div className="space-y-8">
-          {arrangemang.map((item, index) => {
-            const isEven = index % 2 === 0
-            return (
-              <div
-                key={item._id}
-                className="flex flex-col lg:flex-row items-stretch gap-px bg-black"
+        <div ref={sliderInstRef} className="keen-slider">
+          {arrangemang.map((item) => (
+            <div key={item._id} className="keen-slider__slide">
+              {/* Full-width image with centered text overlay */}
+              <Link
+                href={`/arrangemang/${item.URL.current}`}
+                className="group block relative w-full overflow-hidden border-4 border-black"
               >
-                {/* Image column — above title on mobile, alternates on desktop */}
-                <div className={`w-full lg:w-1/2 relative overflow-hidden border-4 border-black bg-gray-100 ${isEven ? "lg:order-1" : "lg:order-2"}`}>
-                  <Link
-                    href={`/arrangemang/${item.URL.current}`}
-                    className="group block relative w-full h-full aspect-[3/4] lg:aspect-auto lg:min-h-[400px]"
-                  >
-                    <Image
-                      src={urlFor(item.Bild)}
-                      alt={item.Namn}
-                      fill
-                      priority={index < 2}
-                      loading={index < 2 ? "eager" : "lazy"}
-                      className="object-contain w-full h-full transition-transform duration-500 group-hover:scale-105"
-                      sizes="(max-width: 1024px) 100vw, 50vw"
-                    />
-                  </Link>
+                {/* Image fills entire container */}
+                <div className="relative w-full aspect-[3/4] sm:aspect-[4/3] lg:aspect-[16/9]">
+                  <Image
+                    src={urlFor(item.Bild)}
+                    alt={item.Namn}
+                    fill
+                    priority={arrangemang[0]._id === item._id}
+                    loading={arrangemang[0]._id === item._id ? "eager" : "lazy"}
+                    className="object-cover w-full h-full transition-transform duration-500 group-hover:scale-105"
+                    sizes="100vw"
+                  />
                 </div>
 
-                {/* Text column — below image on mobile */}
-                <div className={`w-full lg:w-1/2 px-6 py-8 sm:px-8 lg:px-10 lg:py-12 flex flex-col justify-center border-b lg:border-b-0 lg:border-l border-black ${isEven ? "lg:order-2" : "lg:order-1"}`}>
-                  {/* Mobile layout: title left, button right */}
-                  <div className="flex flex-col lg:flex-col gap-4">
-                    <div className="flex items-start justify-between gap-4 lg:gap-0 lg:flex-col">
-                      <h3 className="text-sans-22 sm:text-sans-35 lg:text-sans-45 font-700 uppercase leading-[1.1] text-balance flex-1">
-                        {item.Namn}
-                      </h3>
-                      {/* Mobile: Button on far right, stacked on desktop */}
-                      <Link
-                        href={`/arrangemang/${item.URL.current}`}
-                        className="inline-flex items-center gap-2 border-2 border-black px-4 py-2.5 text-sans-12 sm:text-sans-14 font-600 uppercase tracking-widest transition-colors shrink-0 lg:mt-6 lg:w-fit hover:bg-black hover:text-white"
-                      >
-                        Läs mer
-                        <span className="text-[var(--vividGreen)] group-hover:text-white" aria-hidden="true">→</span>
-                      </Link>
-                    </div>
-                  </div>
+                {/* Semi-transparent overlay for text readability */}
+                <div className="absolute inset-0 bg-black/40" />
+
+                {/* Centered text overlay */}
+                <div className="absolute inset-0 flex flex-col items-center justify-center px-6 py-8 text-center">
+                  <span className="inline-flex items-center gap-1.5 text-sans-10 font-600 uppercase tracking-widest text-white/90 mb-6">
+                    <span className="text-[var(--vividGreen)]" aria-hidden="true">■</span>
+                    Arrangerat av Music For Pennies
+                  </span>
+                  <h3 className="text-sans-28 sm:text-sans-35 lg:text-sans-60 font-700 uppercase leading-[1.1] text-white text-balance">
+                    {item.Namn}
+                  </h3>
                 </div>
-              </div>
-            )
-          })}
+              </Link>
+            </div>
+          ))}
+        </div>
+
+        {/* See all arrangemang button at bottom */}
+        <div className="mt-10 flex justify-center lg:justify-start">
+          <Link
+            href="/arrangemang"
+            className="inline-flex items-center gap-2 border-2 border-black px-8 py-4 text-sans-14 font-600 uppercase tracking-widest hover:bg-black hover:text-white transition-colors"
+          >
+            Se alla arrangemang
+            <span className="text-[var(--vividGreen)] group-hover:text-white" aria-hidden="true">→</span>
+          </Link>
         </div>
       </section>
     </div>
   )
 }
+
 
 
 
