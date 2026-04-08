@@ -101,22 +101,6 @@ export default function ForeningarSection() {
     return <div className="px-2 py-3 lg:px-5"></div>
   }
 
-  // Custom See More component for the slider
-  const SeeMoreSlide = () => (
-    <div className="keen-slider__slide">
-      <Link
-        href="/om-oss/vara-foreningar"
-        className="group block relative aspect-[4/5] lg:aspect-[6/5] overflow-hidden bg-black flex items-center justify-center"
-      >
-        <div className="text-white text-center p-5">
-          <h2 className="text-3xl font-bold mb-4">Se våra föreningar</h2>
-          <div className="mt-6 inline-block border border-white px-6 py-3 hover:bg-white hover:text-black transition-colors">
-            Utforska →
-          </div>
-        </div>
-      </Link>
-    </div>
-  )
 
   return (
     <div className="px-2 py-3 lg:px-5">
@@ -150,9 +134,6 @@ export default function ForeningarSection() {
                 </Link>
               </div>
             ))}
-
-            {/* See More slide */}
-            <SeeMoreSlide />
           </div>
         </section> 
       ) : (
@@ -192,7 +173,7 @@ export default function ForeningarSection() {
             <div className="mt-12">
               <div className="grid grid-cols-3 gap-5">
                 {/* Show only 2 artists from the filtered list */}
-                {filteredArtists.slice(0, 2).map((artist, index) => (
+                {filteredArtists.slice(0, 3).map((artist, index) => (
                   <Link
                     key={artist._id}
                     href={`/om-oss/vara-foreningar/${artist.URL.current}`}  // Changed from slug to URL
@@ -213,19 +194,6 @@ export default function ForeningarSection() {
                     </div>
                   </Link>
                 ))}
-
-                {/* Static "See More" panel */}
-                <Link
-                  href="/om-oss/vara-foreningar"
-                  className="group block relative aspect-[4/5] lg:aspect-[6/5] overflow-hidden bg-black flex items-center justify-center"
-                >
-                  <div className="text-white text-center p-5">
-                    <h2 className="text-2xl font-bold">Se våra föreningar</h2>
-                    <div className="mt-6 inline-block border border-white px-6 py-3 hover:bg-white hover:text-black transition-colors">
-                      Utforska →
-                    </div>
-                  </div>
-                </Link>
               </div>
             </div>
           )}

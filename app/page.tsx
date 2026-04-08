@@ -19,7 +19,7 @@ export const metadata: Metadata = {
     siteName: "Music For Pennies",
     images: [
       {
-        url: "https://images.unsplash.com/photo-1470225620780-dba8ba36b745?q=80&w=1200&auto=format&fit=crop",
+        url: "https://musicforpennies.se/api/",
         width: 1200,
         height: 630,
         alt: "Music For Pennies - Musikproduktion och evenemang",
@@ -33,7 +33,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Music For Pennies",
     description: "Bästa gänget, svänget & hänget. Musikproduktion och konserter.",
-    images: ["https://images.unsplash.com/photo-1470225620780-dba8ba36b745?q=80&w=1200&auto=format&fit=crop"],
+    images: ["https://musicforpennies.se/api/"],
   },
 };
 
@@ -44,7 +44,7 @@ export default function Home() {
     "name": "Music For Pennies",
     "url": "https://musicforpennies.se",
     "description": "Musikproduktion, evenemang och artiststöd från Music For Pennies.",
-    "image": "https://images.unsplash.com/photo-1470225620780-dba8ba36b745?q=80&w=1200&auto=format&fit=crop",
+    "image": "https://musicforpennies.se/api/",
     "sameAs": [
       "https://www.instagram.com/music_for_pennies",
       "https://www.facebook.com/musicforpennies",
