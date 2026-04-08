@@ -61,9 +61,9 @@ export default function ForeningarSection() {
     const fetchArtists = async () => {
       try {
         setLoading(true)
-        // Fetch all artists - using Swedish field names
+        // Fetch all föreningar - using Swedish field names
         const allArtists = await client.fetch<Artist[]>(
-          `*[_type == "artist" && defined(URL.current)]{_id, Namn, URL, Bild}|order(Namn asc)`,
+          `*[_type == "förening" && defined(URL.current)]{_id, Namn, URL, Bild}|order(Namn asc)`,
         )
 
         setArtists(allArtists)
