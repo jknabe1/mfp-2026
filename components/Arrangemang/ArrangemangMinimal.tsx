@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { urlFor, SanityImageSource } from '@/lib/utils';
@@ -18,13 +18,11 @@ interface ArrangemangMinimalProps {
 }
 
 export default function ArrangemangMinimal({ arrangemangItems }: ArrangemangMinimalProps) {
-  const [isLoading, setIsLoading] = useState(true);
+  const [selectedArrangemang, setSelectedArrangemang] = useState<ArrangemangData | null>(
+    arrangemangItems.length > 0 ? arrangemangItems[0] : null
+  );
 
-  useEffect(() => {
-    setIsLoading(false);
-  }, []);
-
-  if (isLoading || !arrangemangItems || arrangemangItems.length === 0) {
+  if (!arrangemangItems || arrangemangItems.length === 0) {
     return (
       <main className="min-h-screen flex items-center justify-center">
         <p className="text-sans-16 text-black/40 uppercase">Inga arrangemang tillgängliga</p>
@@ -38,6 +36,15 @@ export default function ArrangemangMinimal({ arrangemangItems }: ArrangemangMini
     name: 'Music For Pennies - Arrangemang',
     description: 'En lista över alla arrangemang från Music For Pennies.',
     url: 'https://musicforpennies.se/arrangemang',
+    mainEntity: {
+      '@type': 'ItemList',
+      itemListElement: arrangemangItems.map((item, index) => ({
+        '@type': 'ListItem',
+        position: index + 1,
+        name: item.Namn,
+        url: `https://musicforpennies.se/arrangemang/${item.URL.current}`,
+      })),
+    },
   };
 
   return (
@@ -57,70 +64,61 @@ export default function ArrangemangMinimal({ arrangemangItems }: ArrangemangMini
           Arrangemang
         </h1>
         <p className="text-sans-13 sm:text-sans-14 text-black/55 mt-4 max-w-2xl leading-relaxed">
-          Utforska vår samling av arrangemang och evenemang. Välj ett arrangemang för att lära dig mer.
+          Utforska vår samling av arrangemang och evenemang. Hovra eller klicka för att se detaljer.
         </p>
       </header>
 
-      {/* 50/50 Split Grid */}
-      <div className="divide-y divide-black border-b border-black">
-        {arrangemangItems.map((item, index) => (
-          <div
-            key={item._id}
-            className={`grid grid-cols-1 lg:grid-cols-2 divide-y lg:divide-y-0 lg:divide-x divide-black`}
-          >
-            {/* Left: Image (alternates on desktop for visual interest) */}
-            <div className={`relative overflow-hidden bg-gray-100 h-64 sm:h-80 lg:h-screen flex items-center justify-center order-2 lg:order-none ${index % 2 === 1 ? 'lg:order-2' : ''}`}>
-              {item.Bild ? (
-                <Image
-                  src={urlFor(item.Bild).width(1200).quality(85).url()}
-                  alt={item.Namn}
-                  fill
-                  loading={index < 3 ? 'eager' : 'lazy'}
-                  className="object-cover hover:scale-105 transition-transform duration-700"
-                  sizes="(max-width: 1024px) 100vw, 50vw"
-                />
-              ) : (
-                <div className="w-full h-full bg-gradient-to-br from-gray-200 to-gray-300" />
-              )}
-              
-              {/* Gradient overlay for text on mobile */}
-              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent lg:hidden" />
+      {/* Main 50/50 Grid Layout */}
+      <div className="grid grid-cols-12 gap-px">
+        <div className="col-span-12 relative h-full grid-col-border">
+          <div className="grid grid-cols-12 gap-px items-start">
+            {/* Left Column: List of Arrangemang */}
+            <div className="col-span-12 lg:col-span-6 grid-col-border">
+              <ul className="flex flex-col gap-px">
+                {arrangemangItems.map((arrangemang) => (
+                  <Link key={arrangemang._id} href={`/arrangemang/${arrangemang.URL.current}`}>
+                    <li
+                      className="grid-col-border px-4 sm:px-6 lg:px-8 py-6 sm:py-8 lg:py-10 cursor-pointer transition-all hover:bg-black/5"
+                      onMouseEnter={() => setSelectedArrangemang(arrangemang)}
+                    >
+                      <h2 className="text-sans-24 sm:text-sans-35 lg:text-sans-60 font-600 uppercase leading-tight hover:italic transition-all">
+                        {arrangemang.Namn}
+                      </h2>
+                    </li>
+                  </Link>
+                ))}
+                <Link href="/om-oss/kontakta-oss">
+                  <li className="grid-col-border px-4 sm:px-6 lg:px-8 py-6 sm:py-8 lg:py-10 bg-black text-white cursor-pointer transition-all hover:bg-black/90">
+                    <h2 className="italic text-sans-24 sm:text-sans-35 lg:text-sans-60 font-600 uppercase">
+                      Du eller ditt arrangemang?
+                    </h2>
+                  </li>
+                </Link>
+              </ul>
             </div>
 
-            {/* Right: Content (title, description, CTA) */}
-            <div className={`flex flex-col justify-center px-6 sm:px-8 lg:px-10 py-8 sm:py-12 lg:py-16 order-1 lg:order-none ${index % 2 === 1 ? 'lg:order-1' : ''}`}>
-              <div>
-                {/* Badge/Index */}
-                <span className="inline-flex items-center bg-black text-white text-sans-10 font-700 uppercase tracking-widest px-2.5 py-1 mb-4 w-fit">
-                  {String(index + 1).padStart(2, '0')}
-                </span>
-
-                {/* Title */}
-                <h2 className="text-sans-28 sm:text-sans-40 lg:text-sans-52 font-700 uppercase leading-[1.1] text-balance mb-4 lg:mb-6">
-                  {item.Namn}
-                </h2>
-
-                {/* Description preview (if available) */}
-                {item.Beskrivning && (
-                  <p className="text-sans-14 sm:text-sans-15 text-black/60 leading-relaxed mb-6 lg:mb-8 max-w-sm line-clamp-3">
-                    {typeof item.Beskrivning === 'string' 
-                      ? item.Beskrivning 
-                      : 'Ett arrangement från Music For Pennies.'}
-                  </p>
+            {/* Right Column: Image Preview (Sticky on Desktop) */}
+            <div className="hidden lg:block col-span-6 grid-col-border sticky top-7 min-h-[calc(100vh-2rem)] overflow-hidden">
+              <div className="image overflow-hidden absolute inset-0">
+                {selectedArrangemang && selectedArrangemang.Bild ? (
+                  <Image
+                    src={urlFor(selectedArrangemang.Bild).width(1000).quality(85).url()}
+                    alt={selectedArrangemang.Namn || 'Arrangemang'}
+                    className="w-full h-full object-cover noise transition-opacity duration-500"
+                    width={1000}
+                    height={1000}
+                    loading="lazy"
+                    key={selectedArrangemang._id}
+                  />
+                ) : (
+                  <div className="w-full h-full bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center">
+                    <p className="text-sans-14 text-black/40 uppercase">Ingen bild tillgänglig</p>
+                  </div>
                 )}
-
-                {/* CTA Button */}
-                <Link
-                  href={`/arrangemang/${item.URL.current}`}
-                  className="inline-flex items-center gap-2 border-2 border-black px-6 sm:px-8 py-3 sm:py-4 text-sans-13 sm:text-sans-14 font-700 uppercase tracking-widest hover:bg-black hover:text-white transition-all duration-200 hover:translate-x-1 w-fit"
-                >
-                  Läs mer
-                  <span className="text-[var(--vividGreen)] group-hover:translate-x-1 transition-transform" aria-hidden="true">→</span>
-                </Link>
               </div>
             </div>
           </div>
-        ))}
+        </div>
       </div>
 
       {/* Bottom CTA Section */}
@@ -128,10 +126,10 @@ export default function ArrangemangMinimal({ arrangemangItems }: ArrangemangMini
         <div className="px-4 sm:px-6 lg:px-8 py-12 lg:py-16 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
           <div>
             <h3 className="text-sans-24 lg:text-sans-32 font-700 uppercase">
-              Vill du veta mer?
+              Vill du utforska mer?
             </h3>
             <p className="text-sans-13 lg:text-sans-14 text-white/50 mt-2 max-w-sm">
-              Utforska vår festival-arkiv och alla event som har gjort Music For Pennies speciell.
+              Kolla in vår fullständiga festival-arkiv med alla event och aktiviteter.
             </p>
           </div>
           <Link
@@ -139,7 +137,7 @@ export default function ArrangemangMinimal({ arrangemangItems }: ArrangemangMini
             className="inline-flex items-center gap-2 bg-[var(--vividGreen)] text-black px-6 sm:px-8 py-3 sm:py-4 text-sans-13 sm:text-sans-14 font-700 uppercase tracking-widest hover:bg-white transition-colors min-h-[48px] sm:min-h-[52px] shrink-0"
           >
             <span aria-hidden="true">■</span>
-            Se all festival-arkiv
+            Festival-arkiv
           </Link>
         </div>
       </section>
