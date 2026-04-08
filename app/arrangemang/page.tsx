@@ -37,8 +37,15 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-export default async function ArrangemangPage() {
+export default async function ArrangemangPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ page?: string }>
+}) {
+  const params = await searchParams;
+  const currentPage = parseInt(params.page || '1', 10);
   const arrangemangItems = await fetchArrangemang();
+  const totalCount = arrangemangItems.length;
 
-  return <ArrangemangList initialArrangemang={arrangemangItems} />;
+  return <ArrangemangList initialArrangemang={arrangemangItems} currentPage={currentPage} totalCount={totalCount} />;
 }
