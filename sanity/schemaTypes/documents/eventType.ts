@@ -87,7 +87,7 @@ export const eventType = defineType({
     defineField({
       name: 'headliner',
       type: 'reference',
-      to: [{type: 'förening'}],
+      to: [{type: 'forening'}],
       description: 'Reference to the featured artist/förening',
     }),
   ],

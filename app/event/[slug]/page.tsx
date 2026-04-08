@@ -446,7 +446,7 @@ export default async function EventPage({ params }: { params: Promise<{ slug: st
 
                   {/* Artist */}
                   {artist && (
-                    <div className="flex flex-col border-t border-neutral-200 pt-4">
+                    <div className="flex flex-col border-t border-neutral-200">
                       <dt className="text-sm text-neutral-500 uppercase tracking-wide mb-1">Artist</dt>
                       <dd className="text-lg font-600">{artist}</dd>
                     </div>

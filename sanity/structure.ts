@@ -14,7 +14,7 @@ export const structure = (S: StructureBuilder) =>
             .items([
               S.documentTypeListItem('event').title('Events'),
               S.documentTypeListItem('arrangemang').title('Arrangemang'),
-              S.documentTypeListItem('artist').title('Föreningar'),
+              S.documentTypeListItem('forening').title('Föreningar'),
               S.documentTypeListItem('venue').title('Venues'),
             ])
         ),
