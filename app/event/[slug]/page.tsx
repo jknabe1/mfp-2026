@@ -116,7 +116,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 
     if (!event) {
       return {
-        title: "Event Not Found - K&K Records",
+        title: "Event Not Found - Music For Pennies",
         description: "The requested event does not exist.",
       }
     }
@@ -124,24 +124,24 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     const plainTextDescription = event.shortDescription || (event.details ? portableTextToPlainText(event.details) : "")
 
     return {
-      title: `${event.name}`,
-      description: plainTextDescription.slice(0, 160) || `Event by K&K Records: ${event.name}`,
+      title: `${event.name} | Music For Pennies`,
+      description: plainTextDescription.slice(0, 160) || `Event från Music For Pennies: ${event.name}`,
       alternates: {
-        canonical: `https://kkrecords.se/event/${event.slug.current}`,
+        canonical: `https://musicforpennies.se/event/${event.slug.current}`,
       },
       openGraph: {
-        title: `${event.name} - K&K Records`,
-        description: plainTextDescription.slice(0, 160) || `Event by K&K Records: ${event.name}`,
-        url: `https://kkrecords.se/event/${event.slug.current}`,
-        siteName: "K&K Records",
+        title: `${event.name} - Music For Pennies`,
+        description: plainTextDescription.slice(0, 160) || `Event från Music For Pennies: ${event.name}`,
+        url: `https://musicforpennies.se/event/${event.slug.current}`,
+        siteName: "Music For Pennies",
         locale: "sv_SE",
         type: "website",
         images: event.image ? [{ url: urlFor(event.image).url(), width: 1200, height: 630, alt: event.name }] : [],
       },
       twitter: {
         card: "summary_large_image",
-        title: `${event.name} - K&K Records`,
-        description: plainTextDescription.slice(0, 160) || `Event by K&K Records: ${event.name}`,
+        title: `${event.name} - Music For Pennies`,
+        description: plainTextDescription.slice(0, 160) || `Event från Music For Pennies: ${event.name}`,
         images: event.image ? [{ url: urlFor(event.image).url() }] : [],
       },
     }
@@ -170,18 +170,18 @@ export default async function EventPage({ params }: { params: Promise<{ slug: st
   const venueObject = venue
     ? {
         "@type": "Place" as const,
-        name: venue.name || "K&K Records Venue",
-        address: venue.address || "K&K Records, Sweden",
+        name: venue.name || "Music For Pennies Venue",
+        address: venue.address || "Örebro, Sweden",
       }
     : {
         "@type": "Place" as const,
-        name: "K&K Records Venue",
-        address: "K&K Records, Sweden",
+        name: "Music For Pennies Venue",
+        address: "Örebro, Sweden",
       }
 
   const performerObject = {
     "@type": "MusicGroup" as const,
-    name: event.headline?.name || event.name || "K&K Records Artist",
+    name: event.headline?.name || event.name || "Music For Pennies Artist",
   }
 
   const breadcrumbSchema = {
@@ -192,19 +192,19 @@ export default async function EventPage({ params }: { params: Promise<{ slug: st
         "@type": "ListItem",
         position: 1,
         name: "Hem",
-        item: "https://kkrecords.se"
+        item: "https://musicforpennies.se"
       },
       {
         "@type": "ListItem",
         position: 2,
         name: "Event",
-        item: "https://kkrecords.se/event"
+        item: "https://musicforpennies.se/event"
       },
       {
         "@type": "ListItem",
         position: 3,
         name: event.name,
-        item: `https://kkrecords.se/event/${event.slug.current}`
+        item: `https://musicforpennies.se/event/${event.slug.current}`
       }
     ]
   }
@@ -212,27 +212,27 @@ export default async function EventPage({ params }: { params: Promise<{ slug: st
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "MusicEvent",
-    "@id": `https://kkrecords.se/event/${event.slug.current}`,
+    "@id": `https://musicforpennies.se/event/${event.slug.current}`,
     name: event.name,
     startDate: event.date,
     eventStatus: "https://schema.org/EventScheduled",
     location: venueObject,
-    image: event.image ? urlFor(event.image).url() : "https://kkrecords.se/default-event-image.jpg",
-    url: `https://kkrecords.se/event/${event.slug.current}`,
-    description: plainTextDescription || `Music event: ${event.name} at K&K Records`,
+    image: event.image ? urlFor(event.image).width(1200).height(630).url() : "https://images.unsplash.com/photo-1470225620780-dba8ba36b745?q=80&w=1200&auto=format&fit=crop",
+    url: `https://musicforpennies.se/event/${event.slug.current}`,
+    description: plainTextDescription || `Music event: ${event.name} at Music For Pennies`,
     performer: performerObject,
     organizer: {
       "@type": "Organization",
-      name: "K&K Records",
-      url: "https://kkrecords.se",
-      logo: "https://kkrecords.se/logo.png",
+      name: "Music For Pennies",
+      url: "https://musicforpennies.se",
+      logo: "https://musicforpennies.se/media/mfp.svg",
     },
     offers: tickets
       ? {
           "@type": "Offer",
           url: tickets,
           availability: "https://schema.org/InStock",
-          price: "0",
+          price: ticketPrice || "0",
           priceCurrency: "SEK",
         }
       : undefined,
@@ -276,13 +276,14 @@ export default async function EventPage({ params }: { params: Promise<{ slug: st
       <header className="relative w-full h-[50vh] md:h-[60vh] lg:h-[70vh] overflow-hidden">
         {event.image ? (
           <Image
-            src={urlFor(event.image).width(1920).height(1080).url()}
+            src={urlFor(event.image).width(1920).height(1080).auto('format').quality(85).url()}
             alt={event.name}
             fill
             priority
             loading="eager"
             className="object-cover"
             sizes="100vw"
+            quality={85}
           />
         ) : (
           <div className="absolute inset-0 bg-neutral-200 flex items-center justify-center">
@@ -375,11 +376,13 @@ export default async function EventPage({ params }: { params: Promise<{ slug: st
                   {gallery.map((img, index) => (
                     <figure key={index} className="relative aspect-video overflow-hidden bg-neutral-100">
                       <Image
-                        src={urlFor(img.asset).width(800).height(450).url()}
+                        src={urlFor(img.asset).width(800).height(450).auto('format').quality(80).url()}
                         alt={img.alt || `Bild ${index + 1} från ${event.name}`}
                         fill
                         className="object-cover"
                         sizes="(max-width: 640px) 100vw, 50vw"
+                        quality={80}
+                        loading={index < 2 ? "eager" : "lazy"}
                       />
                       {img.caption && (
                         <figcaption className="absolute bottom-0 left-0 right-0 bg-black/60 text-white text-sm p-2">

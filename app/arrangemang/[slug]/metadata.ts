@@ -45,17 +45,43 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   if (!arrangemang) {
     return {
       title: 'Arrangemang Not Found | Music For Pennies',
-      description: 'The requested arrangemang could not be found.',
+      description: 'Det efterfrågade arrangemanget kunde inte hittas.',
     };
   }
 
+  const description = arrangemang.Beskrivning?.map(block => block.children?.map((child: any) => child.text).join(' ')).join(' ') || 'Se detta arrangemang från Music For Pennies.';
+
   return {
     title: `${arrangemang.Namn} | Music For Pennies`,
-    description: arrangemang.Beskrivning?.map(block => block.children?.map(child => child.text).join(' ')).join(' ') || 'Explore this arrangemang.',
+    description: description.slice(0, 160),
+    keywords: ['arrangemang', arrangemang.Namn, 'Music For Pennies', 'konserter'],
+    alternates: {
+      canonical: `https://musicforpennies.se/arrangemang/${arrangemang.currentURL}`,
+    },
     openGraph: {
       title: arrangemang.Namn,
-      description: arrangemang.Beskrivning?.map(block => block.children?.map(child => child.text).join(' ')).join(' ') || 'Explore this arrangemang.',
-      images: arrangemang.Bild ? [{ url: urlFor(arrangemang.Bild).url() }] : [],
+      description: description.slice(0, 160),
+      url: `https://musicforpennies.se/arrangemang/${arrangemang.currentURL}`,
+      siteName: 'Music For Pennies',
+      locale: 'sv_SE',
+      type: 'website',
+      images: arrangemang.Bild ? [{ 
+        url: urlFor(arrangemang.Bild).width(1200).height(630).url(),
+        width: 1200,
+        height: 630,
+        alt: arrangemang.Namn,
+      }] : [{
+        url: 'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?q=80&w=1200&auto=format&fit=crop',
+        width: 1200,
+        height: 630,
+        alt: 'Music For Pennies arrangemang',
+      }],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: arrangemang.Namn,
+      description: description.slice(0, 160),
+      images: arrangemang.Bild ? [urlFor(arrangemang.Bild).width(1200).height(630).url()] : ['https://images.unsplash.com/photo-1470225620780-dba8ba36b745?q=80&w=1200&auto=format&fit=crop'],
     },
   };
 }

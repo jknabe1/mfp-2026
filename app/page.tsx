@@ -6,50 +6,71 @@ import ArrangemangSection from "@/components/Landing/Arrangemang/ArrangemangSect
 import ForeningarSection from '@/components/Landing/Foreningar/ForeningarSection';
 
 export const metadata: Metadata = {
-  title: "Music For Pennies",
-  description: "Bästa gänget, svänget & hänget.",
+  title: "Music For Pennies - Musikproduktion och Evenemang",
+  description: "Bästa gänget, svänget & hänget. Music For Pennies är en musikproducent och arrangör av konserter och evenemang i Sverige.",
+  keywords: ['musik', 'skivbolag', 'konserter', 'evenemang', 'musikproduktion', 'artiststöd'],
+  alternates: {
+    canonical: "https://musicforpennies.se/",
+  },
   openGraph: {
-    title: "",
-    description: "Explore top artists, upcoming concerts, and new releases from Music For Pennies.",
+    title: "Music For Pennies - Musikproduktion och Evenemang",
+    description: "Bästa gänget, svänget & hänget. Musikproduktion, konserter och artiststöd.",
     url: "https://musicforpennies.se/",
     siteName: "Music For Pennies",
     images: [
       {
-        url: "https://musicforpennies.se/api",
+        url: "https://images.unsplash.com/photo-1470225620780-dba8ba36b745?q=80&w=1200&auto=format&fit=crop",
         width: 1200,
         height: 630,
-        alt: "ç",
+        alt: "Music For Pennies - Musikproduktion och evenemang",
+        type: 'image/jpeg',
       },
     ],
+    locale: 'sv_SE',
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
     title: "Music For Pennies",
-    description: "Stay updated with the latest music, concerts, and artists at Music For Pennies.",
-    images: ["https://musicforpennies.se/api"],
+    description: "Bästa gänget, svänget & hänget. Musikproduktion och konserter.",
+    images: ["https://images.unsplash.com/photo-1470225620780-dba8ba36b745?q=80&w=1200&auto=format&fit=crop"],
   },
 };
 
 export default function Home() {
   const jsonLd = {
     "@context": "https://schema.org",
-    "@type": "WebSite",
+    "@type": "Organization",
     "name": "Music For Pennies",
     "url": "https://musicforpennies.se",
-    "description": "Discover top artists, upcoming concerts, and new releases from Music For Pennies.",
-    "publisher": {
-      "@type": "Organization",
-      "name": "Music For Pennies",
-      "logo": {
-        "@type": "ImageObject",
-        "url": "https://musicforpennies.se/api"
-      }
+    "description": "Musikproduktion, evenemang och artiststöd från Music For Pennies.",
+    "image": "https://images.unsplash.com/photo-1470225620780-dba8ba36b745?q=80&w=1200&auto=format&fit=crop",
+    "sameAs": [
+      "https://www.instagram.com/music_for_pennies",
+      "https://www.facebook.com/musicforpennies",
+      "https://www.tiktok.com/@musicforpennies",
+      "https://open.spotify.com/user/rp0di7du2vijxmhev2mp6vugo"
+    ],
+    "contactPoint": {
+      "@type": "ContactPoint",
+      "telephone": "tjooo@musicforpennies.se",
+      "contactType": "Customer Service",
+      "email": "tjooo@musicforpennies.se"
     },
-    "potentialAction": {
-      "@type": "SearchAction",
-      "target": "https://musicforpennies.se/search?q={search_term_string}",
-      "query-input": "required name=search_term_string"
+    "founder": [
+      {
+        "@type": "Person",
+        "name": "Jens Knabe"
+      },
+      {
+        "@type": "Person",
+        "name": "Mikael Lehikoinen"
+      }
+    ],
+    "foundingDate": "2019",
+    "foundingLocation": {
+      "@type": "Place",
+      "name": "Örebro, Sweden"
     }
   };
 
