@@ -35,6 +35,17 @@ export const arrangemangType = defineType({
       name: 'Beskrivning',
       type: 'array',
       of: [{type: 'block'}],
+      description: 'Beskrivning av denna samling/arrangemang'
+    }),
+    defineField({
+      name: 'events',
+      type: 'array',
+      title: 'Events/Konserter',
+      description: 'Referens till events som ingår i denna arrangemang-samling',
+      of: [{
+        type: 'reference',
+        to: [{type: 'event'}]
+      }],
     }),
     defineField({
       name: 'URL',
