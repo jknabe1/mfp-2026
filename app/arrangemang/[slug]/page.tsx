@@ -35,9 +35,25 @@ function portableTextToPlainText(blocks: PortableTextBlock[] = []): string {
     .join("\n\n")
 }
 
-async function getArrangemang(slug: string): Promise<Arrangemang | null> {
+async function getArrangemang(slug: string) {
   const QUERY = `*[_type == "arrangemang" && URL.current == $slug][0]{
-    ...,
+    _id,
+    Namn,
+    Bild,
+    Beskrivning,
+    URL,
+    events[] -> {
+      _id,
+      name,
+      slug,
+      date,
+      image,
+      shortDescription,
+      venue -> {
+        name,
+        City
+      }
+    }
   }`
   return await client.fetch(QUERY, { slug })
 }
@@ -259,43 +275,12 @@ export default async function ArrangemangPage({
             </div>
           )}
 
-          {/* Image gallery */}
-          {arrangemang.Bilder && arrangemang.Bilder.length > 0 && (
-            <div className="px-3 py-5 sm:px-4 sm:py-6 lg:px-8 lg:py-10 border-b border-black border-solid">
-              <p className="text-sans-11 sm:text-sans-12 font-600 uppercase tracking-widest opacity-50 mb-4">
-                Galleribilder
-              </p>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                {arrangemang.Bilder.map((image, idx) => (
-                  <div
-                    key={idx}
-                    className="relative w-full h-48 overflow-hidden border border-black/20"
-                  >
-                    <Image
-                      src={urlFor(image).width(400).quality(75).url()}
-                      alt={`Gallery image ${idx + 1}`}
-                      fill
-                      className="object-cover hover:scale-110 transition-transform duration-500"
-                    />
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {/* Visit website CTA */}
-          {arrangemang.Hemsida && (
-            <div className="px-4 py-6 lg:px-8 lg:py-8 border-b border-black border-solid">
-              <Link
-                href={arrangemang.Hemsida}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-3 px-6 py-4 bg-[var(--vividGreen)] text-black text-sans-14 font-600 uppercase tracking-widest hover:bg-white transition-colors min-h-[52px]"
-              >
-                <span aria-hidden="true">■</span>
-                Besök webbplats
-              </Link>
-            </div>
+          {/* Event Slideshow - Collection of concerts */}
+          {arrangemang.events && arrangemang.events.length > 0 && (
+            <EventSlideshow 
+              events={arrangemang.events} 
+              title="Evenemang i denna samling"
+            />
           )}
         </div>
 
@@ -307,41 +292,32 @@ export default async function ArrangemangPage({
             </p>
 
             <div className="flex flex-col space-y-4">
-              {arrangemang.Plats && (
-                <div className="flex flex-col border-b border-black/20 pb-4">
-                  <span className="text-sans-10 sm:text-sans-12 font-600 uppercase tracking-widest opacity-50 mb-1">
-                    Plats
-                  </span>
-                  <span className="text-sans-14 sm:text-sans-16 font-600 uppercase">
-                    {arrangemang.Plats}
-                  </span>
-                </div>
-              )}
+              <div className="flex flex-col border-b border-black/20 pb-4">
+                <span className="text-sans-10 sm:text-sans-12 font-600 uppercase tracking-widest opacity-50 mb-1">
+                  Antal evenemang
+                </span>
+                <span className="text-sans-14 sm:text-sans-16 font-600 uppercase">
+                  {arrangemang.events?.length || 0}
+                </span>
+              </div>
 
-              {arrangemang.Datum && (
-                <div className="flex flex-col border-b border-black/20 pb-4">
-                  <span className="text-sans-10 sm:text-sans-12 font-600 uppercase tracking-widest opacity-50 mb-1">
-                    Datum
-                  </span>
-                  <span className="text-sans-14 sm:text-sans-16 font-600 uppercase">
-                    {arrangemang.Datum}
-                  </span>
-                </div>
-              )}
-
-              {arrangemang.Hemsida && (
+              {arrangemang.events && arrangemang.events.length > 0 && (
                 <div className="flex flex-col">
-                  <span className="text-sans-10 sm:text-sans-12 font-600 uppercase tracking-widest opacity-50 mb-1">
-                    Länk
+                  <span className="text-sans-10 sm:text-sans-12 font-600 uppercase tracking-widest opacity-50 mb-3">
+                    Evenemang
                   </span>
-                  <Link
-                    href={arrangemang.Hemsida}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-sans-14 sm:text-sans-16 font-600 uppercase hover:italic transition-all underline underline-offset-2 text-[var(--vividGreen)] w-fit"
-                  >
-                    Besök →
-                  </Link>
+                  <div className="space-y-2">
+                    {arrangemang.events.map((event) => (
+                      <Link
+                        key={event._id}
+                        href={`/event/${event.slug.current}`}
+                        className="text-sans-12 sm:text-sans-14 font-600 uppercase hover:italic transition-all underline underline-offset-2 text-[var(--vividGreen)] block truncate"
+                        title={event.name}
+                      >
+                        {event.name}
+                      </Link>
+                    ))}
+                  </div>
                 </div>
               )}
             </div>
