@@ -56,9 +56,7 @@ async function getArrangemang(slug: string) {
       }
     }
   }`
-  const result = await client.fetch(QUERY, { slug })
-  console.log("[v0] Arrangemang data:", { Namn: result?.Namn, hasImages: !!result?.Bildgalleri, imageCount: result?.Bildgalleri?.length })
-  return result
+  return await client.fetch(QUERY, { slug })
 }
 
 async function getRelatedArrangemang(currentSlug: string): Promise<Arrangemang[]> {
@@ -279,11 +277,14 @@ export default async function ArrangemangPage({
             </section>
           )}
 
-          {/* Full-width image after text */}
-          {arrangemang.Bildgalleri && arrangemang.Bildgalleri.length > 0 && (
+          {/* Full-width image after text - use Bildgalleri or fallback to Bild */}
+          {(arrangemang.Bildgalleri?.length > 0 || arrangemang.Bild) && (
             <section className="relative w-full h-[50vh] sm:h-[60vh] lg:h-[70vh] overflow-hidden">
               <Image
-                src={urlFor(arrangemang.Bildgalleri[0]).width(1920).height(1080).auto('format').quality(85).url()}
+                src={arrangemang.Bildgalleri?.length > 0 
+                  ? urlFor(arrangemang.Bildgalleri[0]).width(1920).height(1080).auto('format').quality(85).url()
+                  : urlFor(arrangemang.Bild).width(1920).height(1080).auto('format').quality(85).url()
+                }
                 alt="Featured image from arrangemang"
                 fill
                 priority
