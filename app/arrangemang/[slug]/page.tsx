@@ -40,6 +40,7 @@ async function getArrangemang(slug: string) {
     _id,
     Namn,
     Bild,
+    Bilder,
     Beskrivning,
     URL,
     events[] -> {
@@ -275,6 +276,19 @@ export default async function ArrangemangPage({
             </div>
           )}
 
+          {/* Featured Image in the middle */}
+          {arrangemang.Bilder && arrangemang.Bilder.length > 0 && (
+            <div className="relative w-full aspect-video overflow-hidden border-b border-black border-solid">
+              <Image
+                src={urlFor(arrangemang.Bilder[0]).width(800).height(450).auto('format').quality(85).url()}
+                alt="Featured image from arrangemang"
+                fill
+                className="object-cover"
+                quality={85}
+              />
+            </div>
+          )}
+
           {/* Event Slideshow - Collection of concerts */}
           {arrangemang.events && arrangemang.events.length > 0 && (
             <EventSlideshow 
@@ -324,6 +338,32 @@ export default async function ArrangemangPage({
           </div>
         </div>
       </div>
+
+      {/* ── Gallery Grid Section ──────────────────────────────────────────── */}
+      {arrangemang.Bilder && arrangemang.Bilder.length > 1 && (
+        <section className="px-3 sm:px-4 lg:px-8 py-8 sm:py-12 lg:py-16 border-t border-black border-solid">
+          <h2 className="text-sans-18 sm:text-sans-24 lg:text-sans-32 font-600 uppercase mb-6 sm:mb-8">
+            Bilder från arrangemanget
+          </h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+            {arrangemang.Bilder.slice(1).map((image, idx) => (
+              <div
+                key={idx}
+                className="relative w-full aspect-square overflow-hidden border border-black/20 hover:border-black transition-colors"
+              >
+                <Image
+                  src={urlFor(image).width(400).height(400).auto('format').quality(80).url()}
+                  alt={`Gallery image ${idx + 1}`}
+                  fill
+                  className="object-cover hover:scale-105 transition-transform duration-300"
+                  quality={80}
+                  loading="lazy"
+                />
+              </div>
+            ))}
+          </div>
+        </section>
+      )}
 
       {/* ── Related Arrangemang Section ────────────────────────────────────── */}
       {relatedArrangemang && relatedArrangemang.length > 0 && (
