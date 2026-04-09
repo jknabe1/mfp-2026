@@ -15,18 +15,22 @@ function urlFor(source: any) {
 }
 
 async function getArrangemang(slug: string) {
-  const QUERY = `*[_type == "arrangemang" && slug.current == $slug][0]{
+  const QUERY = `*[_type == "arrangemang" && (slug.current == $slug || URL.current == $slug)][0]{
     _id,
     name,
+    Namn,
     image,
+    Bild,
     excerpt,
     details,
+    Beskrivning,
     gallery[] {
       asset,
       alt,
       caption
     },
     slug,
+    URL,
     events[] -> {
       _id,
       name,
@@ -35,11 +39,24 @@ async function getArrangemang(slug: string) {
       image
     }
   }`
-  return await client.fetch(QUERY, { slug })
+  const result = await client.fetch(QUERY, { slug })
+  
+  // Map old field names to new ones for compatibility
+  if (result) {
+    return {
+      ...result,
+      name: result.name || result.Namn,
+      image: result.image || result.Bild,
+      slug: result.slug || result.URL,
+      details: result.details || result.Beskrivning,
+    }
+  }
+  
+  return result
 }
 
 async function getAllSlugs() {
-  const QUERY = `*[_type == "arrangemang" && defined(slug.current)].slug.current`
+  const QUERY = `*[_type == "arrangemang" && defined(slug.current)].slug.current | *[_type == "arrangemang" && defined(URL.current)].URL.current`
   return await client.fetch(QUERY)
 }
 
@@ -189,7 +206,7 @@ export default async function ArrangemangPage({
                 <div>
                   <ShareButtons 
                     title={arrangemang.name}
-                    url={`https://musicforpennies.se/arrangemang/${arrangemang.slug.current}`}
+                    url={`https://musicforpennies.se/arrangemang/${arrangemang.slug?.current || arrangemang.slug}`}
                     variant="dark"
                   />
                 </div>
