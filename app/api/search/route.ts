@@ -5,11 +5,11 @@ export async function POST(req: Request) {
   const { query } = await req.json();
 
   const results = await client.fetch(
-    `*[_type == "artist" && name match $q]{
+    `*[_type == "forening" && Namn match $q]{
         _id,
-        name,
-        slug,
-        "excerpt": bio[0].children[0].text
+        Namn,
+        URL,
+        "excerpt": Beskrivning[0].children[0].text
       }`,
     { q: `*${query}*` }
   );

@@ -19,7 +19,7 @@ interface Arrangemang {
   Namn: string
   URL: { current: string }
   Bild?: SanityImageSource
-  Bilder?: SanityImageSource[]
+  Bildgalleri?: SanityImageSource[]
   Beskrivning?: PortableTextBlock[]
   Plats?: string
   Datum?: string
@@ -35,9 +35,26 @@ function portableTextToPlainText(blocks: PortableTextBlock[] = []): string {
     .join("\n\n")
 }
 
-async function getArrangemang(slug: string): Promise<Arrangemang | null> {
+async function getArrangemang(slug: string) {
   const QUERY = `*[_type == "arrangemang" && URL.current == $slug][0]{
-    ...,
+    _id,
+    Namn,
+    Bild,
+    Bildgalleri,
+    Beskrivning,
+    URL,
+    events[] -> {
+      _id,
+      name,
+      slug,
+      date,
+      image,
+      shortDescription,
+      venue -> {
+        name,
+        City
+      }
+    }
   }`
   return await client.fetch(QUERY, { slug })
 }
@@ -206,7 +223,7 @@ export default async function ArrangemangPage({
           </div>
         </div>
 
-        {/* ── Mobile header ────────────────────────────────────────────────── */}
+        {/* ── Mobile header ───────────────────────────────────────���────────── */}
         <div className="md:hidden bg-white text-black border-b border-black">
           <div className="px-4 py-5">
             <h1 className="text-sans-28 font-700 uppercase leading-[1.05] text-balance">
@@ -243,109 +260,86 @@ export default async function ArrangemangPage({
         </div>
       </div>
 
-      {/* ── Content below banner ───────────────────────────────────────────── */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-px">
-        {/* Left column: description */}
-        <div className="lg:col-span-7 grid-col-border">
-          {/* Description */}
+      {/* ── Editorial Content Layout ──────────────────────────────────────── */}
+      <div className="w-full">
+        <div className="max-w-6xl mx-auto">
+          {/* First section of text */}
           {arrangemang.Beskrivning && (
-            <div className="px-3 py-5 sm:px-4 sm:py-6 lg:px-8 lg:py-10 border-b border-black border-solid">
-              <p className="text-sans-11 sm:text-sans-12 font-600 uppercase tracking-widest opacity-50 mb-3 sm:mb-4">
-                Om arrangemanget
-              </p>
-              <div className="prose prose-sm lg:prose-base max-w-none text-sans-14 sm:text-sans-16 leading-relaxed rich-text">
-                <PortableText value={arrangemang.Beskrivning} />
+            <section className="px-4 sm:px-6 lg:px-8 py-8 sm:py-12 lg:py-16">
+              <div className="max-w-3xl">
+                <p className="text-sans-11 sm:text-sans-12 font-600 uppercase tracking-widest opacity-50 mb-4 sm:mb-6">
+                  Om arrangemanget
+                </p>
+                <div className="prose prose-sm lg:prose-base max-w-none text-sans-14 sm:text-sans-16 leading-relaxed lg:leading-relaxed rich-text">
+                  <PortableText value={arrangemang.Beskrivning} />
+                </div>
               </div>
-            </div>
+            </section>
           )}
 
-          {/* Image gallery */}
-          {arrangemang.Bilder && arrangemang.Bilder.length > 0 && (
-            <div className="px-3 py-5 sm:px-4 sm:py-6 lg:px-8 lg:py-10 border-b border-black border-solid">
-              <p className="text-sans-11 sm:text-sans-12 font-600 uppercase tracking-widest opacity-50 mb-4">
-                Galleribilder
-              </p>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                {arrangemang.Bilder.map((image, idx) => (
-                  <div
-                    key={idx}
-                    className="relative w-full h-48 overflow-hidden border border-black/20"
-                  >
+          {/* Full-width image after text */}
+          {arrangemang.Bildgalleri && arrangemang.Bildgalleri.length > 0 && (
+            <section className="relative w-full h-[50vh] sm:h-[60vh] lg:h-[70vh] overflow-hidden">
+              <Image
+                src={urlFor(arrangemang.Bildgalleri[0]).width(1920).height(1080).auto('format').quality(85).url()}
+                alt="Featured image from arrangemang"
+                fill
+                priority
+                className="object-cover"
+                quality={85}
+              />
+            </section>
+          )}
+
+          {/* Event Slideshow */}
+          {arrangemang.events && arrangemang.events.length > 0 && (
+            <section className="px-4 sm:px-6 lg:px-8 py-8 sm:py-12 lg:py-16 border-t border-black border-solid">
+              <EventSlideshow 
+                events={arrangemang.events} 
+                title="Evenemang i denna samling"
+              />
+            </section>
+          )}
+
+          {/* Interleaved image grid - 2 column layout */}
+          {arrangemang.Bildgalleri && arrangemang.Bildgalleri.length > 1 && (
+            <section className="px-4 sm:px-6 lg:px-8 py-8 sm:py-12 lg:py-16 border-t border-black border-solid">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8">
+                {arrangemang.Bildgalleri.slice(1, 3).map((image, idx) => (
+                  <div key={idx} className="relative w-full aspect-square overflow-hidden">
                     <Image
-                      src={urlFor(image).width(400).quality(75).url()}
+                      src={urlFor(image).width(600).height(600).auto('format').quality(85).url()}
                       alt={`Gallery image ${idx + 1}`}
                       fill
-                      className="object-cover hover:scale-110 transition-transform duration-500"
+                      className="object-cover"
+                      quality={85}
+                      loading="lazy"
                     />
                   </div>
                 ))}
               </div>
-            </div>
+            </section>
           )}
 
-          {/* Visit website CTA */}
-          {arrangemang.Hemsida && (
-            <div className="px-4 py-6 lg:px-8 lg:py-8 border-b border-black border-solid">
-              <Link
-                href={arrangemang.Hemsida}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-3 px-6 py-4 bg-[var(--vividGreen)] text-black text-sans-14 font-600 uppercase tracking-widest hover:bg-white transition-colors min-h-[52px]"
-              >
-                <span aria-hidden="true">■</span>
-                Besök webbplats
-              </Link>
-            </div>
+          {/* More images in 3-column grid if available */}
+          {arrangemang.Bildgalleri && arrangemang.Bildgalleri.length > 3 && (
+            <section className="px-4 sm:px-6 lg:px-8 py-8 sm:py-12 lg:py-16 border-t border-black border-solid">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-6">
+                {arrangemang.Bildgalleri.slice(3).map((image, idx) => (
+                  <div key={idx} className="relative w-full aspect-square overflow-hidden">
+                    <Image
+                      src={urlFor(image).width(400).height(400).auto('format').quality(80).url()}
+                      alt={`Gallery image ${idx + 3}`}
+                      fill
+                      className="object-cover hover:scale-105 transition-transform duration-300"
+                      quality={80}
+                      loading="lazy"
+                    />
+                  </div>
+                ))}
+              </div>
+            </section>
           )}
-        </div>
-
-        {/* Right column: metadata */}
-        <div className="lg:col-span-5 grid-col-border">
-          <div className="px-3 py-5 sm:px-4 sm:py-6 lg:px-8 lg:py-10">
-            <p className="text-sans-11 sm:text-sans-12 font-600 uppercase tracking-widest opacity-50 mb-4 sm:mb-6">
-              Information
-            </p>
-
-            <div className="flex flex-col space-y-4">
-              {arrangemang.Plats && (
-                <div className="flex flex-col border-b border-black/20 pb-4">
-                  <span className="text-sans-10 sm:text-sans-12 font-600 uppercase tracking-widest opacity-50 mb-1">
-                    Plats
-                  </span>
-                  <span className="text-sans-14 sm:text-sans-16 font-600 uppercase">
-                    {arrangemang.Plats}
-                  </span>
-                </div>
-              )}
-
-              {arrangemang.Datum && (
-                <div className="flex flex-col border-b border-black/20 pb-4">
-                  <span className="text-sans-10 sm:text-sans-12 font-600 uppercase tracking-widest opacity-50 mb-1">
-                    Datum
-                  </span>
-                  <span className="text-sans-14 sm:text-sans-16 font-600 uppercase">
-                    {arrangemang.Datum}
-                  </span>
-                </div>
-              )}
-
-              {arrangemang.Hemsida && (
-                <div className="flex flex-col">
-                  <span className="text-sans-10 sm:text-sans-12 font-600 uppercase tracking-widest opacity-50 mb-1">
-                    Länk
-                  </span>
-                  <Link
-                    href={arrangemang.Hemsida}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-sans-14 sm:text-sans-16 font-600 uppercase hover:italic transition-all underline underline-offset-2 text-[var(--vividGreen)] w-fit"
-                  >
-                    Besök →
-                  </Link>
-                </div>
-              )}
-            </div>
-          </div>
         </div>
       </div>
 
