@@ -260,110 +260,89 @@ export default async function ArrangemangPage({
         </div>
       </div>
 
-      {/* ── Content below banner ───────────────────────────────────────────── */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-px">
-        {/* Left column: description */}
-        <div className="lg:col-span-7 grid-col-border">
-          {/* Description */}
-          {arrangemang.Beskrivning && (
-            <div className="px-3 py-5 sm:px-4 sm:py-6 lg:px-8 lg:py-10 border-b border-black border-solid">
-              <p className="text-sans-11 sm:text-sans-12 font-600 uppercase tracking-widest opacity-50 mb-3 sm:mb-4">
-                Om arrangemanget
-              </p>
-              <div className="prose prose-sm lg:prose-base max-w-none text-sans-14 sm:text-sans-16 leading-relaxed rich-text">
-                <PortableText value={arrangemang.Beskrivning} />
-              </div>
-            </div>
-          )}
-
-          {/* Featured Image in the middle */}
-          {arrangemang.Bilder && arrangemang.Bilder.length > 0 && (
-            <div className="relative w-full aspect-video overflow-hidden border-b border-black border-solid">
-              <Image
-                src={urlFor(arrangemang.Bilder[0]).width(800).height(450).auto('format').quality(85).url()}
-                alt="Featured image from arrangemang"
-                fill
-                className="object-cover"
-                quality={85}
-              />
-            </div>
-          )}
-
-          {/* Event Slideshow - Collection of concerts */}
-          {arrangemang.events && arrangemang.events.length > 0 && (
-            <EventSlideshow 
-              events={arrangemang.events} 
-              title="Evenemang i denna samling"
-            />
-          )}
-        </div>
-
-        {/* Right column: metadata */}
-        <div className="lg:col-span-5 grid-col-border">
-          <div className="px-3 py-5 sm:px-4 sm:py-6 lg:px-8 lg:py-10">
-            <p className="text-sans-11 sm:text-sans-12 font-600 uppercase tracking-widest opacity-50 mb-4 sm:mb-6">
-              Information
-            </p>
-
-            <div className="flex flex-col space-y-4">
-              <div className="flex flex-col border-b border-black/20 pb-4">
-                <span className="text-sans-10 sm:text-sans-12 font-600 uppercase tracking-widest opacity-50 mb-1">
-                  Antal evenemang
-                </span>
-                <span className="text-sans-14 sm:text-sans-16 font-600 uppercase">
-                  {arrangemang.events?.length || 0}
-                </span>
-              </div>
-
-              {arrangemang.events && arrangemang.events.length > 0 && (
-                <div className="flex flex-col">
-                  <span className="text-sans-10 sm:text-sans-12 font-600 uppercase tracking-widest opacity-50 mb-3">
-                    Evenemang
-                  </span>
-                  <div className="space-y-2">
-                    {arrangemang.events.map((event) => (
-                      <Link
-                        key={event._id}
-                        href={`/event/${event.slug.current}`}
-                        className="text-sans-12 sm:text-sans-14 font-600 uppercase hover:italic transition-all underline underline-offset-2 text-[var(--vividGreen)] block truncate"
-                        title={event.name}
-                      >
-                        {event.name}
-                      </Link>
-                    ))}
-                  </div>
+      {/* ── Editorial Content Layout ──────────────────────────────────────── */}
+      <div className="w-full">
+        {/* Split Beskrivning into segments and interleave with images */}
+        {arrangemang.Beskrivning && (
+          <div className="max-w-6xl mx-auto">
+            {/* First section of text */}
+            <section className="px-4 sm:px-6 lg:px-8 py-8 sm:py-12 lg:py-16">
+              <div className="max-w-3xl">
+                <p className="text-sans-11 sm:text-sans-12 font-600 uppercase tracking-widest opacity-50 mb-4 sm:mb-6">
+                  Om arrangemanget
+                </p>
+                <div className="prose prose-sm lg:prose-base max-w-none text-sans-14 sm:text-sans-16 leading-relaxed lg:leading-relaxed rich-text">
+                  <PortableText value={arrangemang.Beskrivning} />
                 </div>
-              )}
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* ── Gallery Grid Section ──────────────────────────────────────────── */}
-      {arrangemang.Bilder && arrangemang.Bilder.length > 1 && (
-        <section className="px-3 sm:px-4 lg:px-8 py-8 sm:py-12 lg:py-16 border-t border-black border-solid">
-          <h2 className="text-sans-18 sm:text-sans-24 lg:text-sans-32 font-600 uppercase mb-6 sm:mb-8">
-            Bilder från arrangemanget
-          </h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-            {arrangemang.Bilder.slice(1).map((image, idx) => (
-              <div
-                key={idx}
-                className="relative w-full aspect-square overflow-hidden border border-black/20 hover:border-black transition-colors"
-              >
-                <Image
-                  src={urlFor(image).width(400).height(400).auto('format').quality(80).url()}
-                  alt={`Gallery image ${idx + 1}`}
-                  fill
-                  className="object-cover hover:scale-105 transition-transform duration-300"
-                  quality={80}
-                  loading="lazy"
-                />
               </div>
-            ))}
+            </section>
+
+            {/* Full-width image after text */}
+            {arrangemang.Bilder && arrangemang.Bilder.length > 0 && (
+              <section className="relative w-full h-[50vh] sm:h-[60vh] lg:h-[70vh] overflow-hidden">
+                <Image
+                  src={urlFor(arrangemang.Bilder[0]).width(1920).height(1080).auto('format').quality(85).url()}
+                  alt="Featured image from arrangemang"
+                  fill
+                  priority
+                  className="object-cover"
+                  quality={85}
+                />
+              </section>
+            )}
+
+            {/* Event Slideshow */}
+            {arrangemang.events && arrangemang.events.length > 0 && (
+              <section className="px-4 sm:px-6 lg:px-8 py-8 sm:py-12 lg:py-16 border-t border-black border-solid">
+                <EventSlideshow 
+                  events={arrangemang.events} 
+                  title="Evenemang i denna samling"
+                />
+              </section>
+            )}
+
+            {/* Interleaved image grid - 2 column layout */}
+            {arrangemang.Bilder && arrangemang.Bilder.length > 1 && (
+              <section className="px-4 sm:px-6 lg:px-8 py-8 sm:py-12 lg:py-16 border-t border-black border-solid">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8">
+                  {arrangemang.Bilder.slice(1, 3).map((image, idx) => (
+                    <div key={idx} className="relative w-full aspect-square overflow-hidden">
+                      <Image
+                        src={urlFor(image).width(600).height(600).auto('format').quality(85).url()}
+                        alt={`Gallery image ${idx + 1}`}
+                        fill
+                        className="object-cover"
+                        quality={85}
+                        loading="lazy"
+                      />
+                    </div>
+                  ))}
+                </div>
+              </section>
+            )}
+
+            {/* More images in 3-column grid if available */}
+            {arrangemang.Bilder && arrangemang.Bilder.length > 3 && (
+              <section className="px-4 sm:px-6 lg:px-8 py-8 sm:py-12 lg:py-16 border-t border-black border-solid">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-6">
+                  {arrangemang.Bilder.slice(3).map((image, idx) => (
+                    <div key={idx} className="relative w-full aspect-square overflow-hidden">
+                      <Image
+                        src={urlFor(image).width(400).height(400).auto('format').quality(80).url()}
+                        alt={`Gallery image ${idx + 3}`}
+                        fill
+                        className="object-cover hover:scale-105 transition-transform duration-300"
+                        quality={80}
+                        loading="lazy"
+                      />
+                    </div>
+                  ))}
+                </div>
+              </section>
+            )}
           </div>
-        </section>
-      )}
+        )}
+      </div>
 
       {/* ── Related Arrangemang Section ────────────────────────────────────── */}
       {relatedArrangemang && relatedArrangemang.length > 0 && (
