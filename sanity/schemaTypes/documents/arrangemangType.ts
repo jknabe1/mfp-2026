@@ -20,10 +20,10 @@ export const arrangemangType = defineType({
       },
     }),
     defineField({
-      name: 'Bilder',
+      name: 'Bildgalleri',
       type: 'array',
-      title: 'Galleribilder',
-      description: 'Ytterligare bilder för bildgalleri nedan huvudbilden',
+      title: 'Bildgalleri',
+      description: 'Galleribilder för arrangemanget',
       of: [{
         type: 'image',
         options: {

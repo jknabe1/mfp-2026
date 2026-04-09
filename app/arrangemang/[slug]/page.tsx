@@ -19,7 +19,7 @@ interface Arrangemang {
   Namn: string
   URL: { current: string }
   Bild?: SanityImageSource
-  Bilder?: SanityImageSource[]
+  Bildgalleri?: SanityImageSource[]
   Beskrivning?: PortableTextBlock[]
   Plats?: string
   Datum?: string
@@ -40,7 +40,7 @@ async function getArrangemang(slug: string) {
     _id,
     Namn,
     Bild,
-    Bilder,
+    Bildgalleri,
     Beskrivning,
     URL,
     events[] -> {
@@ -223,7 +223,7 @@ export default async function ArrangemangPage({
           </div>
         </div>
 
-        {/* ── Mobile header ───────────────────────────────────────��────────── */}
+        {/* ── Mobile header ───────────────────────────────────────���────────── */}
         <div className="md:hidden bg-white text-black border-b border-black">
           <div className="px-4 py-5">
             <h1 className="text-sans-28 font-700 uppercase leading-[1.05] text-balance">
@@ -278,10 +278,10 @@ export default async function ArrangemangPage({
           )}
 
           {/* Full-width image after text */}
-          {arrangemang.Bilder && arrangemang.Bilder.length > 0 && (
+          {arrangemang.Bildgalleri && arrangemang.Bildgalleri.length > 0 && (
             <section className="relative w-full h-[50vh] sm:h-[60vh] lg:h-[70vh] overflow-hidden">
               <Image
-                src={urlFor(arrangemang.Bilder[0]).width(1920).height(1080).auto('format').quality(85).url()}
+                src={urlFor(arrangemang.Bildgalleri[0]).width(1920).height(1080).auto('format').quality(85).url()}
                 alt="Featured image from arrangemang"
                 fill
                 priority
@@ -302,10 +302,10 @@ export default async function ArrangemangPage({
           )}
 
           {/* Interleaved image grid - 2 column layout */}
-          {arrangemang.Bilder && arrangemang.Bilder.length > 1 && (
+          {arrangemang.Bildgalleri && arrangemang.Bildgalleri.length > 1 && (
             <section className="px-4 sm:px-6 lg:px-8 py-8 sm:py-12 lg:py-16 border-t border-black border-solid">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8">
-                {arrangemang.Bilder.slice(1, 3).map((image, idx) => (
+                {arrangemang.Bildgalleri.slice(1, 3).map((image, idx) => (
                   <div key={idx} className="relative w-full aspect-square overflow-hidden">
                     <Image
                       src={urlFor(image).width(600).height(600).auto('format').quality(85).url()}
@@ -322,10 +322,10 @@ export default async function ArrangemangPage({
           )}
 
           {/* More images in 3-column grid if available */}
-          {arrangemang.Bilder && arrangemang.Bilder.length > 3 && (
+          {arrangemang.Bildgalleri && arrangemang.Bildgalleri.length > 3 && (
             <section className="px-4 sm:px-6 lg:px-8 py-8 sm:py-12 lg:py-16 border-t border-black border-solid">
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-6">
-                {arrangemang.Bilder.slice(3).map((image, idx) => (
+                {arrangemang.Bildgalleri.slice(3).map((image, idx) => (
                   <div key={idx} className="relative w-full aspect-square overflow-hidden">
                     <Image
                       src={urlFor(image).width(400).height(400).auto('format').quality(80).url()}
