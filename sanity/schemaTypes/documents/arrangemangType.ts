@@ -5,37 +5,80 @@ export const arrangemangType = defineType({
   title: 'Arrangemang',
   type: 'document',
   fields: [
-    defineField(
-      {
-      name: 'Namn',
+    defineField({
+      name: 'name',
       type: 'string',
+      title: 'Namn',
+      validation: (rule) => rule.required(),
     }),
     defineField({
-      name: 'Bild',
+      name: 'image',
       type: 'image',
       title: 'Huvudbild',
-      description: 'Huvudbilden som visas överst på sidan',
+      description: 'Huvudbilden som visas i hero-sektionen',
       options: {
         hotspot: true
       },
+      validation: (rule) => rule.required(),
     }),
     defineField({
-      name: 'Bildgalleri',
+      name: 'excerpt',
+      type: 'text',
+      title: 'Sammanfattning',
+      description: 'Kort sammanfattning av arrangemanget',
+      rows: 3,
+    }),
+    defineField({
+      name: 'details',
+      type: 'array',
+      title: 'Detaljer',
+      description: 'Huvudinnehål för sidan',
+      of: [{type: 'block'}],
+    }),
+    defineField({
+      name: 'gallery',
       type: 'array',
       title: 'Bildgalleri',
       description: 'Galleribilder för arrangemanget',
       of: [{
-        type: 'image',
-        options: {
-          hotspot: true
+        type: 'object',
+        fields: [
+          {
+            name: 'asset',
+            type: 'image',
+            title: 'Bild',
+            options: {
+              hotspot: true
+            }
+          },
+          {
+            name: 'alt',
+            type: 'string',
+            title: 'Alt-text',
+            description: 'Beskrivande text för tillgänglighet',
+          },
+          {
+            name: 'caption',
+            type: 'string',
+            title: 'Bildtext',
+            description: 'Valfri bildtext under bilden',
+          }
+        ],
+        preview: {
+          select: {
+            media: 'asset',
+            title: 'alt',
+            subtitle: 'caption'
+          }
         }
       }],
     }),
     defineField({
-      name: 'Beskrivning',
-      type: 'array',
-      of: [{type: 'block'}],
-      description: 'Beskrivning av denna samling/arrangemang'
+      name: 'slug',
+      type: 'slug',
+      title: 'URL-slug',
+      options: {source: 'name'},
+      validation: (rule) => rule.required(),
     }),
     defineField({
       name: 'events',
@@ -46,14 +89,6 @@ export const arrangemangType = defineType({
         type: 'reference',
         to: [{type: 'event'}]
       }],
-    }),
-    defineField({
-      name: 'URL',
-      type: 'slug',
-      options: {source: 'Namn'},
-      validation: (rule) => rule
-      .required()
-      .error(`Required to generate a page on the website`),
     }),
   ],
 })
