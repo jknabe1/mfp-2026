@@ -17,6 +17,7 @@ module.exports = {
     };
   },
   images: {
+    qualities: [75, 85],
     remotePatterns: [
       {
         hostname: 'cdn.sanity.io',
