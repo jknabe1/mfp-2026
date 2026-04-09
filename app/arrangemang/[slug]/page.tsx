@@ -261,58 +261,67 @@ export default async function ArrangemangPage({
       </div>
 
       {/* ── Editorial Content Layout ──────────────────────────────────────── */}
-      <div className="w-full">
-        <div className="max-w-6xl mx-auto">
-          {/* First section of text */}
+      <div className="w-full bg-white">
+        <div className="max-w-4xl mx-auto">
+          {/* Opening text section */}
           {arrangemang.Beskrivning && (
-            <section className="px-4 sm:px-6 lg:px-8 py-8 sm:py-12 lg:py-16">
-              <div className="max-w-3xl">
-                <p className="text-sans-11 sm:text-sans-12 font-600 uppercase tracking-widest opacity-50 mb-4 sm:mb-6">
-                  Om arrangemanget
-                </p>
-                <div className="prose prose-sm lg:prose-base max-w-none text-sans-14 sm:text-sans-16 leading-relaxed lg:leading-relaxed rich-text">
-                  <PortableText value={arrangemang.Beskrivning} />
+            <section className="px-4 sm:px-6 lg:px-8 py-12 sm:py-16 lg:py-20">
+              <div className="prose prose-lg max-w-none">
+                <PortableText value={arrangemang.Beskrivning} />
+              </div>
+            </section>
+          )}
+
+          {/* Full-width hero image */}
+          {arrangemang.gallery && arrangemang.gallery.length > 0 && (
+            <section className="w-screen -ml-[50vw] left-1/2 relative">
+              <div className="relative w-full aspect-[3/2] sm:aspect-[16/9]">
+                <Image
+                  src={urlFor(arrangemang.gallery[0]).width(1920).height(1080).auto('format').quality(85).url()}
+                  alt="Featured editorial image"
+                  fill
+                  priority
+                  className="object-cover"
+                  quality={85}
+                />
+              </div>
+            </section>
+          )}
+
+          {/* Text + Image Layout (Image on right) */}
+          {arrangemang.gallery && arrangemang.gallery.length > 1 && (
+            <section className="px-4 sm:px-6 lg:px-8 py-12 sm:py-16 lg:py-20">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-12 items-start">
+                <div className="prose prose-lg max-w-none order-2 md:order-1">
+                  <p className="text-sans-14 sm:text-sans-16 leading-relaxed">
+                    {arrangemang.gallery.length > 2 
+                      ? "Utforska detta arrangemang genom bilder, events och framträdanden som skapar en unik upplevelse."
+                      : "Se highlights från arrangemanget och upptäck de moments som gjorde det speciellt."}
+                  </p>
+                </div>
+                <div className="relative w-full aspect-square overflow-hidden order-1 md:order-2">
+                  <Image
+                    src={urlFor(arrangemang.gallery[1]).width(600).height(600).auto('format').quality(85).url()}
+                    alt="Editorial image"
+                    fill
+                    className="object-cover"
+                    quality={85}
+                    loading="lazy"
+                  />
                 </div>
               </div>
             </section>
           )}
 
-          {/* Full-width image after text - use gallery or fallback to Bild */}
-          {(arrangemang.gallery?.length > 0 || arrangemang.Bild) && (
-            <section className="relative w-full h-[50vh] sm:h-[60vh] lg:h-[70vh] overflow-hidden">
-              <Image
-                src={arrangemang.gallery?.length > 0 
-                  ? urlFor(arrangemang.gallery[0]).width(1920).height(1080).auto('format').quality(85).url()
-                  : urlFor(arrangemang.Bild).width(1920).height(1080).auto('format').quality(85).url()
-                }
-                alt="Featured image from arrangemang"
-                fill
-                priority
-                className="object-cover"
-                quality={85}
-              />
-            </section>
-          )}
-
-          {/* Event Slideshow */}
-          {arrangemang.events && arrangemang.events.length > 0 && (
-            <section className="px-4 sm:px-6 lg:px-8 py-8 sm:py-12 lg:py-16 border-t border-black border-solid">
-              <EventSlideshow 
-                events={arrangemang.events} 
-                title="Evenemang i denna samling"
-              />
-            </section>
-          )}
-
-          {/* Interleaved image grid - 2 column layout */}
-          {arrangemang.gallery && arrangemang.gallery.length > 1 && (
-            <section className="px-4 sm:px-6 lg:px-8 py-8 sm:py-12 lg:py-16 border-t border-black border-solid">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8">
-                {arrangemang.gallery.slice(1, 3).map((image, idx) => (
-                  <div key={idx} className="relative w-full aspect-square overflow-hidden">
+          {/* Image pair grid */}
+          {arrangemang.gallery && arrangemang.gallery.length > 2 && (
+            <section className="px-4 sm:px-6 lg:px-8 py-12 sm:py-16 lg:py-20">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 lg:gap-6">
+                {arrangemang.gallery.slice(2, 4).map((image, idx) => (
+                  <div key={idx} className="relative w-full aspect-[4/5] overflow-hidden">
                     <Image
-                      src={urlFor(image).width(600).height(600).auto('format').quality(85).url()}
-                      alt={`Gallery image ${idx + 1}`}
+                      src={urlFor(image).width(600).height(750).auto('format').quality(85).url()}
+                      alt={`Gallery image ${idx + 2}`}
                       fill
                       className="object-cover"
                       quality={85}
@@ -324,15 +333,15 @@ export default async function ArrangemangPage({
             </section>
           )}
 
-          {/* More images in 3-column grid if available */}
-          {arrangemang.gallery && arrangemang.gallery.length > 3 && (
-            <section className="px-4 sm:px-6 lg:px-8 py-8 sm:py-12 lg:py-16 border-t border-black border-solid">
+          {/* Additional gallery grid (3 columns) */}
+          {arrangemang.gallery && arrangemang.gallery.length > 4 && (
+            <section className="px-4 sm:px-6 lg:px-8 py-12 sm:py-16 lg:py-20">
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-6">
-                {arrangemang.gallery.slice(3).map((image, idx) => (
+                {arrangemang.gallery.slice(4).map((image, idx) => (
                   <div key={idx} className="relative w-full aspect-square overflow-hidden">
                     <Image
-                      src={urlFor(image).width(400).height(400).auto('format').quality(80).url()}
-                      alt={`Gallery image ${idx + 3}`}
+                      src={urlFor(image).width(500).height(500).auto('format').quality(80).url()}
+                      alt={`Gallery image ${idx + 4}`}
                       fill
                       className="object-cover hover:scale-105 transition-transform duration-300"
                       quality={80}
@@ -341,6 +350,16 @@ export default async function ArrangemangPage({
                   </div>
                 ))}
               </div>
+            </section>
+          )}
+
+          {/* Event Slideshow - moved below images */}
+          {arrangemang.events && arrangemang.events.length > 0 && (
+            <section className="px-4 sm:px-6 lg:px-8 py-12 sm:py-16 lg:py-20 border-t border-black border-solid">
+              <EventSlideshow 
+                events={arrangemang.events} 
+                title="Evenemang i denna samling"
+              />
             </section>
           )}
         </div>
