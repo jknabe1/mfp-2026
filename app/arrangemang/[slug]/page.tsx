@@ -56,7 +56,9 @@ async function getArrangemang(slug: string) {
       }
     }
   }`
-  return await client.fetch(QUERY, { slug })
+  const result = await client.fetch(QUERY, { slug })
+  console.log("[v0] Arrangemang data:", { Namn: result?.Namn, hasImages: !!result?.Bildgalleri, imageCount: result?.Bildgalleri?.length })
+  return result
 }
 
 async function getRelatedArrangemang(currentSlug: string): Promise<Arrangemang[]> {
