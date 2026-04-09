@@ -37,7 +37,7 @@ export default function NewsSection() {
     const fetchNews = async () => {
       try {
         const data = await client.fetch<NewsArticle[]>(
-          `*[_type == "news" && defined(slug.current)]{_id, name, slug, image, publishedAt} | order(publishedAt desc)`
+          `*[_type == "edits" && defined(slug.current)]{_id, name, slug, image, publishedAt} | order(publishedAt desc)`
         );
         setNews(data);
       } catch (error) {

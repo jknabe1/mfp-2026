@@ -19,25 +19,25 @@ const staticPages = [
 
 // ✅ Fetch dynamic pages from Sanity
 async function fetchDynamicRoutes() {
-  const ARTISTS_QUERY = `*[_type == "artist" && defined(slug.current)]{slug}`;
-  const NEWS_QUERY = `*[_type == "news" && defined(slug.current)]{slug}`;
+  const FORENINGER_QUERY = `*[_type == "forening" && defined(URL.current)]{URL}`;
+  const EDITS_QUERY = `*[_type == "edits" && defined(slug.current)]{slug}`;
   const EVENTS_QUERY = `*[_type == "event" && defined(slug.current)]{slug}`;
 
-  const [artists, news, events] = await Promise.all([
-    client.fetch<{ slug: { current: string } }[]>(ARTISTS_QUERY),
-    client.fetch<{ slug: { current: string } }[]>(NEWS_QUERY),
+  const [foreninger, edits, events] = await Promise.all([
+    client.fetch<{ URL: { current: string } }[]>(FORENINGER_QUERY),
+    client.fetch<{ slug: { current: string } }[]>(EDITS_QUERY),
     client.fetch<{ slug: { current: string } }[]>(EVENTS_QUERY),
   ]);
 
   // Convert Sanity data to sitemap format
-  const artistRoutes = artists.map(({ slug }) => ({
-    url: `https://musicforpennies.se/forening/${slug.current}`,
+  const foreningarRoutes = foreninger.map(({ URL }) => ({
+    url: `https://musicforpennies.se/om-oss/vara-foreningar/${URL.current}`,
     lastModified: new Date(),
     changeFrequency: 'monthly' as const,
     priority: 0.7,
   }));
 
-  const newsRoutes = news.map(({ slug }) => ({
+  const editsRoutes = edits.map(({ slug }) => ({
     url: `https://musicforpennies.se/edits/${slug.current}`,
     lastModified: new Date(),
     changeFrequency: 'never' as const,
@@ -51,7 +51,7 @@ async function fetchDynamicRoutes() {
     priority: 0.8,
   }));
 
-  return [...artistRoutes, ...newsRoutes, ...eventRoutes];
+  return [...foreningarRoutes, ...editsRoutes, ...eventRoutes];
 }
 
 // ✅ Generate sitemap dynamically
