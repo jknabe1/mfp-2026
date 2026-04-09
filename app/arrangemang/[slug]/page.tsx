@@ -43,11 +43,12 @@ async function getArrangemang(slug: string) {
   
   // Map old field names to new ones for compatibility
   if (result) {
+    const slugValue = result.slug?.current || result.slug || result.URL?.current || result.URL
     return {
       ...result,
       name: result.name || result.Namn,
       image: result.image || result.Bild,
-      slug: result.slug || result.URL,
+      slug: slugValue,
       details: result.details || result.Beskrivning,
     }
   }
@@ -206,7 +207,7 @@ export default async function ArrangemangPage({
                 <div>
                   <ShareButtons 
                     title={arrangemang.name}
-                    url={`https://musicforpennies.se/arrangemang/${arrangemang.slug?.current || arrangemang.slug}`}
+                    url={`https://musicforpennies.se/arrangemang/${arrangemang.slug}`}
                     variant="dark"
                   />
                 </div>
